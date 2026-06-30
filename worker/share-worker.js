@@ -6,7 +6,7 @@
  *   GET  /health
  * 设计:2× 高清(1200px 宽,治糊);标题=优雅衬线 Noto Serif SC,正文=Noto Sans SC;
  *   中文走 Google Fonts css2 + &text= 子集化(必须 encodeURIComponent,否则中文豆腐块)。
- *   字体:标题与正文同用 Noto Serif SC(衬线,400 正文 / 700 标题),品牌=Playfair Display,日期=JetBrains Mono。
+ *   字体:标题/正文/日期同用 Noto Serif SC(衬线,400 / 700),仅品牌刊名=Playfair Display。
  *   样式服务端统一定义 → 每张图风格一致;图表(若有)以内嵌 SVG 带进图里。
  */
 import { ImageResponse } from "workers-og";
@@ -53,9 +53,9 @@ function cardHtml(d) {
 
   return `
   <div style="display:flex;flex-direction:column;width:1200px;background:${C.paper};font-family:'${SERIF}';padding:64px 70px 66px;">
-    <div style="display:flex;align-items:center;padding-bottom:30px;border-bottom:3px solid ${C.ink};">
+    <div style="display:flex;align-items:flex-end;padding-bottom:30px;border-bottom:3px solid ${C.ink};">
       <div style="display:flex;font-family:'${BRAND}';font-weight:700;font-size:66px;color:${C.ink};">Loop News</div>
-      <div style="display:flex;margin-left:auto;font-family:'${MONO}';font-weight:500;font-size:30px;color:${C.date};letter-spacing:0.5px;">${esc(d.date || "")}</div>
+      <div style="display:flex;margin-left:auto;font-family:'${SERIF}';font-weight:400;font-size:33px;color:${C.date};">${esc(d.date || "")}</div>
     </div>
     <div style="display:flex;flex-direction:column;padding:48px 0 0;">
       <div style="display:flex;color:${grade};font-size:27px;letter-spacing:6px;margin-bottom:32px;">${esc(badge)}</div>
@@ -81,18 +81,16 @@ async function fontsFor(d) {
   const punct = " ·…—《》「」『』、,。:;!?()%0123456789";
   const latin = " @&.,'\"-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";       // 兜底:署名/引文里的拉丁字符不缺字形
   // 标题与正文同字体(Noto Serif SC):一份全文,加载 400(正文/徽章/署名)与 700(标题)两个字重
-  const text = (d.title || "") + (d.quote || "") + (d.summary || "") + (d.source || "") + (d.badge || "") + " 今日要闻 共识 深度原声 家在报 图表 " + punct + latin;
-  const [brand, serif400, serif700, mono] = await Promise.all([
+  const text = (d.title || "") + (d.quote || "") + (d.summary || "") + (d.source || "") + (d.badge || "") + (d.date || "") + " 今日要闻 共识 深度原声 家在报 图表 " + punct + latin;
+  const [brand, serif400, serif700] = await Promise.all([
     loadFont(BRAND, 700, "Loop News"),                                               // 品牌刊名(Playfair)
-    loadFont(SERIF, 400, text),                                                      // 正文/徽章/署名
+    loadFont(SERIF, 400, text),                                                      // 正文/徽章/署名/日期
     loadFont(SERIF, 700, text),                                                      // 标题
-    loadFont(MONO, 500, (d.date || "") + "0123456789-./: "),                          // 日期(等宽)
   ]);
   return [
     { name: BRAND, data: brand, weight: 700, style: "normal" },
     { name: SERIF, data: serif400, weight: 400, style: "normal" },
     { name: SERIF, data: serif700, weight: 700, style: "normal" },
-    { name: MONO, data: mono, weight: 500, style: "normal" },
   ];
 }
 
