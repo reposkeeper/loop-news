@@ -36,10 +36,14 @@ function cardHtml(d) {
   const title = clip(d.title, 58);
   const summary = clip(d.summary, deep ? 96 : 184);
   const quote = deep ? clip(d.quote, 132) : "";
+  const src = clip(d.source, 36);
   const titleSize = deep ? 46 : 62;
 
   const quoteBlock = quote
-    ? `<div style="display:flex;font-family:'${SERIF}';font-size:50px;line-height:1.56;color:${C.ink};border-left:7px solid ${C.accent};padding-left:36px;margin-bottom:36px;">${esc(quote)}</div>`
+    ? `<div style="display:flex;flex-direction:column;margin-bottom:38px;">`
+      + `<div style="display:flex;font-family:'${SERIF}';font-size:50px;line-height:1.56;color:${C.ink};border-left:7px solid ${C.accent};padding-left:36px;">${esc(quote)}</div>`
+      + (src ? `<div style="display:flex;justify-content:flex-end;color:${C.muted};font-size:31px;margin-top:22px;">—— ${esc(src)}</div>` : "")
+      + `</div>`
     : "";
   const iw = 1020, ih = Math.round((iw * 240) / 640);
   const chartBlock = d.chart
@@ -49,7 +53,7 @@ function cardHtml(d) {
   return `
   <div style="display:flex;flex-direction:column;width:1200px;background:${C.paper};font-family:'${SANS}';padding:64px 70px 66px;">
     <div style="display:flex;align-items:center;padding-bottom:30px;border-bottom:3px solid ${C.ink};">
-      <div style="display:flex;font-family:'${BRAND}';font-weight:700;font-size:55px;color:${C.ink};">Loop News</div>
+      <div style="display:flex;font-family:'${BRAND}';font-weight:700;font-size:66px;color:${C.ink};">Loop News</div>
       <div style="display:flex;margin-left:auto;font-family:'${MONO}';font-weight:500;font-size:30px;color:${C.date};letter-spacing:0.5px;">${esc(d.date || "")}</div>
     </div>
     <div style="display:flex;flex-direction:column;padding:48px 0 0;">
@@ -73,9 +77,10 @@ async function loadFont(family, weight, text) {
   return await fetch(m[1]).then((r) => r.arrayBuffer());
 }
 async function fontsFor(d) {
-  const punct = " ·…—《》「」『』、,。:;()%0123456789";
-  const serifText = (d.title || "") + (d.quote || "") + punct;                       // 标题/引文
-  const sansText = (d.summary || "") + " 今日要闻 共识 深度原声 家在报 图表 " + (d.badge || "") + punct; // 正文/徽章
+  const punct = " ·…—《》「」『』、,。:;!?()%0123456789";
+  const latin = " @&.,'\"-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";       // 兜底:署名/引文里的拉丁字符不缺字形
+  const serifText = (d.title || "") + (d.quote || "") + punct + latin;               // 标题/引文
+  const sansText = (d.summary || "") + " 今日要闻 共识 深度原声 家在报 图表 " + (d.badge || "") + (d.source || "") + punct + latin; // 正文/徽章/署名
   const [brand, serif, sans, mono] = await Promise.all([
     loadFont(BRAND, 700, "Loop News"),                                               // 品牌刊名(Playfair)
     loadFont(SERIF, 700, serifText),
