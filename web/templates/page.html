@@ -177,6 +177,7 @@
     var card=btn.closest(".card"),cs=card&&card.querySelector(".chart-svg"),chart="";
     if(cs){try{chart="data:image/svg+xml;base64,"+btoa(unescape(encodeURIComponent(cs.outerHTML)));}catch(_){}}
     var pay={title:btn.dataset.title||"",summary:btn.dataset.summary||"",source:btn.dataset.source||"",date:btn.dataset.date||"",kind:btn.dataset.kind||"consensus",badge:btn.dataset.badge||"",quote:btn.dataset.quote||"",chart:chart};
+    if(btn.dataset.items){try{pay.items=JSON.parse(btn.dataset.items);}catch(_){}}   // 自进化日志:发布要点
     var old=btn.textContent;btn.textContent="⤴ 生成中…";btn.disabled=true;
     fetch(SHARE_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(pay)})
       .then(function(r){if(!r.ok)throw 0;return r.blob();})

@@ -458,6 +458,16 @@ def _inline(s):
     return out
 
 
+def _rel_headline(s):
+    """从 changelog 行提取简短要点(分享卡用):优先粗体小标题,否则取冒号前。"""
+    s = re.sub(r"^\s*(?:\d+\.|[-*])\s*", "", s.strip())
+    mb = re.search(r"\*\*(.+?)\*\*", s)
+    if mb:
+        return mb.group(1).strip()
+    s = re.split(r"[:：]", s, 1)[0]
+    return re.sub(r"[`*]", "", s).strip()
+
+
 def render_evolution(md):
     """把 prompts/CHANGELOG.md 渲染成「更新日志 / Release Notes」视图——产品发布形态,与新闻刻意区分。"""
     entries, cur = [], None
@@ -493,10 +503,22 @@ def render_evolution(md):
                 rows.append(f'<li class="rn-item">{_inline(s.strip())}</li>')
         date_html = f'<time class="release-date">{e(date)}</time>' if date else ""
         note_html = f'<p class="release-note">{e(sub)}</p>' if sub else ""
+        # 分享成现代产品发布卡:要点取数字子项(无则取顶层 - 项)的简短小标题
+        sitems = [_rel_headline(b) for b in ent["body"] if re.match(r"^\s+\d+\.", b.rstrip())]
+        if not sitems:
+            sitems = [_rel_headline(b) for b in ent["body"] if b.strip().startswith("- ")]
+        sitems = [x for x in sitems if x][:6]
+        share_btn = ""
+        if sitems:
+            share_btn = ('<div class="release-actions">'
+                         f'<button class="act share" data-kind="release" data-title="{e(sub or tag)}" '
+                         f'data-date="{e(date)}" data-badge="{e(tag)}" '
+                         f'data-items="{e(json.dumps(sitems, ensure_ascii=False))}">⤴ 分享卡片</button></div>')
         cards.append(f'''<article class="release">
   <div class="release-head"><span class="release-tag">{e(tag)}</span>{date_html}</div>
   {note_html}
   <ul class="release-body">{"".join(rows)}</ul>
+  {share_btn}
 </article>''')
     return ('<section class="view" id="view-evolution">'
             '<div class="release-masthead">'

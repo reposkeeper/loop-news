@@ -207,6 +207,7 @@ mark.hl{background:linear-gradient(transparent 56%, rgba(232,198,110,.6) 56%);co
 .rn-item::before{content:"›";position:absolute;left:2px;top:-1px;color:var(--accent);font-weight:700;font-size:16px;}
 .rn-sub{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--muted);margin:3px 0 3px 22px;padding-left:12px;border-left:2px solid var(--line-soft);list-style:none;}
 .rn-item strong,.rn-sub strong,.release-note strong{color:var(--ink);font-weight:700;}
+.release-actions{margin-top:15px;padding-top:13px;border-top:1px solid var(--line-soft);}
 code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em;background:#1f5c570f;color:#2a4f4b;padding:1px 5px;border-radius:3px;}
 
 /* ── 浮动操作:想看的话题(所有访客)+ 全局反馈(owner 专属),右下堆叠 ── */

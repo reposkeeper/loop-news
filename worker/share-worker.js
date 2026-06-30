@@ -67,6 +67,32 @@ function cardHtml(d) {
   </div>`;
 }
 
+// 自进化日志 → 现代产品发布卡(版本徽章 + 标题 + 要点,刻意区别于新闻卡)
+function releaseHtml(d) {
+  const tag = clip(d.badge || d.tag || "更新", 16);
+  const items = (Array.isArray(d.items) ? d.items : []).slice(0, 6);
+  const bullets = items.map((t) =>
+    `<div style="display:flex;align-items:flex-start;margin-bottom:22px;">`
+    + `<div style="display:flex;width:14px;height:14px;border-radius:4px;background:${C.accent};margin:14px 22px 0 0;flex:0 0 14px;"></div>`  // 绘制标记,不依赖字体字形
+    + `<div style="display:flex;flex:1;font-size:35px;line-height:1.46;color:${C.soft};">${esc(clip(t, 60))}</div>`
+    + `</div>`).join("");
+  return `
+  <div style="display:flex;flex-direction:column;width:1200px;background:${C.paper};font-family:'${SERIF}';padding:64px 70px 66px;">
+    <div style="display:flex;align-items:flex-end;padding-bottom:30px;border-bottom:3px solid ${C.ink};">
+      <div style="display:flex;font-family:'${BRAND}';font-weight:700;font-size:66px;color:${C.ink};">Loop News</div>
+      <div style="display:flex;margin-left:auto;font-size:32px;color:${C.date};">更新日志</div>
+    </div>
+    <div style="display:flex;flex-direction:column;padding:46px 0 0;">
+      <div style="display:flex;align-items:center;margin-bottom:32px;">
+        <div style="display:flex;background:${C.accent};color:#FFFFFF;font-size:27px;font-weight:700;padding:9px 24px;border-radius:999px;">${esc(tag)}</div>
+        <div style="display:flex;margin-left:20px;color:${C.muted};font-size:29px;">${esc(d.date || "")}</div>
+      </div>
+      <div style="display:flex;font-size:54px;line-height:1.4;font-weight:700;color:${C.ink};margin-bottom:42px;letter-spacing:-0.5px;">${esc(clip(d.title, 42))}</div>
+      ${bullets}
+    </div>
+  </div>`;
+}
+
 // 老版 Safari UA → Google Fonts 对子集请求返回 TTF(satori 不吃 woff2)
 const UA = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; de-at) AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1";
 async function loadFont(family, weight, text) {
@@ -81,7 +107,8 @@ async function fontsFor(d) {
   const punct = " ·…—《》「」『』、,。:;!?()%0123456789";
   const latin = " @&.,'\"-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";       // 兜底:署名/引文里的拉丁字符不缺字形
   // 标题与正文同字体(Noto Serif SC):一份全文,加载 400(正文/徽章/署名)与 700(标题)两个字重
-  const text = (d.title || "") + (d.quote || "") + (d.summary || "") + (d.source || "") + (d.badge || "") + (d.date || "") + " 今日要闻 共识 深度原声 家在报 图表 " + punct + latin;
+  const items = Array.isArray(d.items) ? d.items.join(" ") : "";
+  const text = (d.title || "") + (d.quote || "") + (d.summary || "") + (d.source || "") + (d.badge || "") + (d.date || "") + (d.tag || "") + items + " 今日要闻 共识 深度原声 家在报 图表 更新日志 " + punct + latin;
   const [brand, serif400, serif700] = await Promise.all([
     loadFont(BRAND, 700, "Loop News"),                                               // 品牌刊名(Playfair)
     loadFont(SERIF, 400, text),                                                      // 正文/徽章/署名/日期
@@ -111,7 +138,7 @@ export default {
     if (!d.title && !d.quote) return new Response("nothing to render", { status: 400, headers: CORS });
 
     try {
-      const html = cardHtml(d);
+      const html = d.kind === "release" ? releaseHtml(d) : cardHtml(d);
       const fonts = await fontsFor(d);
       const img = new ImageResponse(html, { width: 1200, fonts });
       const h = new Headers(img.headers);
