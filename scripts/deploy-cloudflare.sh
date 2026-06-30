@@ -14,7 +14,7 @@ echo "[deploy] 2/4 部署 Pages(静态站)"
 npx wrangler pages deploy docs --project-name="$PAGES_PROJECT"
 
 echo "[deploy] 3/4 同步常用词到 R2(弹窗 chips 数据源)"
-npx wrangler r2 object put "$R2_BUCKET/config/feedback_tags.json" --file config/feedback_tags.json --content-type application/json
+npx wrangler r2 object put "$R2_BUCKET/config/feedback_tags.json" --file config/feedback_tags.json --content-type application/json --remote
 
 echo "[deploy] 4/4 部署 Worker(反馈 API)"
 npx wrangler deploy
