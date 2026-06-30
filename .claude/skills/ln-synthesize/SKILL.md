@@ -35,6 +35,7 @@ description: Loop News 汇总分析步骤。加载前一天语料 + 相关历史
   "summary_zh": "当日总览,2-4 句:今天最值得记住的是什么。",
   "consensus": [
     { "title_zh": "...", "summary_zh": "...", "sources": ["Reuters","AP"],
+      "source_links": [{"name":"Reuters","url":"https://..."},{"name":"AP","url":"https://..."}],
       "consensus_count": 5, "url": "https://...", "topics": ["..."], "id": "...",
       "charts": [{ "type":"bar|line|pie", "title":"", "unit":"%", "source":"", "note":"据报道生成,仅供参考", "data":[{"label":"","value":0}] }] }
   ],

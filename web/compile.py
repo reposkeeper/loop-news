@@ -318,14 +318,23 @@ def render_consensus(items, cfg, date):
         topics = "".join(f'<span class="topic">#{e(t)}</span> ' for t in it.get("topics", []))
         cc = it.get("consensus_count", len(it.get("sources", [])))
         src_badge = f'<span class="badge badge-consensus">{e(cc)} 家在报</span>' if cc else ""
-        src_list = " · ".join(e(s) for s in it.get("sources", []))
-        url = it.get("url", "")
-        link = f'<a href="{e(url)}" target="_blank" rel="noopener">原文 ↗</a>' if url else ""
+        # 来源:有 source_links(每家带 url)→ 每家各自可点原文;否则退化为名字 + 单一原文
+        links = [x for x in (it.get("source_links") or []) if x.get("url")]
+        if links:
+            srcs = " · ".join(
+                f'<a class="src-link" href="{e(x["url"])}" target="_blank" rel="noopener">{e(x.get("name") or "原文")} ↗</a>'
+                for x in links)
+            src_html = f'<span class="srcs">{srcs}</span>'
+        else:
+            src_list = " · ".join(e(s) for s in it.get("sources", []))
+            url = it.get("url", "")
+            one = f' <a class="src-link" href="{e(url)}" target="_blank" rel="noopener">原文 ↗</a>' if url else ""
+            src_html = f'<span class="badge badge-src">{src_list}</span>{one}'
         out.append(f"""<article class="card" id="item-{e(it.get('id'))}">
   <h3>{e(it.get('title_zh'))}</h3>
   <p>{hl(it.get('summary_zh'))}</p>
   {render_charts(it.get('charts'))}
-  <div class="meta-row">{src_badge}<span class="badge badge-src">{src_list}</span>{topics}{link}</div>
+  <div class="meta-row">{src_badge}{src_html}{topics}</div>
   <div class="row-actions">{fb_row(cfg, date, it.get('id',''), it.get('title_zh',''))}{act_row(cfg, date, it)}</div>
 </article>""")
     return "\n".join(out)
