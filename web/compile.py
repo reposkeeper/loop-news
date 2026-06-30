@@ -664,7 +664,7 @@ def main():
         "{{FEEDBACK_ENABLED}}": "true" if cfg_get(cfg, "feedback.enabled", True) else "false",
         "{{FEEDBACK_API}}": e(cfg_get(cfg, "feedback.api_url", "")),
         "{{SHARE_API}}": e(cfg_get(cfg, "feedback.share_api_url", "")),
-        "{{SYS_OWNER_NAV}}": "",  # owner 专属系统按钮(生成分享链接等),由后续功能注入
+        "{{SYS_OWNER_NAV}}": '<button class="nav-link nav-owner" id="tokenBtn">🔗 生成分享链接</button>',  # owner 自助发 token;CSS .nav-owner 仅 body.is-owner 可见
         "{{FEEDBACK_TAGS}}": json.dumps(fb_tags, ensure_ascii=False),
     }
     for k, v in repl.items():

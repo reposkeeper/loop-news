@@ -23,6 +23,17 @@ const ALLOWED = new Set(["up", "down", "adopt", "ask"]);
 function validTokens(env) {
   try { return JSON.parse(env.SHARE_TOKENS || "{}"); } catch (_) { return {}; }
 }
+// token 校验同时认两处:① env.SHARE_TOKENS(静态/owner)② R2 tokens/<tok>(owner 在网页自助生成的)
+async function resolveToken(env, tok) {
+  if (!tok) return null;
+  const t = validTokens(env)[tok];
+  if (t) return t;
+  try {
+    const o = await env.BUCKET.get(`tokens/${tok}.json`);
+    if (o) return JSON.parse(await o.text());
+  } catch (_) {}
+  return null;
+}
 async function listAll(env, prefix) {
   const items = [];
   let cursor;
@@ -102,7 +113,7 @@ export default {
     if (p === "/favorite" && req.method === "POST") {
       let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
       const tok = String(d.token || "");
-      if (!validTokens(env)[tok]) return json({ error: "invalid token" }, 403);
+      if (!(await resolveToken(env, tok))) return json({ error: "invalid token" }, 403);
       const key = `fav/${tok}/${String(d.item_id || "").slice(0, 120)}.json`;
       if (d.on === false) { await env.BUCKET.delete(key); return json({ ok: true, on: false }); }
       const rec = { item_id: d.item_id, date: String(d.date || "").slice(0, 20), title: String(d.title || "").slice(0, 300), ts: new Date().toISOString() };
@@ -111,7 +122,7 @@ export default {
     }
     if (p === "/favorites" && req.method === "GET") {
       const tok = url.searchParams.get("token") || "";
-      if (!validTokens(env)[tok]) return json({ error: "invalid token" }, 403);
+      if (!(await resolveToken(env, tok))) return json({ error: "invalid token" }, 403);
       const items = await listAll(env, `fav/${tok}/`);
       items.sort((a, b) => (a.ts < b.ts ? 1 : -1));
       return json({ count: items.length, items });
@@ -121,7 +132,7 @@ export default {
     if (p === "/follow" && req.method === "POST") {
       let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
       const tok = String(d.token || "");
-      const who = validTokens(env)[tok];
+      const who = await resolveToken(env, tok);
       if (!who) return json({ error: "invalid token" }, 403);
       const key = `follow/${tok}/${String(d.item_id || "").slice(0, 120)}.json`;
       if (d.on === false) { await env.BUCKET.delete(key); return json({ ok: true, on: false }); }
@@ -148,7 +159,7 @@ export default {
     if (p === "/request" && req.method === "POST") {
       let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
       const tok = String(d.token || "");
-      const who = validTokens(env)[tok];
+      const who = await resolveToken(env, tok);
       if (!who) return json({ error: "invalid token" }, 403);
       const text = String(d.text || "").trim().slice(0, 500);
       const tags = (Array.isArray(d.tags) ? d.tags : []).slice(0, 8).map((x) => String(x).slice(0, 40));
@@ -167,7 +178,7 @@ export default {
     // ── 已读状态(per-user;专题更新小红点)──
     if (p === "/reads" && req.method === "GET") {
       const tok = url.searchParams.get("token") || "";
-      if (!validTokens(env)[tok]) return json({ error: "invalid token" }, 403);
+      if (!(await resolveToken(env, tok))) return json({ error: "invalid token" }, 403);
       const o = await env.BUCKET.get(`reads/${tok}.json`);
       let m = {};
       if (o) { try { m = JSON.parse(await o.text()); } catch (_) {} }
@@ -176,7 +187,7 @@ export default {
     if (p === "/read" && req.method === "POST") {
       let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
       const tok = String(d.token || "");
-      if (!validTokens(env)[tok]) return json({ error: "invalid token" }, 403);
+      if (!(await resolveToken(env, tok))) return json({ error: "invalid token" }, 403);
       const key = `reads/${tok}.json`;
       const o = await env.BUCKET.get(key);
       let m = {};
@@ -184,6 +195,37 @@ export default {
       m[String(d.id || "").slice(0, 80)] = String(d.ts || "").slice(0, 32);
       await env.BUCKET.put(key, JSON.stringify(m), { httpMetadata: { contentType: "application/json" } });
       return json({ ok: true });
+    }
+
+    // ── 分享令牌:owner 在网页自助生成,存 R2 tokens/<lnk>(带名字,便于区分分享给谁)──
+    if (p === "/mint" && req.method === "POST") {
+      let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
+      if (!env.OWNER_TOKEN || d.ownerToken !== env.OWNER_TOKEN) return json({ error: "owner only" }, 403);
+      const name = String(d.name || "").trim().slice(0, 60) || "朋友";
+      const tok = "lnk_" + crypto.randomUUID().replace(/-/g, "").slice(0, 24);
+      const rec = { name, owner: false, created: new Date().toISOString() };
+      await env.BUCKET.put(`tokens/${tok}.json`, JSON.stringify(rec), { httpMetadata: { contentType: "application/json" } });
+      return json({ ok: true, token: tok, name, url: (env.SITE_URL || "https://news.xdzq.org") + "/?token=" + tok });
+    }
+    if (p === "/tokens" && req.method === "GET") {
+      if (!env.OWNER_TOKEN || url.searchParams.get("ownerToken") !== env.OWNER_TOKEN) return json({ error: "owner only" }, 403);
+      const items = [];
+      let cursor;
+      do {
+        const l = await env.BUCKET.list({ prefix: "tokens/", cursor });
+        for (const o of l.objects) {
+          const g = await env.BUCKET.get(o.key);
+          if (g) { try { const r = JSON.parse(await g.text()); r.token = o.key.slice(7, -5); items.push(r); } catch (_) {} }
+        }
+        cursor = l.truncated ? l.cursor : undefined;
+      } while (cursor);
+      items.sort((a, b) => (a.created < b.created ? 1 : -1));
+      return json({ count: items.length, items });
+    }
+    // token 校验(给 Pages 访问门用:env 或 R2 命中即放行)
+    if (p === "/validate" && req.method === "GET") {
+      const rec = await resolveToken(env, url.searchParams.get("token") || "");
+      return json(rec ? { valid: true, name: rec.name || "", owner: !!rec.owner } : { valid: false });
     }
 
     return json({ error: "not found" }, 404);

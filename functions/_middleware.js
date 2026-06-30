@@ -23,6 +23,15 @@ function cookie(name, req) {
   const m = (req.headers.get("Cookie") || "").match(new RegExp("(?:^|;\\s*)" + name + "=([^;]+)"));
   return m ? decodeURIComponent(m[1]) : "";
 }
+// env.SHARE_TOKENS 未命中时,回退查反馈 Worker 的 /validate(认 R2 里 owner 自助生成的 token);边缘缓存 5 分钟
+async function validateRemote(tok, env) {
+  const base = (env.FEEDBACK_API || "https://feedback.xdzq.org").replace(/\/$/, "");
+  try {
+    const resp = await fetch(base + "/validate?token=" + encodeURIComponent(tok), { cf: { cacheTtl: 300, cacheEverything: true } });
+    const j = await resp.json();
+    return j && j.valid ? { name: j.name, owner: j.owner } : null;
+  } catch (_) { return null; }
+}
 
 export async function onRequest(context) {
   const { request, env, next } = context;
@@ -31,7 +40,8 @@ export async function onRequest(context) {
   try { tokens = JSON.parse(env.SHARE_TOKENS || "{}"); } catch (_) {}
 
   const tok = url.searchParams.get("token") || cookie("lnt", request);
-  const rec = tok && tokens[tok];
+  let rec = tok && tokens[tok];
+  if (!rec && tok) rec = await validateRemote(tok, env);
 
   if (!rec) {
     return new Response(GATE_HTML, { status: 401, headers: { "Content-Type": "text/html; charset=utf-8" } });

@@ -62,6 +62,18 @@
   </div>
 </div>
 
+<!-- 生成分享链接(owner 专属) -->
+<div class="fb-modal" id="tokenModal" hidden>
+  <div class="fb-card" role="dialog" aria-modal="true" aria-label="生成分享链接">
+    <div class="fb-head"><span class="fb-act">🔗 生成分享链接</span><button class="fb-x" id="tokenClose" aria-label="关闭">✕</button></div>
+    <p class="fb-item">给朋友生成专属访问链接,填个名字方便区分分享给了谁。</p>
+    <input class="fb-text" id="tokenName" placeholder="给谁(如:张三 / 公司同事)…" autocomplete="off">
+    <div class="fb-foot"><span class="fb-msg" id="tokenMsg"></span><button class="fb-submit" id="tokenSubmit">生成链接</button></div>
+    <div id="tokenResult"></div>
+    <div id="tokenList" class="token-list"></div>
+  </div>
+</div>
+
 <script>window.__FB={enabled:{{FEEDBACK_ENABLED}},api:"{{FEEDBACK_API}}",share:"{{SHARE_API}}",tags:{{FEEDBACK_TAGS}}};</script>
 <script>
 (function(){
@@ -184,8 +196,47 @@
       .then(function(b){var u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=((btn.dataset.title||"loop-news").replace(/[\/\\:*?"<>|\s]/g,"").slice(0,36)||"loop-news")+".png";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},2000);btn.textContent="✓ 已下载";setTimeout(function(){btn.textContent=old;btn.disabled=false;},1600);})
       .catch(function(){btn.textContent="✕ 失败,重试";setTimeout(function(){btn.textContent=old;btn.disabled=false;},1800);});
   }
+  /* ---- owner:生成分享链接(填名字区分分享给谁)---- */
+  var tokenModal=document.getElementById("tokenModal"),tokenName=document.getElementById("tokenName"),
+      tokenMsg=document.getElementById("tokenMsg"),tokenSubmit=document.getElementById("tokenSubmit"),
+      tokenResult=document.getElementById("tokenResult"),tokenList=document.getElementById("tokenList");
+  function tokenUrl(t){return location.origin+"/?token="+encodeURIComponent(t);}
+  function openTokenModal(){if(!API){return;}tokenModal.hidden=false;tokenMsg.textContent="";tokenResult.innerHTML="";loadTokens();setTimeout(function(){tokenName.focus();},40);}
+  function closeTokenModal(){tokenModal.hidden=true;}
+  function mintToken(){
+    var name=tokenName.value.trim(),tok=ck("lnt");
+    if(!API||!tok){tokenMsg.textContent="需要 owner 令牌";return;}
+    tokenSubmit.disabled=true;tokenMsg.textContent="生成中…";
+    fetch(API+"/mint",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({ownerToken:tok,name:name})})
+      .then(function(r){return r.json();}).then(function(x){
+        tokenSubmit.disabled=false;
+        if(x.error){tokenMsg.textContent="失败:"+x.error;return;}
+        tokenMsg.textContent="已生成!把链接发给 TA 即可访问。";tokenName.value="";
+        tokenResult.innerHTML='<div class="token-new">给 <b>'+esc(x.name)+'</b> 的链接 <button class="token-copy" data-url="'+esc(x.url)+'">复制</button><div class="token-url">'+esc(x.url)+'</div></div>';
+        loadTokens();
+      }).catch(function(){tokenSubmit.disabled=false;tokenMsg.textContent="失败:服务未连接?";});
+  }
+  function loadTokens(){
+    var tok=ck("lnt");if(!API||!tok){return;}
+    fetch(API+"/tokens?ownerToken="+encodeURIComponent(tok)).then(function(r){return r.json();}).then(function(d){
+      if(d.error||!d.items||!d.items.length){tokenList.innerHTML="";return;}
+      tokenList.innerHTML='<div class="token-list-h">已分享 '+d.items.length+' 人</div>'+d.items.map(function(it){
+        return '<div class="token-row"><span class="token-name">'+esc(it.name||"朋友")+'</span><button class="token-copy" data-url="'+esc(tokenUrl(it.token))+'">复制链接</button></div>';
+      }).join("");
+    }).catch(function(){});
+  }
+  function copyUrl(btn){
+    var url=btn.getAttribute("data-url"),old=btn.textContent,done=function(){btn.textContent="已复制";setTimeout(function(){btn.textContent=old;},1200);};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(done,done);}
+    else{var ta=document.createElement("textarea");ta.value=url;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(_){}ta.remove();done();}
+  }
   document.addEventListener("click",function(e){
     if(e.target.closest("#reqBtn")){openRequest();return;}
+    if(e.target.closest("#tokenBtn")){openTokenModal();return;}
+    if(e.target.closest("#tokenClose")){closeTokenModal();return;}
+    if(e.target.closest("#tokenSubmit")){mintToken();return;}
+    var cp=e.target.closest(".token-copy");if(cp){copyUrl(cp);return;}
+    if(e.target===tokenModal){closeTokenModal();return;}
     var sh=e.target.closest(".act.share");if(sh){shareCard(sh);return;}
     var act=e.target.closest(".act");if(act){toggleAct(act);return;}
     var rm=e.target.closest(".fav-remove");if(rm){removeFav(rm.dataset.item);return;}
@@ -197,7 +248,7 @@
     var sb=document.getElementById("sidebar");                       // 点抽屉外 → 关闭(移动端)
     if(sb&&sb.classList.contains("open")&&!e.target.closest("#sidebar")&&!e.target.closest(".menu-toggle")){sb.classList.remove("open");}
   });
-  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!modal.hidden)closeModal();});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"){if(!modal.hidden)closeModal();if(!tokenModal.hidden)closeTokenModal();}});
 })();
 </script>
 </body>
