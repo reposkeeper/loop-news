@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Loop News:提交前自动跑变更落地自检(规范见 RUNBOOK「变更落地契约」)。
+# 不通过则拦住本次提交。启用:git config core.hooksPath .githooks(见 RUNBOOK)。
+exec bash "$(git rev-parse --show-toplevel)/scripts/check.sh"

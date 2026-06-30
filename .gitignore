@@ -7,6 +7,7 @@ __pycache__/
 # 密钥(永不入库)
 config/secrets.yaml
 config/secrets.yml
+config/share_tokens.json
 .env
 *.key
 *.token

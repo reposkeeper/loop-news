@@ -3,6 +3,8 @@
 给在本仓库工作的 Claude 的操作说明。本项目是一个自循环新闻情报系统,详见 [README.md](README.md)。
 
 > **跨 agent 的权威流程见 [RUNBOOK.md](RUNBOOK.md)**(Codex 等见 [AGENTS.md](AGENTS.md))。本文件是 Claude 视角的补充约定;两者冲突时以 RUNBOOK 的流程为准。
+>
+> **进化北极星见 [GOALS.md](GOALS.md):最大化「非显然洞察」(信息优势)。所有自进化朝它收敛;硬约束=不臆造、宁缺毋滥。**
 
 ## 时区
 所有"今天/昨天/早班/晚班"按 **Asia/Shanghai**(见 `config/loop.yaml`)。
@@ -29,12 +31,13 @@
 - 人类反馈 → 网页弹窗(👍赞/👎踩/✓采用 + 常用词 + 文字)经 `server/feedback_server.py` 写入 `data/feedback.jsonl` + `feedback.md`(`bash scripts/feedback.sh` 读取;ln-evolve 消化并进化 `config/feedback_tags.json`)
 
 ## 网站(单页)
-`docs/index.html` 是**唯一**页面:左侧日期列表 + 线索入口,右侧主区,JS hash 路由同页切换(无 iframe)。现代杂志风(宋体+Newsreader 标题、抽印引文、分级配色)。每块正文最多 2 处高亮(`==文本==`)。每条新闻/结论**底部**有 👍赞/👎踩/✓采用,点击弹出页面内对话框(常用词 chips + 可选文字),提交到反馈服务器,**不跳转 GitHub**。
+`docs/index.html` 是**唯一**页面:左侧日期列表 + 🧵线索 + ⚙️自进化日志(渲染自 `prompts/CHANGELOG.md`)入口,右侧主区,JS hash 路由同页切换(无 iframe)。现代杂志风(宋体+Newsreader 标题、抽印引文、分级配色)。每块正文最多 2 处高亮(`==文本==`)。每条新闻/结论**底部**有 👍赞/👎踩/✓采用,点击弹出页面内对话框(常用词 chips + 可选文字),提交到反馈服务器,**不跳转 GitHub**。
 
 ## 自我进化边界(ln-evolve)
 - 可改:`prompts/*.md`、`config/*.yaml`(来源增删降权、提示词措辞)。
 - 不可自动改:数据 schema、`web/compile.py` 逻辑(属人工大版本)。
 - 每轮改动小而有据,可被 git revert + CHANGELOG 回滚。
+- **变更落地契约**:进化/功能改动必须落进【代码】或【skill/提示词/文档】(不留在对话);提交前 `bash scripts/check.sh` 自检(pre-commit 已挂,不通过不提交),进化记 CHANGELOG。详见 [RUNBOOK.md](RUNBOOK.md)「变更落地契约」。
 
 ## 编译/发布是确定性脚本
 `web/compile.py` 与 `scripts/publish.sh` 不含 LLM 逻辑,直接运行即可。

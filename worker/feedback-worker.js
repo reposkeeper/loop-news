@@ -18,7 +18,7 @@ const CORS = {
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
-const ALLOWED = new Set(["up", "down", "adopt"]);
+const ALLOWED = new Set(["up", "down", "adopt", "ask"]);
 
 function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
@@ -46,7 +46,11 @@ export default {
     if (p === "/feedback" && req.method === "POST") {
       let d;
       try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
-      if (!ALLOWED.has(d.action)) return json({ error: "action must be up|down|adopt" }, 400);
+      if (!ALLOWED.has(d.action)) return json({ error: "action must be up|down|adopt|ask" }, 400);
+      // 全局提问(ask)只接受站长令牌(env.OWNER_TOKEN);其余反馈匿名可提
+      if (d.action === "ask" && env.OWNER_TOKEN && d.token !== env.OWNER_TOKEN) {
+        return json({ error: "global feedback requires owner token" }, 403);
+      }
       const ts = new Date().toISOString();
       const rec = {
         ts,

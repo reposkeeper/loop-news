@@ -9,13 +9,13 @@
 
 零第三方依赖:仅标准库;loop.yaml 用内置迷你解析器。
 """
-import sys, os, json, html, glob, shutil, re
+import sys, os, json, html, glob, shutil, re, math
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ANALYSIS_DIR = os.path.join(ROOT, "data", "analysis")
 CORPUS_DIR = os.path.join(ROOT, "data", "corpus")
 THREADS_PATH = os.path.join(ROOT, "data", "threads.json")
-DOCS_DIR = os.path.join(ROOT, "docs")
+DOCS_DIR = os.environ.get("LN_DOCS_DIR") or os.path.join(ROOT, "docs")  # 自检时可指向临时目录
 TPL = os.path.join(ROOT, "web", "templates", "page.html")
 ASSETS_SRC = os.path.join(ROOT, "web", "assets")
 ASSETS_DST = os.path.join(DOCS_DIR, "assets")
@@ -84,6 +84,128 @@ def hl(s):
         n[0] += 1
         return f'<mark class="hl">{m.group(1)}</mark>' if n[0] <= HL_CAP else m.group(1)
     return HL_RE.sub(repl, e(s))
+
+
+# ── 内联 SVG 图表(零依赖;趋势线 / 柱 / 饼)。仅渲染 analysis 条目的 charts 字段 ──
+CHART_PAL = ["#1F5C57", "#9A6B16", "#5B3FB0", "#2F6F4E", "#3A5A8C", "#7A5C9E"]
+CHART_POS, CHART_NEG = "#2F6F4E", "#B0413E"
+
+
+def _num(v):
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _fmt(v):
+    s = f"{v:.1f}"
+    return s.rstrip("0").rstrip(".") if "." in s else s
+
+
+def _svg_open(extra=""):
+    return f'<svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg" class="chart-svg" role="img">{extra}'
+
+
+def _svg_bar(c):
+    data = [d for d in c.get("data", []) if d.get("label") is not None]
+    if not data:
+        return ""
+    labels = [str(d.get("label", "")) for d in data]
+    vals = [_num(d.get("value")) for d in data]
+    signed = any(v < 0 for v in vals)
+    unit = c.get("unit", "")
+    L, R, T, B = 30, 18, 28, 44
+    x0, x1, y0, y1 = L, 640 - R, T, 240 - B
+    vmax, vmin = max(vals + [0.0]), min(vals + [0.0])
+    rng = (vmax - vmin) or 1.0
+    yv = lambda v: y1 - (v - vmin) / rng * (y1 - y0)
+    zeroY = yv(0.0)
+    n = len(data)
+    step = (x1 - x0) / n
+    bw = min(56.0, step * 0.5)
+    p = [f'<line x1="{x0}" y1="{zeroY:.1f}" x2="{x1}" y2="{zeroY:.1f}" stroke="#d8d8d2"/>']
+    for i, (lab, v) in enumerate(zip(labels, vals)):
+        cx = x0 + (i + 0.5) * step
+        y = yv(v)
+        top, h = min(y, zeroY), abs(y - zeroY)
+        col = CHART_POS if v >= 0 else CHART_NEG
+        vlab = ("+" if (signed and v > 0) else "") + _fmt(v) + unit
+        vy = top - 7 if v >= 0 else top + h + 14
+        p.append(f'<rect x="{cx - bw / 2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{max(h, 0.6):.1f}" rx="2" fill="{col}"/>')
+        p.append(f'<text x="{cx:.1f}" y="{vy:.1f}" text-anchor="middle" font-size="12" fill="#33333A">{e(vlab)}</text>')
+        p.append(f'<text x="{cx:.1f}" y="222" text-anchor="middle" font-size="11.5" fill="#6B6B70">{e(lab)}</text>')
+    return _svg_open("".join(p)) + "</svg>"
+
+
+def _svg_line(c):
+    data = [d for d in c.get("data", []) if d.get("label") is not None]
+    if len(data) < 2:
+        return _svg_bar(c)
+    labels = [str(d.get("label", "")) for d in data]
+    vals = [_num(d.get("value")) for d in data]
+    unit = c.get("unit", "")
+    L, R, T, B = 34, 18, 26, 42
+    x0, x1, y0, y1 = L, 640 - R, T, 240 - B
+    vmax, vmin = max(vals), min(vals)
+    pad = ((vmax - vmin) or abs(vmax) or 1.0) * 0.18
+    vmax += pad
+    vmin -= pad
+    rng = (vmax - vmin) or 1.0
+    n = len(data)
+    xv = lambda i: x0 + (i / (n - 1)) * (x1 - x0)
+    yv = lambda v: y1 - (v - vmin) / rng * (y1 - y0)
+    pts = " ".join(f"{xv(i):.1f},{yv(v):.1f}" for i, v in enumerate(vals))
+    p = [f'<polyline points="{pts}" fill="none" stroke="{CHART_PAL[0]}" stroke-width="2.5"/>']
+    for i, v in enumerate(vals):
+        p.append(f'<circle cx="{xv(i):.1f}" cy="{yv(v):.1f}" r="3.5" fill="{CHART_PAL[0]}"/>')
+        p.append(f'<text x="{xv(i):.1f}" y="{yv(v) - 10:.1f}" text-anchor="middle" font-size="12" fill="#33333A">{e(_fmt(v))}{e(unit)}</text>')
+        p.append(f'<text x="{xv(i):.1f}" y="224" text-anchor="middle" font-size="11.5" fill="#6B6B70">{e(labels[i])}</text>')
+    return _svg_open("".join(p)) + "</svg>"
+
+
+def _svg_pie(c):
+    data = [d for d in c.get("data", []) if _num(d.get("value")) > 0]
+    if not data:
+        return ""
+    vals = [_num(d.get("value")) for d in data]
+    total = sum(vals) or 1.0
+    cx, cy, r, ir = 116, 120, 92, 48
+    ang = -math.pi / 2
+    p = []
+    for i, d in enumerate(data):
+        frac = vals[i] / total
+        a2 = ang + frac * 2 * math.pi
+        x1c, y1c = cx + r * math.cos(ang), cy + r * math.sin(ang)
+        x2c, y2c = cx + r * math.cos(a2), cy + r * math.sin(a2)
+        large = 1 if frac > 0.5 else 0
+        col = CHART_PAL[i % len(CHART_PAL)]
+        p.append(f'<path d="M {cx} {cy} L {x1c:.1f} {y1c:.1f} A {r} {r} 0 {large} 1 {x2c:.1f} {y2c:.1f} Z" fill="{col}"/>')
+        ang = a2
+    p.append(f'<circle cx="{cx}" cy="{cy}" r="{ir}" fill="#fbfaf7"/>')
+    lx, ly = 250, 46
+    for i, d in enumerate(data):
+        col = CHART_PAL[i % len(CHART_PAL)]
+        pct = vals[i] / total * 100
+        p.append(f'<rect x="{lx}" y="{ly + i * 26}" width="12" height="12" rx="2" fill="{col}"/>')
+        p.append(f'<text x="{lx + 18}" y="{ly + i * 26 + 11}" font-size="12.5" fill="#33333A">{e(str(d.get("label", "")))} · {pct:.0f}%</text>')
+    return _svg_open("".join(p)) + "</svg>"
+
+
+def svg_chart(c):
+    t = c.get("type", "bar")
+    svg = _svg_line(c) if t == "line" else _svg_pie(c) if t == "pie" else _svg_bar(c)
+    if not svg:
+        return ""
+    src = c.get("source", "")
+    note = c.get("note", "据报道生成,仅供参考")
+    cap = " · ".join(x for x in [f"来源:{e(src)}" if src else "", e(note)] if x)
+    return (f'<figure class="chart"><figcaption class="chart-title">{e(c.get("title", ""))}</figcaption>'
+            f'{svg}<figcaption class="chart-cap">{cap}</figcaption></figure>')
+
+
+def render_charts(charts):
+    return "".join(svg_chart(c) for c in (charts or []) if c.get("data"))
 
 
 # ── 数据加载 ──
@@ -156,6 +278,7 @@ def render_consensus(items, cfg, date):
         out.append(f"""<article class="card" id="item-{e(it.get('id'))}">
   <h3>{e(it.get('title_zh'))}</h3>
   <p>{hl(it.get('summary_zh'))}</p>
+  {render_charts(it.get('charts'))}
   <div class="meta-row">{src_badge}<span class="badge badge-src">{src_list}</span>{topics}{link}</div>
   {fb_row(cfg, date, it.get('id',''), it.get('title_zh',''))}
 </article>""")
@@ -179,6 +302,7 @@ def render_deep(items, cfg, date):
   {pq}
   <h3 class="deep-title">{e(it.get('title_zh'))}</h3>
   <p class="deep-sum">{hl(it.get('summary_zh'))}</p>
+  {render_charts(it.get('charts'))}
   {ihtml}
   {fb_row(cfg, date, it.get('id',''), it.get('title_zh',''))}
 </article>""")
@@ -271,6 +395,62 @@ def render_threads(threads):
             f'{"".join(blocks)}</section>')
 
 
+def _inline(s):
+    """行内 markdown:**粗体** 与 `代码`(先转义)。"""
+    out = e(s)
+    out = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", out)
+    out = re.sub(r"`(.+?)`", r"<code>\1</code>", out)
+    return out
+
+
+def render_evolution(md):
+    """把 prompts/CHANGELOG.md 渲染成「更新日志 / Release Notes」视图——产品发布形态,与新闻刻意区分。"""
+    entries, cur = [], None
+    for ln in (md or "").splitlines():
+        if ln.startswith("## "):
+            if cur:
+                entries.append(cur)
+            cur = {"title": ln[3:].strip(), "body": []}
+        elif cur is not None:
+            cur["body"].append(ln)
+    if cur:
+        entries.append(cur)
+    if not entries:
+        return ('<section class="view" id="view-evolution"><div class="release-masthead">'
+                '<h1 class="release-h1">更新日志 · Release Notes</h1></div>'
+                '<p class="empty">暂无发布记录。</p></section>')
+    cards = []
+    for ent in entries:
+        m = re.match(r"^(\d{4}-\d{2}-\d{2})\s*·\s*(.+)$", ent["title"])
+        date, rest = (m.group(1), m.group(2)) if m else ("", ent["title"])
+        m2 = re.match(r"^(.*?)\s*[(（](.+?)[)）]\s*$", rest)
+        tag, sub = (m2.group(1).strip(), m2.group(2).strip()) if m2 else (rest.strip(), "")
+        rows = []
+        for b in ent["body"]:
+            s = b.rstrip()
+            if not s or s == "---":
+                continue
+            if re.match(r"^\s+\d+\.", s):
+                rows.append(f'<li class="rn-sub">{_inline(s.strip())}</li>')
+            elif s.startswith("- "):
+                rows.append(f'<li class="rn-item">{_inline(s[2:])}</li>')
+            else:
+                rows.append(f'<li class="rn-item">{_inline(s.strip())}</li>')
+        date_html = f'<time class="release-date">{e(date)}</time>' if date else ""
+        note_html = f'<p class="release-note">{e(sub)}</p>' if sub else ""
+        cards.append(f'''<article class="release">
+  <div class="release-head"><span class="release-tag">{e(tag)}</span>{date_html}</div>
+  {note_html}
+  <ul class="release-body">{"".join(rows)}</ul>
+</article>''')
+    return ('<section class="view" id="view-evolution">'
+            '<div class="release-masthead">'
+            '<h1 class="release-h1">更新日志 · Release Notes</h1>'
+            '<p class="release-lead">系统每轮自进化(ln-evolve)的产品式变更记录——改了什么、为什么、如何回滚。最新在上。</p>'
+            '</div>'
+            f'{"".join(cards)}</section>')
+
+
 def render_nav(dates, analyses):
     links = []
     for d in dates:
@@ -293,8 +473,14 @@ def main():
     analyses = {d: load_json(os.path.join(ANALYSIS_DIR, d + ".json"), {}) for d in dates}
     id_to_date = build_id_to_date()
     threads = (load_json(THREADS_PATH, {}) or {}).get("threads", [])
+    changelog_md = ""
+    cpath = os.path.join(ROOT, "prompts", "CHANGELOG.md")
+    if os.path.exists(cpath):
+        with open(cpath, encoding="utf-8") as f:
+            changelog_md = f.read()
 
     threads_view = render_threads(threads)
+    evolution_view = render_evolution(changelog_md)
     day_views = "\n".join(render_day(analyses[d], cfg, id_to_date) for d in dates)
     date_nav = render_nav(dates, analyses)
 
@@ -309,6 +495,7 @@ def main():
         "{{PAGE_DESC}}": e(analyses[dates[0]].get("summary_zh", "").replace("==", "")),
         "{{DATE_NAV}}": date_nav,
         "{{THREADS_VIEW}}": threads_view,
+        "{{EVOLUTION_VIEW}}": evolution_view,
         "{{DAY_VIEWS}}": day_views,
         "{{FOOTER}}": footer,
         "{{FEEDBACK_ENABLED}}": "true" if cfg_get(cfg, "feedback.enabled", True) else "false",

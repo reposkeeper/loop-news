@@ -21,7 +21,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FEEDBACK = os.path.join(ROOT, "data", "feedback.jsonl")
 TAGS = os.path.join(ROOT, "config", "feedback_tags.json")
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8099
-ALLOWED_ACTIONS = {"up", "down", "adopt"}
+ALLOWED_ACTIONS = {"up", "down", "adopt", "ask"}
+OWNER_TOKEN = os.environ.get("OWNER_TOKEN", "")  # 设置后,ask(全局提问)需带该 token
 
 
 def _cors(h):
@@ -73,6 +74,8 @@ class Handler(BaseHTTPRequestHandler):
         action = data.get("action", "")
         if action not in ALLOWED_ACTIONS:
             return self._json(400, {"error": f"action must be one of {sorted(ALLOWED_ACTIONS)}"})
+        if action == "ask" and OWNER_TOKEN and data.get("token") != OWNER_TOKEN:
+            return self._json(403, {"error": "global feedback requires owner token"})
         rec = {
             "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
             "action": action,

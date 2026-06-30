@@ -12,16 +12,14 @@ description: Loop News 每日循环编排。一条命令按权威顺序跑完整
 - `batch`:`am` 或 `pm`(不传则按当前时间:< 12:00 视为 am,否则 pm)。
 - `mode`:`interactive`(默认,**发布前人工确认**)或 `autonomous`(定时调度用,免确认直接发布)。
 
-## 早班(am)—— 全链路
-**串行执行,前一步产物是后一步输入;任一步失败 → 立即停止、记入 `state/metrics.json`、不进入发布(绝不带病发布)。**
+## 早班(am)—— 全链路(**先进化修复,再生成当天总结**)
+**串行执行;任一步失败 → 立即停止、记入 `state/metrics.json`、不进入发布(绝不带病发布)。**
 1. **`ln-collect`(batch=am)** —— 采集今天(共识 + 深度;X 走 `x_cost` 低成本模式)。
-2. **`ln-synthesize`(date=昨天)** —— 汇总**前一天**(其数据已 am+pm 两班完整);产出 `data/analysis/<昨天>.json` + 更新 `data/threads.json`。
-3. **`ln-compile`** —— `python3 web/compile.py` 重建单页 `docs/index.html`。
-4. **发布门**:
-   - `interactive`:先本地预览(`preview` / 浏览器看 `docs/index.html`),**请用户确认**后再继续。
-   - `autonomous`:跳过确认,直接进入下一步(已由调度授权)。
-5. **`ln-publish`** —— `bash scripts/publish.sh` 提交并 push,GitHub Pages 上线。
-6. **`ln-evolve`** —— 读人类反馈(`scripts/feedback.sh`)+ 自评 + 小步改进 `prompts/*.md`/`config/*.yaml` + 记 `prompts/CHANGELOG.md`。
+2. **`ln-evolve`(★ 先跑,必须先完成)** —— **消化所有待处理反馈/问题(尤其 owner 的全局提问 `ask`)并据此改进 `prompts/*.md`、`config/*.yaml`**。当天的总结要用改进后的提示词,所以**进化没跑完不进入下一步**。遇到需决策的点**不等待**:按 [GOALS.md](../../../GOALS.md) 北极星选**最简可行**方案、记 `prompts/CHANGELOG.md`,继续。
+3. **`ln-synthesize`(date=昨天)** —— 用刚改进的方法论汇总**前一天**(数据已 am+pm 两班完整);产 `data/analysis/<昨天>.json` + 更新 `data/threads.json`。
+4. **`ln-compile`** —— `python3 web/compile.py` 重建单页 `docs/index.html`。
+5. **发布门**:`interactive` 本地预览 + 人工确认 / `autonomous` 直接(已由调度授权)。
+6. **`ln-publish`** —— `bash scripts/deploy-cloudflare.sh` 部署 Cloudflare(Pages 站点 + Worker 反馈 API)。
 
 ## 晚班(pm)—— 仅采集
 1. **`ln-collect`(batch=pm)** —— 采集今天晚班,入语料库供次日早班汇总。
@@ -30,3 +28,4 @@ description: Loop News 每日循环编排。一条命令按权威顺序跑完整
 - 严格串行;**编译失败 / 当日分析为空 → 不发布**。
 - 全程中文产出;深度类保留原文;X 成本受 `config/loop.yaml` 的 `x_cost` 约束。
 - 跨 agent:Codex 等无此编排器时,照 RUNBOOK.md 的"每日循环"逐步执行,等价。
+- **变更落地契约**:本轮任何进化/改动须落进【代码】或【skill/文档】;`ln-evolve` 末尾会跑 `bash scripts/check.sh` 自检(git 提交时也强制),不通过先修。

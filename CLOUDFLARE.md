@@ -52,5 +52,17 @@ bash scripts/deploy-cloudflare.sh
 - 本地服务器模式:读 `data/feedback.jsonl`。
 - Cloudflare 模式:从 Worker 拉,`curl https://feedback.你的域名/feedback`(`scripts/feedback.sh` 可据此改造)。
 
+## 访问令牌门(token 分享,简单防一下)
+站点不整站私有,而是**凭 token 访问**:每人一个长期 token,分享链接 `https://news.xdzq.org/?token=lnk_xxx`。
+- 实现:Pages 中间件 `functions/_middleware.js`(随 `wrangler pages deploy docs` 从仓库根自动编译部署)。无有效 token → 返回"输入令牌"门页,**内容不下发**(服务端校验,非前端遮挡)。
+- 令牌清单 = Pages 环境变量 **`SHARE_TOKENS`**(JSON:`{"<token>":{"name":..,"owner":bool}}`)。本地源 `config/share_tokens.json`(**不入库**)。
+- **生成 / 吊销**:
+  ```bash
+  bash scripts/share-token.sh 张三            # 普通访客;打印分享链接并同步到 Pages
+  bash scripts/share-token.sh 我自己 --owner   # 站长令牌:解锁全局反馈按钮,并同步 OWNER_TOKEN 给反馈 Worker
+  # 吊销:编辑 config/share_tokens.json 删该条,再随便跑一次本脚本同步
+  ```
+- 命中后写 cookie:`lnt`(令牌)+ `lnrole`(owner/viewer)。前端据 `lnrole==owner` 显示「✍ 提问」全局反馈按钮;Worker 端再校验 `OWNER_TOKEN` 才接受 `ask` 全局提问。
+
 ## 回退
 不想用 Cloudflare 时,`scripts/publish.sh` 仍可把 `docs/` 推回 GitHub Pages;本地仍可 `python3 server/feedback_server.py`。

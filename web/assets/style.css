@@ -156,6 +156,36 @@ mark.hl{background:linear-gradient(transparent 56%, rgba(232,198,110,.6) 56%);co
 
 .empty{color:var(--faint);font-style:italic;}
 
+/* ── 内联图表(新闻后) ── */
+.chart{margin:13px 0 4px;padding:12px 14px;background:#fbfaf7;border:1px solid var(--line);border-radius:8px;}
+.chart-title{font-family:var(--sans);font-size:12.5px;font-weight:700;letter-spacing:.02em;color:var(--ink);margin:0 0 4px;}
+.chart-svg{width:100%;height:auto;display:block;font-family:var(--sans);}
+.chart-cap{font-family:var(--sans);font-size:11px;color:var(--faint);margin-top:4px;}
+
+/* ── 更新日志 / Release Notes —— 刻意区别于新闻:无衬线 + 版本徽章 + 卡片面板 ── */
+.release-masthead{margin:0 0 26px;padding-bottom:16px;border-bottom:1px solid var(--line);}
+.release-h1{font-family:var(--sans);font-weight:800;font-size:30px;letter-spacing:-.015em;margin:0;}
+.release-lead{font-family:var(--sans);color:var(--muted);font-size:14px;line-height:1.6;margin:8px 0 0;max-width:58ch;}
+.release{background:var(--raised);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:16px 18px;margin:0 0 14px;}
+.release-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.release-tag{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:600;letter-spacing:.02em;color:#fff;background:var(--accent);padding:3px 11px;border-radius:6px;}
+.release-date{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:var(--muted);}
+.release-note{font-family:var(--sans);font-size:14.5px;color:var(--ink);font-weight:600;margin:10px 0 6px;}
+.release-body{list-style:none;margin:6px 0 0;padding:0;}
+.rn-item{font-family:var(--sans);font-size:14.5px;line-height:1.62;color:var(--ink-soft);margin:7px 0;padding-left:18px;position:relative;}
+.rn-item::before{content:"›";position:absolute;left:2px;top:-1px;color:var(--accent);font-weight:700;font-size:16px;}
+.rn-sub{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--muted);margin:3px 0 3px 22px;padding-left:12px;border-left:2px solid var(--line-soft);list-style:none;}
+.rn-item strong,.rn-sub strong,.release-note strong{color:var(--ink);font-weight:700;}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em;background:#1f5c570f;color:#2a4f4b;padding:1px 5px;border-radius:3px;}
+
+/* ── 全局反馈按钮(owner 专属,浮动) ── */
+.fab-feedback{position:fixed;right:22px;bottom:22px;z-index:40;display:none;
+  font-family:var(--sans);font-size:14px;font-weight:600;color:#fff;background:var(--ink);
+  border:none;border-radius:999px;padding:11px 18px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.22);}
+.fab-feedback:hover{background:var(--accent);}
+body.is-owner .fab-feedback{display:inline-flex;align-items:center;gap:6px;}
+@media(max-width:860px){.fab-feedback{right:16px;bottom:16px;}}
+
 /* ── 页脚 ── */
 .site-footer{border-top:2px solid var(--ink);margin-top:24px;}
 .site-footer .hwrap{padding:20px 24px;font-size:12px;color:var(--muted);letter-spacing:.02em;}

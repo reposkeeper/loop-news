@@ -7,6 +7,8 @@ description: Loop News 汇总分析步骤。加载前一天语料 + 相关历史
 
 把零散新闻连成关系网,得出"看单条得不出、连起来才浮现"的有价值结论。**每天早上跑一次,汇总前一天。**
 
+> **北极星(见 [GOALS.md](../../../GOALS.md)):最大化「非显然洞察」。** 优先且尽量多产跨时间/跨域、可证伪、言之有据的深层判断;但每条必须回链证据+分级,**无据不出(防 over-reach)**。
+
 ## 运行参数
 - `date`:被汇总的日期,默认**昨天**(Asia/Shanghai)。
 
@@ -22,7 +24,7 @@ description: Loop News 汇总分析步骤。加载前一天语料 + 相关历史
    - 对识别出的**跨多天**主题/主体(如"AI 监管"、"OpenAI"),把今天的相关条目**接到已有线索的 `timeline`** 上;没有就新建一条 thread。
    - 每条 thread 必须真正**跨日期**(timeline 含 ≥2 个不同日期),否则不要建(单日的放当天 `connections` 即可)。
    - 更新 `summary_zh` / `status_zh` 反映最新进展。线索条目的 `item_id` 必须能在某天 corpus 里找到(可回溯)。
-6. **写盘**:`data/analysis/<date>.json`(schema 见下)+ `data/threads.json`;更新 `state/metrics.json`(结论数、各透镜命中数、线索数)。
+6. **写盘**:`data/analysis/<date>.json`(schema 见下)+ `data/threads.json`;更新 `state/metrics.json`(结论数、各透镜命中数、线索数,以及**北极星指标 `non_obvious / edge / cross_date / falsifiable`**,定义见 [GOALS.md](../../../GOALS.md))。
 
 ## 分析产物 schema(`data/analysis/<date>.json`)—— 被 web/compile.py 消费
 ```json
@@ -32,7 +34,8 @@ description: Loop News 汇总分析步骤。加载前一天语料 + 相关历史
   "summary_zh": "当日总览,2-4 句:今天最值得记住的是什么。",
   "consensus": [
     { "title_zh": "...", "summary_zh": "...", "sources": ["Reuters","AP"],
-      "consensus_count": 5, "url": "https://...", "topics": ["..."], "id": "..." }
+      "consensus_count": 5, "url": "https://...", "topics": ["..."], "id": "...",
+      "charts": [{ "type":"bar|line|pie", "title":"", "unit":"%", "source":"", "note":"据报道生成,仅供参考", "data":[{"label":"","value":0}] }] }
   ],
   "deep": [
     { "title_zh": "...", "summary_zh": "...", "source": "@sama", "lang": "en",
