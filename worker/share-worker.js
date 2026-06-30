@@ -16,7 +16,8 @@ const CORS = {
   "Access-Control-Allow-Headers": "Content-Type",
 };
 const SERIF = "Noto Serif SC", SANS = "Noto Sans SC";
-const C = { ink: "#1A1A1F", soft: "#3A3A42", muted: "#86868C", line: "#E5E4DF", paper: "#FBFAF7", accent: "#1F5C57", predict: "#5B3FB0" };
+const C = { ink: "#1A1A1F", soft: "#3A3A42", muted: "#86868C", line: "#E5E4DF", paper: "#FBFAF7", accent: "#1F5C57", predict: "#5B3FB0", date: "#33333A" };
+const BRAND = "Playfair Display", MONO = "JetBrains Mono";
 
 // workers-og 的 HTML 解析器不解码实体(&#160; / &amp; 会原样显示),故用形近字符中和 < > &(均罕见于中文标题)
 function esc(s) {
@@ -46,21 +47,17 @@ function cardHtml(d) {
     : "";
 
   return `
-  <div style="display:flex;flex-direction:column;width:1200px;background:${C.paper};font-family:'${SANS}';padding:62px 70px 54px;">
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:28px;border-bottom:3px solid ${C.ink};">
-      <div style="display:flex;font-family:'${SERIF}';font-weight:700;font-size:48px;color:${C.ink};letter-spacing:-1px;">Loop News</div>
-      <div style="display:flex;font-size:31px;color:${C.muted};letter-spacing:1px;">${esc(d.date || "")}</div>
+  <div style="display:flex;flex-direction:column;width:1200px;background:${C.paper};font-family:'${SANS}';padding:64px 70px 66px;">
+    <div style="display:flex;align-items:center;padding-bottom:30px;border-bottom:3px solid ${C.ink};">
+      <div style="display:flex;font-family:'${BRAND}';font-weight:700;font-size:55px;color:${C.ink};">Loop News</div>
+      <div style="display:flex;margin-left:auto;font-family:'${MONO}';font-weight:500;font-size:30px;color:${C.date};letter-spacing:0.5px;">${esc(d.date || "")}</div>
     </div>
-    <div style="display:flex;flex-direction:column;padding:44px 0 0;">
+    <div style="display:flex;flex-direction:column;padding:48px 0 0;">
       <div style="display:flex;color:${grade};font-size:27px;letter-spacing:6px;margin-bottom:32px;">${esc(badge)}</div>
       ${quoteBlock}
       <div style="display:flex;font-family:'${SERIF}';font-size:${titleSize}px;line-height:1.42;font-weight:700;color:${C.ink};margin-bottom:30px;letter-spacing:-0.5px;">${esc(title)}</div>
       <div style="display:flex;font-size:37px;line-height:1.78;color:${C.soft};">${esc(summary)}</div>
       ${chartBlock}
-    </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;border-top:2px solid ${C.line};margin-top:50px;padding-top:30px;">
-      <div style="display:flex;color:${C.muted};font-size:30px;">${esc(clip(d.source, 36))}</div>
-      <div style="display:flex;font-family:'${SERIF}';color:${C.accent};font-size:31px;font-weight:700;">news.xdzq.org</div>
     </div>
   </div>`;
 }
@@ -75,12 +72,21 @@ async function loadFont(family, weight, text) {
   if (!m) throw new Error("font css parse failed: " + css.slice(0, 120));
   return await fetch(m[1]).then((r) => r.arrayBuffer());
 }
-async function fontsFor(text) {
-  const sub = text + " Loop News news.xdzq.org 今日要闻 共识 深度原声 · 家在报 0123456789% …—《》「」『』、,。:;()";
-  const [serif, sans] = await Promise.all([loadFont(SERIF, 700, sub), loadFont(SANS, 400, sub)]);
+async function fontsFor(d) {
+  const punct = " ·…—《》「」『』、,。:;()%0123456789";
+  const serifText = (d.title || "") + (d.quote || "") + punct;                       // 标题/引文
+  const sansText = (d.summary || "") + " 今日要闻 共识 深度原声 家在报 图表 " + (d.badge || "") + punct; // 正文/徽章
+  const [brand, serif, sans, mono] = await Promise.all([
+    loadFont(BRAND, 700, "Loop News"),                                               // 品牌刊名(Playfair)
+    loadFont(SERIF, 700, serifText),
+    loadFont(SANS, 400, sansText),
+    loadFont(MONO, 500, (d.date || "") + "0123456789-./: "),                          // 日期(等宽)
+  ]);
   return [
+    { name: BRAND, data: brand, weight: 700, style: "normal" },
     { name: SERIF, data: serif, weight: 700, style: "normal" },
     { name: SANS, data: sans, weight: 400, style: "normal" },
+    { name: MONO, data: mono, weight: 500, style: "normal" },
   ];
 }
 
@@ -102,7 +108,7 @@ export default {
 
     try {
       const html = cardHtml(d);
-      const fonts = await fontsFor([d.title, d.summary, d.source, d.date, d.badge, d.quote].filter(Boolean).join(" "));
+      const fonts = await fontsFor(d);
       const img = new ImageResponse(html, { width: 1200, fonts });
       const h = new Headers(img.headers);
       for (const [k, v] of Object.entries(CORS)) h.set(k, v);
