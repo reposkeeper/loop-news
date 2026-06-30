@@ -24,6 +24,7 @@
     <nav>
       <a class="nav-link" data-target="view-threads" href="#threads">🧵 线索时间线</a>
       <a class="nav-link" data-target="view-evolution" href="#evolution">⚙️ 自进化日志</a>
+      <a class="nav-link" data-target="view-favorites" href="#favorites">★ 我的收藏</a>
       <div class="nav-section">每日</div>
       {{DATE_NAV}}
     </nav>
@@ -31,6 +32,7 @@
   <main class="content">
     {{THREADS_VIEW}}
     {{EVOLUTION_VIEW}}
+    {{FAVORITES_VIEW}}
     {{DAY_VIEWS}}
   </main>
 </div>
@@ -58,12 +60,13 @@
   function showTarget(){
     var raw=(location.hash||"").replace(/^#/, ""), date=raw, item="";
     if(raw.indexOf("__")>-1){var p=raw.split("__");date=p[0];item=p[1];}
-    var targetId=(date==="threads"||date==="")?"view-threads":(date==="evolution"?"view-evolution":"day-"+date), found=false;
+    var targetId=(date==="threads"||date==="")?"view-threads":(date==="evolution"?"view-evolution":(date==="favorites"?"view-favorites":"day-"+date)), found=false;
     document.querySelectorAll(".view").forEach(function(v){var on=(v.id===targetId);v.classList.toggle("active",on);if(on)found=true;});
     if(!found){var first=document.querySelector(".view.day");if(first){first.classList.add("active");targetId=first.id;}}
     document.querySelectorAll(".nav-link").forEach(function(a){a.classList.toggle("current",a.getAttribute("data-target")===targetId);});
     if(item){var el=document.getElementById("item-"+item);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("flash");setTimeout(function(){el.classList.remove("flash");},1600);}}
     else{window.scrollTo(0,0);}
+    if(targetId==="view-favorites") loadFavorites();
     document.getElementById("sidebar").classList.remove("open");
   }
   window.addEventListener("hashchange",showTarget);
@@ -103,8 +106,36 @@
       .catch(function(){elMsg.textContent="提交失败:反馈服务器未启动?";elSubmit.disabled=false;});
   }
 
+  /* ---- 收藏 / 关注(per-user,凭 token)---- */
+  function esc(s){return (s||"").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+  function toggleAct(btn){
+    if(!FB.enabled||!API)return;
+    var tok=ck("lnt"); if(!tok){return;}
+    var isFav=btn.classList.contains("fav"), on=!btn.classList.contains("on");
+    var ep=isFav?"/favorite":"/follow";
+    var payload={token:tok,item_id:btn.dataset.item,date:btn.dataset.date,title:btn.dataset.title,on:on};
+    if(!isFav){try{payload.topics=JSON.parse(btn.dataset.topics||"[]");payload.entities=JSON.parse(btn.dataset.entities||"[]");}catch(_){}}
+    btn.classList.toggle("on",on);
+    btn.textContent=isFav?(on?"★ 已收藏":"★ 收藏"):(on?"✓ 已关注":"+ 关注");
+    fetch(API+ep,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+      .then(function(r){return r.json();}).then(function(x){if(x&&x.error){btn.classList.toggle("on",!on);}}).catch(function(){btn.classList.toggle("on",!on);});
+  }
+  function removeFav(id){var tok=ck("lnt");if(!API||!tok)return;fetch(API+"/favorite",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token:tok,item_id:id,on:false})}).then(function(){loadFavorites();});}
+  function loadFavorites(){
+    var box=document.getElementById("favList"); if(!box)return;
+    var tok=ck("lnt");
+    if(!FB.enabled||!API||!tok){box.innerHTML='<p class="empty">需要访问令牌后才能查看收藏。</p>';return;}
+    box.innerHTML='<p class="empty">加载中…</p>';
+    fetch(API+"/favorites?token="+encodeURIComponent(tok)).then(function(r){return r.json();}).then(function(d){
+      if(!d.items||!d.items.length){box.innerHTML='<p class="empty">还没有收藏。点新闻底部的「★ 收藏」即可加入。</p>';return;}
+      box.innerHTML=d.items.map(function(it){var href="#"+(it.date||"")+"__"+it.item_id;return '<div class="fav-item"><a href="'+href+'"><span class="fav-date">'+esc(it.date||"")+'</span> '+esc(it.title||it.item_id)+'</a><button class="fav-remove" data-item="'+esc(it.item_id)+'">取消</button></div>';}).join("");
+    }).catch(function(){box.innerHTML='<p class="empty">加载失败:反馈服务未连接?</p>';});
+  }
+
   /* ---- 统一点击处理 ---- */
   document.addEventListener("click",function(e){
+    var act=e.target.closest(".act");if(act){toggleAct(act);return;}
+    var rm=e.target.closest(".fav-remove");if(rm){removeFav(rm.dataset.item);return;}
     var fb=e.target.closest(".fb");if(fb){openModal(fb);return;}
     if(e.target.closest(".menu-toggle")){document.getElementById("sidebar").classList.toggle("open");return;}
     if(e.target===modal){closeModal();return;}

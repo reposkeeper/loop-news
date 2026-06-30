@@ -28,6 +28,11 @@ description: Loop News 采集步骤。从四类来源(主流媒体/RSS、X名人
    - 更新实体索引 `data/entities/index.json`:`{ "实体名": [ {date, id, title_zh}, ... ] }`(供汇总做跨时间检索)。
    - 更新 `state/seen.json`、`state/metrics.json`(本轮:各来源产出条数、去重数、深/共识占比、X 抓取是否成功)。
 
+## 关注议程(持续追踪 —— 来自网页「+ 关注」)
+用户在网页「+ 关注」过的新闻,经反馈服务聚合成**追踪话题/实体**。**每轮采集先拉取**:线上 `curl "<feedback.api_url>/follows"`(取 `topics`/`entities` 聚合),把它们并入本轮搜索议程,**主动搜这些话题的最新进展**(共识与深度都查),而不是等它们偶然出现。
+- 某关注话题**连续多轮无新内容** → 在 `state/metrics.json` 标 `stale`、降优先;**确实长期无更新才停**(对应用户「除非确实没有更新的内容」)。
+- 这让系统对用户在意的线索保持跟进,正是北极星「跨时间洞察」的素材来源。
+
 ## 语料库条目 schema(`data/corpus/<date>.json` 数组元素)
 ```json
 {

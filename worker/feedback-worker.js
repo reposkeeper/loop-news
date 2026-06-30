@@ -20,6 +20,23 @@ const CORS = {
 };
 const ALLOWED = new Set(["up", "down", "adopt", "ask"]);
 
+function validTokens(env) {
+  try { return JSON.parse(env.SHARE_TOKENS || "{}"); } catch (_) { return {}; }
+}
+async function listAll(env, prefix) {
+  const items = [];
+  let cursor;
+  do {
+    const l = await env.BUCKET.list({ prefix, cursor });
+    for (const o of l.objects) {
+      const g = await env.BUCKET.get(o.key);
+      if (g) { try { items.push(JSON.parse(await g.text())); } catch (_) {} }
+    }
+    cursor = l.truncated ? l.cursor : undefined;
+  } while (cursor);
+  return items;
+}
+
 function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
     status,
@@ -79,6 +96,52 @@ export default {
       } while (cursor);
       out.sort((a, b) => (a.ts < b.ts ? -1 : 1));
       return json({ count: out.length, items: out });
+    }
+
+    // ── 收藏(per-user;按 token 隔离)──
+    if (p === "/favorite" && req.method === "POST") {
+      let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
+      const tok = String(d.token || "");
+      if (!validTokens(env)[tok]) return json({ error: "invalid token" }, 403);
+      const key = `fav/${tok}/${String(d.item_id || "").slice(0, 120)}.json`;
+      if (d.on === false) { await env.BUCKET.delete(key); return json({ ok: true, on: false }); }
+      const rec = { item_id: d.item_id, date: String(d.date || "").slice(0, 20), title: String(d.title || "").slice(0, 300), ts: new Date().toISOString() };
+      await env.BUCKET.put(key, JSON.stringify(rec), { httpMetadata: { contentType: "application/json" } });
+      return json({ ok: true, on: true });
+    }
+    if (p === "/favorites" && req.method === "GET") {
+      const tok = url.searchParams.get("token") || "";
+      if (!validTokens(env)[tok]) return json({ error: "invalid token" }, 403);
+      const items = await listAll(env, `fav/${tok}/`);
+      items.sort((a, b) => (a.ts < b.ts ? 1 : -1));
+      return json({ count: items.length, items });
+    }
+
+    // ── 关注(驱动后续采集;按 token 存,读取时聚合话题/实体)──
+    if (p === "/follow" && req.method === "POST") {
+      let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
+      const tok = String(d.token || "");
+      const who = validTokens(env)[tok];
+      if (!who) return json({ error: "invalid token" }, 403);
+      const key = `follow/${tok}/${String(d.item_id || "").slice(0, 120)}.json`;
+      if (d.on === false) { await env.BUCKET.delete(key); return json({ ok: true, on: false }); }
+      const rec = {
+        item_id: d.item_id, title: String(d.title || "").slice(0, 300),
+        topics: (Array.isArray(d.topics) ? d.topics : []).slice(0, 12).map((x) => String(x).slice(0, 40)),
+        entities: (Array.isArray(d.entities) ? d.entities : []).slice(0, 12).map((x) => String(x).slice(0, 40)),
+        by: who.name || "", ts: new Date().toISOString(),
+      };
+      await env.BUCKET.put(key, JSON.stringify(rec), { httpMetadata: { contentType: "application/json" } });
+      return json({ ok: true, on: true });
+    }
+    if (p === "/follows" && req.method === "GET") {
+      const items = await listAll(env, "follow/");
+      const topics = {}, ents = {};
+      for (const it of items) {
+        (it.topics || []).forEach((t) => (topics[t] = (topics[t] || 0) + 1));
+        (it.entities || []).forEach((en) => (ents[en] = (ents[en] || 0) + 1));
+      }
+      return json({ count: items.length, items, topics, entities: ents });
     }
 
     return json({ error: "not found" }, 404);

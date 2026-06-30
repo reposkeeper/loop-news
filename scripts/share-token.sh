@@ -28,8 +28,10 @@ echo
 
 # 同步全部有效令牌到 Pages 环境变量(中间件读它校验)
 VALUE=$(python3 -c "import json;d=json.load(open('$FILE'));print(json.dumps({k:v for k,v in d.items() if not k.startswith('_')},ensure_ascii=False))")
-echo "→ 同步 SHARE_TOKENS 到 Pages…"
+echo "→ 同步 SHARE_TOKENS 到 Pages(门校验)…"
 printf '%s' "$VALUE" | npx --yes wrangler pages secret put SHARE_TOKENS --project-name loop-news
+echo "→ 同步 SHARE_TOKENS 到反馈 Worker(收藏/关注校验)…"
+printf '%s' "$VALUE" | npx --yes wrangler secret put SHARE_TOKENS
 
 # 站长令牌额外同步给反馈 Worker(校验"全局提问"只接受 owner)
 if [ "$OWNER" = "true" ]; then

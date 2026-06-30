@@ -277,6 +277,19 @@ def fb_row(cfg, date, item_id, title):
             f'{btn("adopt", "✓ 采用")}</div>')
 
 
+def act_row(cfg, date, it):
+    """新闻条目的 收藏 / 关注(per-user,凭 token;关注驱动后续采集)。"""
+    if not cfg_get(cfg, "feedback.enabled", True):
+        return ""
+    iid, t, d = e(it.get("id")), e(it.get("title_zh")), e(date)
+    topics = e(json.dumps(it.get("topics", []), ensure_ascii=False))
+    ents = e(json.dumps(it.get("entities", []), ensure_ascii=False))
+    return (f'<span class="act-row">'
+            f'<button class="act fav" data-item="{iid}" data-date="{d}" data-title="{t}">★ 收藏</button>'
+            f'<button class="act follow" data-item="{iid}" data-date="{d}" data-title="{t}" data-topics="{topics}" data-entities="{ents}">+ 关注</button>'
+            f'</span>')
+
+
 def ev_links(ev, id_to_date):
     parts = []
     for x in ev or []:
@@ -302,7 +315,7 @@ def render_consensus(items, cfg, date):
   <p>{hl(it.get('summary_zh'))}</p>
   {render_charts(it.get('charts'))}
   <div class="meta-row">{src_badge}<span class="badge badge-src">{src_list}</span>{topics}{link}</div>
-  {fb_row(cfg, date, it.get('id',''), it.get('title_zh',''))}
+  <div class="row-actions">{fb_row(cfg, date, it.get('id',''), it.get('title_zh',''))}{act_row(cfg, date, it)}</div>
 </article>""")
     return "\n".join(out)
 
@@ -326,7 +339,7 @@ def render_deep(items, cfg, date):
   <p class="deep-sum">{hl(it.get('summary_zh'))}</p>
   {render_charts(it.get('charts'))}
   {ihtml}
-  {fb_row(cfg, date, it.get('id',''), it.get('title_zh',''))}
+  <div class="row-actions">{fb_row(cfg, date, it.get('id',''), it.get('title_zh',''))}{act_row(cfg, date, it)}</div>
 </article>""")
     return "\n".join(out)
 
@@ -473,6 +486,15 @@ def render_evolution(md):
             f'{"".join(cards)}</section>')
 
 
+def render_favorites():
+    """「我的收藏」视图外壳;内容由前端按 token 从反馈服务拉取填充。"""
+    return ('<section class="view" id="view-favorites">'
+            '<h1 class="day-date">★ 我的收藏</h1>'
+            '<p class="intro">你收藏的新闻(按访问令牌区分,各看各的)。点条目跳到原文位置;可在此取消收藏。</p>'
+            '<div id="favList" class="fav-list"><p class="empty">加载中…</p></div>'
+            '</section>')
+
+
 def render_nav(dates, analyses):
     links = []
     for d in dates:
@@ -503,6 +525,7 @@ def main():
 
     threads_view = render_threads(threads)
     evolution_view = render_evolution(changelog_md)
+    favorites_view = render_favorites()
     day_views = "\n".join(render_day(analyses[d], cfg, id_to_date) for d in dates)
     date_nav = render_nav(dates, analyses)
 
@@ -518,6 +541,7 @@ def main():
         "{{DATE_NAV}}": date_nav,
         "{{THREADS_VIEW}}": threads_view,
         "{{EVOLUTION_VIEW}}": evolution_view,
+        "{{FAVORITES_VIEW}}": favorites_view,
         "{{DAY_VIEWS}}": day_views,
         "{{FOOTER}}": footer,
         "{{FEEDBACK_ENABLED}}": "true" if cfg_get(cfg, "feedback.enabled", True) else "false",
