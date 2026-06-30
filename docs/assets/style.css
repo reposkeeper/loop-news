@@ -110,18 +110,15 @@ a:hover{text-decoration:none}
 /* 行内高亮:每块 ≤2 处(== 文本 ==)。淡金色马克笔,不与分级色争艳 */
 mark.hl{background:linear-gradient(transparent 56%, rgba(232,198,110,.6) 56%);color:inherit;padding:0 1px;border-radius:1px;}
 
-/* 反馈三键(每块底部:赞 / 踩 / 采用),点击弹窗 */
-.fb-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
-.fb{font-family:var(--sans);font-size:11.5px;letter-spacing:.03em;color:var(--muted);background:none;
-  border:1px solid var(--line);border-radius:999px;padding:3px 12px;cursor:pointer;transition:border-color .15s,color .15s;}
-.fb:hover{border-color:var(--accent);color:var(--accent);}
-.fb[data-act="adopt"]:hover{border-color:var(--fact);color:var(--fact);}
-
-/* 收藏 / 关注 */
-.row-actions{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin-top:14px;}
-.row-actions .fb-row{margin-top:0;}
-.act{font-family:var(--sans);font-size:11.5px;letter-spacing:.03em;color:var(--muted);background:none;border:1px solid var(--line);border-radius:999px;padding:3px 12px;cursor:pointer;transition:.15s;}
-.act:hover{border-color:var(--accent);color:var(--accent);}
+/* ── 条目动作栏:赞/踩/采用(左)· 收藏/关注(右),统一一行 + 顶部发丝线 ── */
+.fb-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}        /* 结论里 fb-row 独立用 */
+.row-actions{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:16px;padding-top:13px;border-top:1px solid var(--line-soft);}
+.row-actions .fb-row,.row-actions .act-row{display:contents;}        /* 摊平成同一行 */
+.fb,.act{font-family:var(--sans);font-size:12px;line-height:1;letter-spacing:.02em;color:var(--muted);
+  background:none;border:1px solid var(--line);border-radius:7px;padding:6px 11px;cursor:pointer;transition:.15s;white-space:nowrap;}
+.fb:hover,.act:hover{border-color:var(--accent);color:var(--accent);background:#1f5c570a;}
+.fb[data-act="adopt"]:hover{border-color:var(--fact);color:var(--fact);background:#2f6f4e0a;}
+.act.fav{margin-left:auto;}                                          /* 把"保存组"推到右侧,与反馈分开 */
 .act.fav.on{border-color:var(--infer);color:#fff;background:var(--infer);}
 .act.follow.on{border-color:var(--accent);color:#fff;background:var(--accent);}
 
@@ -225,14 +222,29 @@ body.is-owner .fab-feedback{display:inline-flex;align-items:center;gap:6px;}
 /* ── 焦点可见 ── */
 a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
 
-/* ── 移动端 ── */
+/* ── 移动端(重点适配)── */
 @media(max-width:860px){
-  .menu-toggle{display:inline-block;order:-1;}
+  .hwrap{padding:11px 16px;align-items:center;gap:11px;}
+  .brand{font-size:18px;}
+  .subtitle{display:none;}                                    /* 窄屏让位给品牌 + 菜单 */
+  .menu-toggle{display:inline-flex;align-items:center;order:-1;font-size:16px;padding:5px 11px;border-radius:7px;}
   .layout{display:block;padding:0;}
-  .sidebar{position:fixed;left:0;top:55px;bottom:0;width:82%;max-width:300px;background:var(--paper);
-    border-right:1px solid var(--line);padding:18px 20px;transform:translateX(-104%);transition:transform .24s ease;z-index:25;max-height:none;}
-  .sidebar.open{transform:translateX(0);box-shadow:0 0 0 100vw #00000022;}
-  .content{padding:24px 20px 56px;max-width:none;}
-  .pq{font-size:20px;}
+  .sidebar{position:fixed;left:0;top:50px;bottom:0;width:84%;max-width:312px;background:var(--paper);
+    border-right:1px solid var(--line);padding:16px 18px calc(22px + env(safe-area-inset-bottom));
+    transform:translateX(-104%);transition:transform .26s cubic-bezier(.4,0,.2,1);z-index:25;max-height:none;overflow-y:auto;}
+  .sidebar.open{transform:translateX(0);box-shadow:0 0 0 100vw rgba(20,20,22,.34);}
+  .content{padding:22px 18px 72px;max-width:none;}
+  .day-date{font-size:clamp(30px,9vw,42px);}
+  .day-summary{font-size:17px;}
+  .thread h3{font-size:20px;}
+  .card h3,.conn h3{font-size:18px;}
+  .pq{font-size:19px;padding-left:16px;}
+  .section{margin:34px 0;}
+  .fb,.act{font-size:12.5px;padding:7px 12px;}               /* 更大触控目标 */
+  .act.fav{margin-left:0;}                                    /* 窄屏不右推,顺势换行 */
+  .fab-feedback{right:15px;bottom:calc(15px + env(safe-area-inset-bottom));}
+  .fb-modal{align-items:flex-end;padding:0;}                  /* 弹窗 → 底部抽屉 */
+  .fb-card{max-width:none;border-radius:16px 16px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));animation:sheet .26s cubic-bezier(.4,0,.2,1) both;}
+  @keyframes sheet{from{transform:translateY(100%)}to{transform:none}}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}

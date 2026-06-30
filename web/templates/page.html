@@ -43,7 +43,7 @@
 <footer class="site-footer"><div class="hwrap">{{FOOTER}}</div></footer>
 
 <!-- 全局反馈(owner 专属,浮动;body.is-owner 时显示) -->
-<button class="fb fab-feedback" data-act="ask" data-item="__global__" data-date="" data-title="全局提问 / 反馈">✍ 提问</button>
+<button class="fb fab-feedback" data-act="ask" data-item="__global__" data-date="" data-title="给整站的反馈 / 想法">✍ 反馈</button>
 
 <!-- 反馈对话框(页面内,不跳转) -->
 <div class="fb-modal" id="fbModal" hidden>
@@ -88,7 +88,7 @@
 
   /* ---- 反馈弹窗 ---- */
   var FB=window.__FB||{enabled:false}, API=(FB.api||"").replace(/\/$/,"");
-  var ACT={up:"👍 赞",down:"👎 踩",adopt:"✓ 采用",ask:"✍ 提问 / 全局反馈",request:"➕ 想看的话题"}, tags=FB.tags||{}, picked, current=null;
+  var ACT={up:"👍 赞",down:"👎 踩",adopt:"✓ 采用",ask:"✍ 反馈",request:"➕ 想看的话题"}, tags=FB.tags||{}, picked, current=null;
   function ck(n){var m=document.cookie.match(new RegExp("(?:^|;\\s*)"+n+"=([^;]+)"));return m?decodeURIComponent(m[1]):"";}
   if(ck("lnrole")==="owner") document.body.classList.add("is-owner");
   var modal=document.getElementById("fbModal"),elAct=document.getElementById("fbAct"),elItem=document.getElementById("fbItem"),
@@ -175,6 +175,8 @@
     if(e.target===modal){closeModal();return;}
     if(e.target.closest("#fbClose")){closeModal();return;}
     if(e.target.closest("#fbSubmit")){submitFb();return;}
+    var sb=document.getElementById("sidebar");                       // 点抽屉外 → 关闭(移动端)
+    if(sb&&sb.classList.contains("open")&&!e.target.closest("#sidebar")&&!e.target.closest(".menu-toggle")){sb.classList.remove("open");}
   });
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!modal.hidden)closeModal();});
 })();
