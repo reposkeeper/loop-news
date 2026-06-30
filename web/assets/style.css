@@ -121,6 +121,8 @@ mark.hl{background:linear-gradient(transparent 56%, rgba(232,198,110,.6) 56%);co
 .act.fav{margin-left:auto;}                                          /* 把"保存组"推到右侧,与反馈分开 */
 .act.fav.on{border-color:var(--infer);color:#fff;background:var(--infer);}
 .act.follow.on{border-color:var(--accent);color:#fff;background:var(--accent);}
+.act.share:hover{border-color:var(--ink);color:var(--ink);}
+.act:disabled{opacity:.6;cursor:default;}
 
 /* 我的收藏列表 */
 .fav-list{margin-top:6px;}

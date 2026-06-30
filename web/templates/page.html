@@ -56,7 +56,7 @@
   </div>
 </div>
 
-<script>window.__FB={enabled:{{FEEDBACK_ENABLED}},api:"{{FEEDBACK_API}}",tags:{{FEEDBACK_TAGS}}};</script>
+<script>window.__FB={enabled:{{FEEDBACK_ENABLED}},api:"{{FEEDBACK_API}}",share:"{{SHARE_API}}",tags:{{FEEDBACK_TAGS}}};</script>
 <script>
 (function(){
   /* ---- hash 路由:同页切换日期/线索 ---- */
@@ -87,7 +87,7 @@
   });
 
   /* ---- 反馈弹窗 ---- */
-  var FB=window.__FB||{enabled:false}, API=(FB.api||"").replace(/\/$/,"");
+  var FB=window.__FB||{enabled:false}, API=(FB.api||"").replace(/\/$/,""), SHARE_API=FB.share||"";
   var ACT={up:"👍 赞",down:"👎 踩",adopt:"✓ 采用",ask:"✍ 反馈",request:"➕ 想看的话题"}, tags=FB.tags||{}, picked, current=null;
   function ck(n){var m=document.cookie.match(new RegExp("(?:^|;\\s*)"+n+"=([^;]+)"));return m?decodeURIComponent(m[1]):"";}
   if(ck("lnrole")==="owner") document.body.classList.add("is-owner");
@@ -166,8 +166,20 @@
   }
 
   /* ---- 统一点击处理 ---- */
+  function shareCard(btn){                                            // 分享 → 服务端按手机卡片出图 → 自动下载
+    if(!SHARE_API){return;}
+    var card=btn.closest(".card"),cs=card&&card.querySelector(".chart-svg"),chart="";
+    if(cs){try{chart="data:image/svg+xml;base64,"+btoa(unescape(encodeURIComponent(cs.outerHTML)));}catch(_){}}
+    var pay={title:btn.dataset.title||"",summary:btn.dataset.summary||"",source:btn.dataset.source||"",date:btn.dataset.date||"",kind:btn.dataset.kind||"consensus",badge:btn.dataset.badge||"",quote:btn.dataset.quote||"",chart:chart};
+    var old=btn.textContent;btn.textContent="⤴ 生成中…";btn.disabled=true;
+    fetch(SHARE_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(pay)})
+      .then(function(r){if(!r.ok)throw 0;return r.blob();})
+      .then(function(b){var u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=((btn.dataset.title||"loop-news").replace(/[\/\\:*?"<>|\s]/g,"").slice(0,36)||"loop-news")+".png";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},2000);btn.textContent="✓ 已下载";setTimeout(function(){btn.textContent=old;btn.disabled=false;},1600);})
+      .catch(function(){btn.textContent="✕ 失败,重试";setTimeout(function(){btn.textContent=old;btn.disabled=false;},1800);});
+  }
   document.addEventListener("click",function(e){
     if(e.target.closest("#reqBtn")){openRequest();return;}
+    var sh=e.target.closest(".act.share");if(sh){shareCard(sh);return;}
     var act=e.target.closest(".act");if(act){toggleAct(act);return;}
     var rm=e.target.closest(".fav-remove");if(rm){removeFav(rm.dataset.item);return;}
     var fb=e.target.closest(".fb");if(fb){openModal(fb);return;}

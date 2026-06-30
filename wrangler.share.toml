@@ -1,0 +1,10 @@
+# Cloudflare Worker 配置:Loop News 分享出图(Satori+resvg / workers-og)。
+# 与反馈 API 分开部署(隔离重依赖),挂到 share.xdzq.org。
+# 部署:npx wrangler deploy -c wrangler.share.toml
+name = "loop-news-share"
+main = "worker/share-worker.js"
+compatibility_date = "2026-06-01"
+
+routes = [
+  { pattern = "share.xdzq.org", custom_domain = true }
+]

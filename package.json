@@ -1,0 +1,27 @@
+{
+  "name": "loop-news",
+  "version": "1.0.0",
+  "description": "一个**自循环、可自我进化**的新闻情报系统。它持续从多语种、多平台采集新闻,沉淀成长期语料库, 每天用方法论挖掘**不同时间新闻之间的深层关联**,产出**有价值的结论**,再编译成纯静态网页发布到 GitHub Pages。系统还会自评质量、自动改进自己的采集提示词与分析方法论,**越跑越聪明**。",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reposkeeper/loop-news.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/reposkeeper/loop-news/issues"
+  },
+  "homepage": "https://github.com/reposkeeper/loop-news#readme",
+  "dependencies": {
+    "workers-og": "^0.0.27"
+  }
+}

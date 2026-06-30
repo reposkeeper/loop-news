@@ -285,9 +285,19 @@ def act_row(cfg, date, it):
     iid, t, d = e(it.get("id")), e(it.get("title_zh")), e(date)
     topics = e(json.dumps(it.get("topics", []), ensure_ascii=False))
     ents = e(json.dumps(it.get("entities", []), ensure_ascii=False))
+    # 分享出图:把卡片内容(纯文本)带在 data-* 上,点击 → POST 出图服务 → 自动下载;图表由 JS 从 DOM 取
+    deep = bool(it.get("original_quote"))
+    kind = "deep" if deep else "consensus"
+    src = it.get("source") or " · ".join(it.get("sources", []))
+    cc = it.get("consensus_count", len(it.get("sources", [])))
+    badge = f"{cc} 家在报" if (cc and not deep) else ""
+    share = (f'<button class="act share" data-item="{iid}" data-date="{d}" data-title="{t}" '
+             f'data-summary="{e(it.get("summary_zh",""))}" data-source="{e(src)}" data-kind="{kind}" '
+             f'data-badge="{e(badge)}" data-quote="{e(it.get("original_quote",""))}">⤴ 分享</button>')
     return (f'<span class="act-row">'
             f'<button class="act fav" data-item="{iid}" data-date="{d}" data-title="{t}">★ 收藏</button>'
             f'<button class="act follow" data-item="{iid}" data-date="{d}" data-title="{t}" data-topics="{topics}" data-entities="{ents}">+ 关注</button>'
+            f'{share}'
             f'</span>')
 
 
@@ -622,6 +632,7 @@ def main():
         "{{FOOTER}}": footer,
         "{{FEEDBACK_ENABLED}}": "true" if cfg_get(cfg, "feedback.enabled", True) else "false",
         "{{FEEDBACK_API}}": e(cfg_get(cfg, "feedback.api_url", "")),
+        "{{SHARE_API}}": e(cfg_get(cfg, "feedback.share_api_url", "")),
         "{{FEEDBACK_TAGS}}": json.dumps(fb_tags, ensure_ascii=False),
     }
     for k, v in repl.items():
