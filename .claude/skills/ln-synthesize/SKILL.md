@@ -24,7 +24,8 @@ description: Loop News 汇总分析步骤。加载前一天语料 + 相关历史
    - 对识别出的**跨多天**主题/主体(如"AI 监管"、"OpenAI"),把今天的相关条目**接到已有线索的 `timeline`** 上;没有就新建一条 thread。
    - 每条 thread 必须真正**跨日期**(timeline 含 ≥2 个不同日期),否则不要建(单日的放当天 `connections` 即可)。
    - 更新 `summary_zh` / `status_zh` 反映最新进展。线索条目的 `item_id` 必须能在某天 corpus 里找到(可回溯)。
-6. **写盘**:`data/analysis/<date>.json`(schema 见下)+ `data/threads.json`;更新 `state/metrics.json`(结论数、各透镜命中数、线索数,以及**北极星指标 `non_obvious / edge / cross_date / falsifiable`**,定义见 [GOALS.md](../../../GOALS.md))。
+6. **图表数据沉淀**(出趋势图时):对随时间变化的指标,**先查最近 ≥5 年真实序列**,写入/更新 `data/series/<id>.json`(累积沉淀、已有只补新点),图表用 `series` 引用——**不要只补新闻里的两点**。详见 `prompts/synthesize.method.md`「图表」。
+7. **写盘**:`data/analysis/<date>.json`(schema 见下)+ `data/threads.json` + 涉及的 `data/series/*.json`;更新 `state/metrics.json`(结论数、各透镜命中数、线索数,以及**北极星指标 `non_obvious / edge / cross_date / falsifiable`**,定义见 [GOALS.md](../../../GOALS.md))。
 
 ## 分析产物 schema(`data/analysis/<date>.json`)—— 被 web/compile.py 消费
 ```json

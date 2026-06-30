@@ -15,6 +15,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ANALYSIS_DIR = os.path.join(ROOT, "data", "analysis")
 CORPUS_DIR = os.path.join(ROOT, "data", "corpus")
 THREADS_PATH = os.path.join(ROOT, "data", "threads.json")
+SERIES_DIR = os.path.join(ROOT, "data", "series")
 DOCS_DIR = os.environ.get("LN_DOCS_DIR") or os.path.join(ROOT, "docs")  # 自检时可指向临时目录
 TPL = os.path.join(ROOT, "web", "templates", "page.html")
 ASSETS_SRC = os.path.join(ROOT, "web", "assets")
@@ -204,8 +205,29 @@ def svg_chart(c):
             f'{svg}<figcaption class="chart-cap">{cap}</figcaption></figure>')
 
 
+def _resolve_chart(c):
+    """series 引用 → 从 data/series/<id>.json 取时间序列(可 recent 截断);否则用 inline data。"""
+    if c.get("series"):
+        s = load_json(os.path.join(SERIES_DIR, str(c["series"]) + ".json"), {}) or {}
+        pts = s.get("points", [])
+        if c.get("recent"):
+            pts = pts[-int(c["recent"]):]
+        c = dict(c)
+        c["data"] = [{"label": p.get("period", ""), "value": p.get("value")} for p in pts]
+        c.setdefault("unit", s.get("unit", ""))
+        c.setdefault("source", s.get("source", ""))
+        if not c.get("title"):
+            c["title"] = s.get("name", "")
+    return c
+
+
 def render_charts(charts):
-    return "".join(svg_chart(c) for c in (charts or []) if c.get("data"))
+    out = []
+    for c in (charts or []):
+        c = _resolve_chart(c)
+        if c.get("data"):
+            out.append(svg_chart(c))
+    return "".join(out)
 
 
 # ── 数据加载 ──

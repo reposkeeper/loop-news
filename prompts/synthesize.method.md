@@ -30,11 +30,13 @@
 - **北极星:优先且尽量多产「非显然」结论**——读者看任何**单条**新闻都得不出、需把跨时间/跨域多条连起来才浮现的判断。这是本系统最高价值;但每条**仍须回链证据 + 分级**,绝不为"显得深刻"而过度引申——**无据的洞察一律不出(over-reach 是最大风险)**。
 
 ## 图表(charts,可选;渲染在该条新闻之后)
-对含**可核实关键数字**的条目,可加 1–2 张内联图(`line` 趋势 / `bar` 对比 / `pie` 占比),compile 自动渲染成 SVG。
-- **只对核实过的数字出图**;必填 `source`,`note` 默认「据报道生成,仅供参考」。
-- **编造好看但无据的图 = over-reach,禁止。** line 需 ≥2 个数据点;占比类才用 pie。
-- schema(放进 consensus/deep 条目的 `charts` 数组):
-  `{ "type":"bar|line|pie", "title":"", "unit":"%", "source":"", "note":"", "data":[{"label":"","value":0}] }`
+对含**可核实关键数字**的条目,可加 1–2 张图(`line` 趋势 / `bar` 对比 / `pie` 占比),compile 自动渲染成 SVG。
+- **只对核实过的数字出图**;必填 `source`,`note` 默认「据报道生成,仅供参考」。**编造好看但无据的图 = over-reach,禁止。**
+- **趋势类:先查历史、再出图、并沉淀**。对随时间变化的指标(增速/通胀/利率/指数/规模等),**不要只补新闻里提到的那两点**——用 web 搜索/抓取查最近 **≥5 年**真实序列,写入/更新 `data/series/<id>.json`(**累积沉淀:已有就只补新点、不重查**),图表用 `series` 引用:
+  `{ "type":"line", "title":"", "series":"<id>", "recent":6, "note":"" }`(unit/source 自动取 series 元数据)。
+- 截面对比(不同主体、同一时点,如各国利率)用 `bar` 的 inline `data`;占比类才用 `pie`。
+- inline schema(`charts` 数组元素):`{ "type":"bar|line|pie", "title":"", "unit":"%", "source":"", "note":"", "data":[{"label":"","value":0}] }`
+- 序列 schema `data/series/<id>.json`:`{ "id":"", "name":"", "unit":"", "source":"", "updated":"YYYY-MM-DD", "points":[{"period":"2024","value":0,"source":""}] }`
 
 ## 北极星指标(随本期产物写入 `state/metrics.json`,供 ln-evolve 追踪)
 统计并记录本期(定义见 [GOALS.md](../GOALS.md)):
