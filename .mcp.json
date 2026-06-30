@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "x": {
+      "command": "node",
+      "args": ["vendor/x-mcp/dist/index.js"]
+    },
+    "x-docs": {
+      "type": "http",
+      "url": "https://docs.x.com/mcp"
+    }
+  }
+}

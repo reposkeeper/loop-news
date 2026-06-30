@@ -3,33 +3,109 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{PAGE_TITLE}}</title>
+<title>{{SITE_TITLE}}</title>
 <meta name="description" content="{{PAGE_DESC}}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 <header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="index.html">{{SITE_TITLE}}</a>
-    <p class="subtitle">{{SITE_SUBTITLE}}</p>
-    <nav class="topnav"><a href="index.html">最新一期</a> · <a href="archive.html">历史归档</a></nav>
+  <div class="hwrap">
+    <button class="menu-toggle" aria-label="切换菜单">☰</button>
+    <a class="brand" href="#">{{SITE_TITLE}}</a>
+    <span class="subtitle">{{SITE_SUBTITLE}}</span>
   </div>
 </header>
-<main class="wrap">
-{{CONTENT}}
-</main>
-<footer class="site-footer">
-  <div class="wrap">{{FOOTER}}</div>
-</footer>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav>
+      <a class="nav-link" data-target="view-threads" href="#threads">🧵 线索时间线</a>
+      <div class="nav-section">每日</div>
+      {{DATE_NAV}}
+    </nav>
+  </aside>
+  <main class="content">
+    {{THREADS_VIEW}}
+    {{DAY_VIEWS}}
+  </main>
+</div>
+
+<footer class="site-footer"><div class="hwrap">{{FOOTER}}</div></footer>
+
+<!-- 反馈对话框(页面内,不跳转) -->
+<div class="fb-modal" id="fbModal" hidden>
+  <div class="fb-card" role="dialog" aria-modal="true" aria-label="反馈">
+    <div class="fb-head"><span class="fb-act" id="fbAct"></span><button class="fb-x" id="fbClose" aria-label="关闭">✕</button></div>
+    <p class="fb-item" id="fbItem"></p>
+    <div class="fb-chips" id="fbChips"></div>
+    <textarea class="fb-text" id="fbText" rows="3" placeholder="补充说明(可不写)…"></textarea>
+    <div class="fb-foot"><span class="fb-msg" id="fbMsg"></span><button class="fb-submit" id="fbSubmit">提交反馈</button></div>
+  </div>
+</div>
+
+<script>window.__FB={enabled:{{FEEDBACK_ENABLED}},api:"{{FEEDBACK_API}}",tags:{{FEEDBACK_TAGS}}};</script>
 <script>
-// 深度原声"显示原文"折叠
-document.addEventListener('click', function(e){
-  var b = e.target.closest('.quote-toggle');
-  if(!b) return;
-  var box = b.nextElementSibling;
-  var open = box.classList.toggle('open');
-  b.textContent = open ? '收起原文' : '显示原文';
-});
+(function(){
+  /* ---- hash 路由:同页切换日期/线索 ---- */
+  function showTarget(){
+    var raw=(location.hash||"").replace(/^#/, ""), date=raw, item="";
+    if(raw.indexOf("__")>-1){var p=raw.split("__");date=p[0];item=p[1];}
+    var targetId=(date==="threads"||date==="")?"view-threads":"day-"+date, found=false;
+    document.querySelectorAll(".view").forEach(function(v){var on=(v.id===targetId);v.classList.toggle("active",on);if(on)found=true;});
+    if(!found){var first=document.querySelector(".view.day");if(first){first.classList.add("active");targetId=first.id;}}
+    document.querySelectorAll(".nav-link").forEach(function(a){a.classList.toggle("current",a.getAttribute("data-target")===targetId);});
+    if(item){var el=document.getElementById("item-"+item);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("flash");setTimeout(function(){el.classList.remove("flash");},1600);}}
+    else{window.scrollTo(0,0);}
+    document.getElementById("sidebar").classList.remove("open");
+  }
+  window.addEventListener("hashchange",showTarget);
+  document.addEventListener("DOMContentLoaded",function(){
+    if(!location.hash){var first=document.querySelector(".nav-link.day");if(first){location.hash=first.getAttribute("href");}}
+    showTarget();
+  });
+
+  /* ---- 反馈弹窗 ---- */
+  var FB=window.__FB||{enabled:false}, API=(FB.api||"").replace(/\/$/,"");
+  var ACT={up:"👍 赞",down:"👎 踩",adopt:"✓ 采用"}, tags=FB.tags||{}, picked, current=null;
+  var modal=document.getElementById("fbModal"),elAct=document.getElementById("fbAct"),elItem=document.getElementById("fbItem"),
+      elChips=document.getElementById("fbChips"),elText=document.getElementById("fbText"),elMsg=document.getElementById("fbMsg"),elSubmit=document.getElementById("fbSubmit");
+  /* 启动时从服务器拉一次最新常用词(失败则用编译进来的) */
+  if(FB.enabled&&API){fetch(API+"/tags").then(function(r){return r.json();}).then(function(t){if(t&&!t.error)tags=t;}).catch(function(){});}
+  function openModal(btn){
+    current={action:btn.dataset.act,item_id:btn.dataset.item,date:btn.dataset.date,title:btn.dataset.title};
+    picked=new Set();elAct.textContent=ACT[current.action]||"反馈";elItem.textContent="「"+(current.title||"")+"」";
+    elText.value="";elMsg.textContent="";elSubmit.disabled=false;
+    elChips.innerHTML="";(tags[current.action]||[]).forEach(function(tag){
+      var c=document.createElement("button");c.type="button";c.className="fb-chip";c.textContent=tag;
+      c.onclick=function(){if(picked.has(tag)){picked.delete(tag);c.classList.remove("on");}else{picked.add(tag);c.classList.add("on");}};
+      elChips.appendChild(c);
+    });
+    modal.hidden=false;setTimeout(function(){elText.focus();},40);
+  }
+  function closeModal(){modal.hidden=true;current=null;}
+  function submitFb(){
+    if(!current)return;
+    if(!FB.enabled||!API){elMsg.textContent="未配置反馈服务器(config/loop.yaml → feedback.api_url)";return;}
+    var payload={action:current.action,item_id:current.item_id,date:current.date,title:current.title,tags:Array.from(picked),text:elText.value};
+    elSubmit.disabled=true;elMsg.textContent="提交中…";
+    fetch(API+"/feedback",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+      .then(function(r){return r.json();}).then(function(){elMsg.textContent="已记录,谢谢!";setTimeout(closeModal,650);})
+      .catch(function(){elMsg.textContent="提交失败:反馈服务器未启动?";elSubmit.disabled=false;});
+  }
+
+  /* ---- 统一点击处理 ---- */
+  document.addEventListener("click",function(e){
+    var fb=e.target.closest(".fb");if(fb){openModal(fb);return;}
+    if(e.target.closest(".menu-toggle")){document.getElementById("sidebar").classList.toggle("open");return;}
+    if(e.target===modal){closeModal();return;}
+    if(e.target.closest("#fbClose")){closeModal();return;}
+    if(e.target.closest("#fbSubmit")){submitFb();return;}
+  });
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!modal.hidden)closeModal();});
+})();
 </script>
 </body>
 </html>

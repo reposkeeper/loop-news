@@ -6,10 +6,20 @@
 抓取**深层次内容**:不在大众关注范畴、但能引发共鸣与思考的内容。这类思考往往只存在于特定圈子
 (AI 领域、经济领域的名人)。**核心诉求:听到原汁原味的话语。**
 
-## 抓取来源(按优先级)
-1. **名人原声** `config/people.yaml`:抓 AI/经济圈关键人物的第一手发言(X 推文、长推、文章、采访)。
-2. **深度长文** `config/sources.yaml` 的 `deep.substack_rss`:抓全文,提炼核心论点。
-3. **圈层讨论** `deep.reddit` / `deep.hackernews`:用于交叉验证 + 发现新兴话题。
+## 抓取来源(按优先级 + 本环境实测可行性,2026-06)
+1. **深度长文 / 独立观点** `deep.substack_rss`:✅ WebFetch 抓 RSS + 全文可用,**深度类主力**。提炼核心论点,保留代表性原句。
+2. **名人原声** `config/people.yaml`:**优先用 X MCP**(已装,见 [RUNBOOK](../RUNBOOK.md) / `scripts/setup-mcp.sh`)。
+   - **a. X MCP(首选,低成本模式)**:严格按 `config/loop.yaml` 的 `x_cost` 执行(X API 按返回资源计费):
+     - **只在 `x_cost.collect_batches`(默认 `am`)批次抓 X**;晚班跳过 X,只用免费来源。
+     - **优先 `search_tweets`**:对每位 handle 用 `search_tweets(query="from:<handle>", max_results=x_cost.per_person_max_tweets)` 直接取最近推文 —— 仅按推文计费($0.005/条),**不产生 $0.010 的用户读**;原文填 `original_quote`。
+     - 仅当确需时间线特性时才用 `get_user`+`get_timeline`,并把解析到的 `user_id` **回写 `people.yaml` 的 `x_id`** 缓存,避免下次重复 `get_user`。
+     - **绝不调用写接口**(post/reply/like/retweet)。同一 UTC 日内同推文重复抓只收一次费,早晚班不必担心重复扣。
+     - 前提:`.env` 配好 X 凭证、`x` server 已连接。
+   - **b. WebSearch 还原引用(回退)**:X MCP 不可用时,搜「<人名> said / 表态 + 主题」→ WebFetch 文章 → 提取直接引用(注明经文章转引)。
+   - **c. 官方渠道**:本人博客 / 公司 newsletter / 采访稿(如 Anthropic、OpenAI 博客),抓原文。
+3. **圈层讨论**:
+   - **HackerNews** `deep.hackernews`:✅ 用 Algolia API `https://hn.algolia.com/api/v1/search?tags=front_page` 抓,作为科技圈信号。
+   - **Reddit** `deep.reddit`:❌ WebFetch 拦截 reddit 全站。退化:WebSearch 限定 `reddit.com` 域找到热帖标题/讨论方向,用于交叉验证(拿不到全文,只作信号)。
 
 ## 判定标准(什么算"深度")
 - **非共识**:主流媒体还没大规模报道,或主流叙事之外的视角。

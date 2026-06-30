@@ -1,6 +1,7 @@
 # 重点追踪的"名人"原声来源(深度类核心)。
 # ln-collect 优先抓这些人的第一手发言(X 推文 / 文章 / 采访),保留原文 + 中文翻译。
 # x 字段为空表示无活跃账号,改走文章/采访渠道。
+# ln-collect 默认用 search_tweets("from:<x>") 直接取推文(省用户读);若改用 get_timeline,会回写 x_id 数字ID 缓存以省下次 get_user。
 
 ai:
   - { name: "Sam Altman",       x: "sama" }

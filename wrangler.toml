@@ -1,0 +1,16 @@
+# Cloudflare Worker 配置:Loop News 反馈 API。
+# 站点本身走 Cloudflare Pages(见 CLOUDFLARE.md),不在此文件。
+name = "loop-news-feedback"
+main = "worker/feedback-worker.js"
+compatibility_date = "2026-06-01"
+
+# 自定义域:反馈 API 挂到 feedback.xdzq.org(xdzq.org 需已托管在本 CF 账号)。
+# wrangler 部署时会自动建好 custom_domain 路由。注意:顶层键须在 [[表头]] 之前。
+routes = [
+  { pattern = "feedback.xdzq.org", custom_domain = true }
+]
+
+# 反馈存储:R2 桶(已用 `wrangler r2 bucket create loop-news` 创建)
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "loop-news"

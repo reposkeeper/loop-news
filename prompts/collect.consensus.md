@@ -16,6 +16,7 @@
 
 ## 处理规则
 - **强去重**:把不同媒体对**同一事件**的报道合并为一条,`consensus_count` 记录有几家在报,`sources` 列出媒体名。标题相似度超过 `thresholds.title_similarity_dedup` 视为同一事件。
+- **优先一手出处**(2026-06-30 进化新增):`url` 优先指向原始报道媒体或官方公告(Reuters/AP/官方稿),**不要用聚合页 / 周报 / roundup 当来源**;`consensus_count` 必须是实际数到的不同媒体数,**不估算**。WebSearch 命中聚合页时,顺藤摸到其引用的一手链接再填 `url`。
 - **跨语种**:英文/中文/其他语种来源都可,但 `title_zh` / `summary_zh` 一律输出**中文**。
 - **摘要**:`summary_zh` 用 2–4 句客观转述事实,不加评论,不夸张。
 - **重要性打分** `importance`(0–1):综合影响范围 × 时效 × 共识强度。低于 `thresholds.importance_min` 丢弃。

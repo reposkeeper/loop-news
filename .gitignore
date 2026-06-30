@@ -10,3 +10,9 @@ config/secrets.yml
 .env
 *.key
 *.token
+
+# 第三方 MCP server(用 scripts/setup-mcp.sh 重新安装,不入库)
+vendor/
+
+# 本地反馈(生产反馈存在 Cloudflare R2;本地 dev server 才写这里)
+data/feedback.jsonl

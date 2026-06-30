@@ -1,0 +1,102 @@
+[
+  {
+    "run": "2026-06-30-am",
+    "date": "2026-06-30",
+    "collected": 11,
+    "consensus": 7,
+    "deep": 4,
+    "deduped": 0,
+    "connections": 4,
+    "conclusions": 6,
+    "source_yield": {
+      "websearch_consensus": 7,
+      "substack_rss": 2,
+      "hackernews_algolia": 1,
+      "x_via_websearch": 1,
+      "x_mcp": "unavailable",
+      "reddit": "blocked",
+      "nitter": "dead"
+    },
+    "lenses_hit": {
+      "共识缺口": 1,
+      "跨域模式匹配": 1,
+      "二阶效应": 1,
+      "主体网络": 1
+    },
+    "notes": "首期真实运行。X MCP 未接入，名人原声本轮走 WebSearch 转引；Reddit/nitter 不可用，圈层信号靠 HN。下一轮接入 X MCP 后改直采原始推文。"
+  },
+  {
+    "run": "2026-06-30-evolve-1",
+    "type": "evolve",
+    "changed": true,
+    "targets": [
+      "prompts/collect.consensus.md",
+      "config/sources.yaml"
+    ],
+    "summary": "新增共识类一手出处规则；固化来源可用性(Reddit 信号化 / HN Algolia / X 走 MCP)。",
+    "changelog_ref": "2026-06-30 · 进化 #1"
+  },
+  {
+    "run": "2026-06-30-am-2",
+    "date": "2026-06-30",
+    "batch": "am",
+    "type": "collect",
+    "mode": "low-cost (x_cost)",
+    "collected": 7,
+    "consensus": 4,
+    "deep": 3,
+    "deduped": 0,
+    "source_yield": {
+      "x_mcp": {
+        "queried_people": 8,
+        "quality_deep": 3,
+        "low_or_no_yield": [
+          "ylecun",
+          "DrJimFan",
+          "paulkrugman",
+          "Noahpinion",
+          "RayDalio"
+        ],
+        "posts_read": 55,
+        "est_cost_usd": 0.275,
+        "rate_limit_remaining": "441/450",
+        "note_search_floor": "search_tweets 最小返回 10/次,per_person_max_tweets=5 未生效;降本需减人数或改用 get_timeline(min 5)"
+      },
+      "websearch_consensus": 4,
+      "hackernews_algolia": "top=Qwen(已在库,跳过)",
+      "substack_rss": 0,
+      "reddit": "未抓(low-cost,仅信号)"
+    },
+    "notes": "首次接入 X MCP 直采原始推文(low-cost:仅 am、search_tweets、只读,55 推≈$0.28)。注:search_tweets 最小返回 10,per_person=5 未生效。ylecun/Noahpinion 本轮多政治口水、DrJimFan/paulkrugman 近7日无实质、RayDalio 仅格言——evolve 可调整这些 handle 或加筛选。部分共识为近1–2周持续事件(高通/Mythos),非严格24h。"
+  },
+  {
+    "run": "2026-06-30-synth-1",
+    "date": "2026-06-30",
+    "type": "synthesize",
+    "inputs": {
+      "corpus_today": 18,
+      "history_days": [
+        "2026-06-04"
+      ]
+    },
+    "consensus": 11,
+    "deep": 7,
+    "connections": 6,
+    "conclusions": 8,
+    "conclusion_grades": {
+      "事实": 2,
+      "推断": 4,
+      "预测": 2
+    },
+    "lenses_hit": {
+      "共识缺口": 1,
+      "矛盾检测": 1,
+      "时间线追踪": 1,
+      "二阶效应": 1,
+      "跨域模式匹配": 1,
+      "沉默信号": 1
+    },
+    "threads": 3,
+    "notes": "首次纳入 X 名人原声(Altman/Karpathy/El-Erian);新增线索 thread-ai-capability;监管线索接上 Altman 真推文。"
+  }
+]

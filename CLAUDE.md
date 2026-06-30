@@ -2,11 +2,15 @@
 
 给在本仓库工作的 Claude 的操作说明。本项目是一个自循环新闻情报系统,详见 [README.md](README.md)。
 
+> **跨 agent 的权威流程见 [RUNBOOK.md](RUNBOOK.md)**(Codex 等见 [AGENTS.md](AGENTS.md))。本文件是 Claude 视角的补充约定;两者冲突时以 RUNBOOK 的流程为准。
+
 ## 时区
 所有"今天/昨天/早班/晚班"按 **Asia/Shanghai**(见 `config/loop.yaml`)。
 
 ## 每日循环
-- **早班 07:00**:`ln-collect`(batch=am) → `ln-synthesize`(汇总**昨天**) → `python3 web/compile.py` → `bash scripts/publish.sh` → `ln-evolve`
+> **一键编排:`/ln-daily am`(早班全链路)、`/ln-daily pm`(晚班)。** 下面是它内部的权威步骤。
+> 定时调度**未 arm**(用户选择手动跑);将来无人值守时 `ln-daily mode=autonomous` = 免确认自动发布。
+- **早班 07:00**:`ln-collect`(batch=am) → `ln-synthesize`(汇总**昨天**) → `python3 web/compile.py` → `bash scripts/deploy-cloudflare.sh`(部署 Cloudflare) → `ln-evolve`
 - **晚班 19:00**:仅 `ln-collect`(batch=pm)
 
 ## 关键纪律(所有 LLM 步骤通用)
@@ -19,8 +23,13 @@
 ## 文件职责
 - 改"抓什么" → `config/sources.yaml` / `config/people.yaml`
 - 改"怎么抓/怎么分析"(提示词) → `prompts/*.md`(改完记 `prompts/CHANGELOG.md`)
-- 改"怎么呈现" → `web/templates/` + `web/assets/style.css`(改后 `python3 web/compile.py --all` 重建)
-- 数据 schema:语料 → `.claude/skills/ln-collect/SKILL.md`;分析 → `.claude/skills/ln-synthesize/SKILL.md`
+- 改"怎么呈现" → `web/templates/page.html` + `web/assets/style.css`(改后 `python3 web/compile.py` 重建单页)
+- 数据 schema:语料 → `.claude/skills/ln-collect/SKILL.md`;分析 + 跨日期线索 → `.claude/skills/ln-synthesize/SKILL.md`
+- 跨日期关联 → `data/threads.json`(由 ln-synthesize 维护,编译成"线索时间线")
+- 人类反馈 → 网页弹窗(👍赞/👎踩/✓采用 + 常用词 + 文字)经 `server/feedback_server.py` 写入 `data/feedback.jsonl` + `feedback.md`(`bash scripts/feedback.sh` 读取;ln-evolve 消化并进化 `config/feedback_tags.json`)
+
+## 网站(单页)
+`docs/index.html` 是**唯一**页面:左侧日期列表 + 线索入口,右侧主区,JS hash 路由同页切换(无 iframe)。现代杂志风(宋体+Newsreader 标题、抽印引文、分级配色)。每块正文最多 2 处高亮(`==文本==`)。每条新闻/结论**底部**有 👍赞/👎踩/✓采用,点击弹出页面内对话框(常用词 chips + 可选文字),提交到反馈服务器,**不跳转 GitHub**。
 
 ## 自我进化边界(ln-evolve)
 - 可改:`prompts/*.md`、`config/*.yaml`(来源增删降权、提示词措辞)。
@@ -29,3 +38,4 @@
 
 ## 编译/发布是确定性脚本
 `web/compile.py` 与 `scripts/publish.sh` 不含 LLM 逻辑,直接运行即可。
+托管二选一:GitHub Pages(`scripts/publish.sh`)或 **Cloudflare**(`scripts/deploy-cloudflare.sh`:Pages 站点 + Worker 反馈 API + R2 桶,见 [CLOUDFLARE.md](CLOUDFLARE.md))。

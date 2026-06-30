@@ -1,0 +1,470 @@
+[
+  {
+    "id": "co-colorado-ai-law",
+    "collected_at": "2026-06-30T07:00:00+08:00",
+    "category": "consensus",
+    "source_type": "media",
+    "source": "AI 行业媒体综述",
+    "lang": "en",
+    "url": "https://www.buildfastwithai.com/blogs/ai-news-today-june-8-2026",
+    "title_zh": "美国首部综合性州级 AI 法——科罗拉多《AI 消费者保护法》于 6 月 30 日生效",
+    "summary_zh": "科罗拉多州《人工智能消费者保护法》（Colorado CPAI Act）于 2026 年 6 月 30 日正式生效，成为全美第一部综合性的州级 AI 法律。它对高风险 AI 系统的开发者与部署者提出披露与防歧视义务。这与联邦层面正在讨论的《Great American AI Act》草案、以及特朗普签署的 AI/网络安全行政令构成同一条监管落地主线。",
+    "original_quote": "",
+    "entities": [
+      "科罗拉多州",
+      "美国国会",
+      "Great American AI Act",
+      "特朗普"
+    ],
+    "topics": [
+      "AI 监管",
+      "合规",
+      "政策"
+    ],
+    "importance": 0.72,
+    "consensus_count": 3,
+    "insight_zh": ""
+  },
+  {
+    "id": "co-nasdaq-openai-ipo",
+    "collected_at": "2026-06-30T07:00:00+08:00",
+    "category": "consensus",
+    "source_type": "media",
+    "source": "Rio Times / 全球市场综述",
+    "lang": "en",
+    "url": "https://www.riotimesonline.com/global-economy-briefing-june-27-2026/",
+    "title_zh": "纳斯达克连跌五日，因有报道称 OpenAI 或推迟上市，AI 融资前景受质疑",
+    "summary_zh": "有报道称 OpenAI 可能将其股票上市推迟到明年，部分原因是 SpaceX 上市后表现疲弱。受此拖累，纳斯达克连续第五个交易日下跌（为 2 月以来最长连跌），芯片与 AI 股遭抛售，美光等半导体股明显走低。市场对“AI 热潮如何融资”的担忧加深。",
+    "original_quote": "",
+    "entities": [
+      "OpenAI",
+      "纳斯达克",
+      "美光",
+      "SpaceX"
+    ],
+    "topics": [
+      "资本市场",
+      "AI 融资",
+      "半导体"
+    ],
+    "importance": 0.78,
+    "consensus_count": 4,
+    "insight_zh": ""
+  },
+  {
+    "id": "co-warsh-fed-chair",
+    "collected_at": "2026-06-30T07:00:00+08:00",
+    "category": "consensus",
+    "source_type": "media",
+    "source": "全球经济综述",
+    "lang": "en",
+    "url": "https://www.deloitte.com/us/en/insights/topics/economy/global-economic-outlook/weekly-update.html",
+    "title_zh": "凯文·沃什（Kevin Warsh）获确认出任新一任美联储主席",
+    "summary_zh": "凯文·沃什以 54 票对 45 票获参议院确认为下一任美联储主席；杰罗姆·鲍威尔的主席任期已于 5 月 15 日结束。市场普遍将沃什视为相对鹰派、强调规则的人选，其上任为美国货币政策路径增添新变量。",
+    "original_quote": "",
+    "entities": [
+      "Kevin Warsh",
+      "美联储",
+      "鲍威尔",
+      "美国参议院"
+    ],
+    "topics": [
+      "货币政策",
+      "美联储",
+      "利率"
+    ],
+    "importance": 0.7,
+    "consensus_count": 3,
+    "insight_zh": ""
+  },
+  {
+    "id": "co-central-bank-divergence",
+    "collected_at": "2026-06-30T07:00:00+08:00",
+    "category": "consensus",
+    "source_type": "media",
+    "source": "World Bank / ECB / 市场综述",
+    "lang": "en",
+    "url": "https://www.worldbank.org/en/publication/global-economic-prospects",
+    "title_zh": "全球货币政策显著分化：欧央行年内四度降息至 2%，日央行偏鹰，中国按兵不动",
+    "summary_zh": "欧洲央行年内第四次降息，将存款便利利率下调至 2%；日本央行行长植田和男强调通胀上行风险、维持加息预期；中国人民银行连续第 13 个月维持一年期与五年期 LPR 在 3.00% 与 3.50% 不变。三大央行政策方向背离明显。",
+    "original_quote": "",
+    "entities": [
+      "欧洲央行",
+      "日本央行",
+      "植田和男",
+      "中国人民银行"
+    ],
+    "topics": [
+      "货币政策",
+      "利率",
+      "全球经济"
+    ],
+    "importance": 0.68,
+    "consensus_count": 3,
+    "insight_zh": ""
+  },
+  {
+    "id": "co-crude-oil",
+    "collected_at": "2026-06-30T07:00:00+08:00",
+    "category": "consensus",
+    "source_type": "media",
+    "source": "Rio Times / 全球市场综述",
+    "lang": "en",
+    "url": "https://www.riotimesonline.com/global-economy-briefing-june-27-2026/",
+    "title_zh": "原油大跌：WTI 跌 3.5% 至约 69 美元，回到与伊朗冲突前水平",
+    "summary_zh": "WTI 原油下跌约 3.5%，至每桶约 69 美元，为与伊朗冲突爆发前以来最低；布伦特报 73.53 美元。能源价格回落缓解了此前因中东冲突推升的通胀压力。",
+    "original_quote": "",
+    "entities": [
+      "WTI 原油",
+      "布伦特",
+      "中东",
+      "伊朗"
+    ],
+    "topics": [
+      "大宗商品",
+      "能源",
+      "通胀"
+    ],
+    "importance": 0.55,
+    "consensus_count": 2,
+    "insight_zh": ""
+  },
+  {
+    "id": "co-anthropic-fraud-accounts",
+    "collected_at": "2026-06-30T07:00:00+08:00",
+    "category": "consensus",
+    "source_type": "media",
+    "source": "AI 行业媒体综述",
+    "lang": "en",
+    "url": "https://medium.com/@davidakpovi/ai-news-week-of-june-22-to-june-28-2026-ed7b09829a67",
+    "title_zh": "Anthropic 称遭近 2.5 万个欺诈账号大规模探测 Claude 能力",
+    "summary_zh": "Anthropic 表示，一场大规模行动使用近 25,000 个欺诈账号与 Claude 模型大量交互，累计产生超过 2,800 万次互动，意在分析 Claude 的推理、编程与复杂任务执行能力。事件凸显前沿模型面临的系统性探测与滥用风险。",
+    "original_quote": "",
+    "entities": [
+      "Anthropic",
+      "Claude"
+    ],
+    "topics": [
+      "AI 安全",
+      "滥用",
+      "前沿模型"
+    ],
+    "importance": 0.6,
+    "consensus_count": 2,
+    "insight_zh": ""
+  },
+  {
+    "id": "co-worldbank-growth",
+    "collected_at": "2026-06-30T07:00:00+08:00",
+    "category": "consensus",
+    "source_type": "media",
+    "source": "World Bank Global Economic Prospects (June 2026)",
+    "lang": "en",
+    "url": "https://thedocs.worldbank.org/en/doc/2b672b3b0415d6b66c45b66579db4ef5-0050012026/original/GEP-Jun-2026.pdf",
+    "title_zh": "世界银行：2026 年全球增长放缓至 2.5%，为疫情以来最低",
+    "summary_zh": "世界银行最新《全球经济展望》预计全球增长将从 2025 年的 2.9% 放缓至 2026 年的 2.5%，为疫情以来最低。报告指出，能源进口依赖型经济体前景走弱，中东冲突推升能源价格、加剧通胀并强化了货币紧缩预期。",
+    "original_quote": "",
+    "entities": [
+      "世界银行",
+      "中东"
+    ],
+    "topics": [
+      "全球经济",
+      "增长",
+      "通胀"
+    ],
+    "importance": 0.62,
+    "consensus_count": 2,
+    "insight_zh": ""
+  },
+  {
+    "id": "dp-noah-transaction-costs",
+    "collected_at": "2026-06-30T07:00:00+08:00",
+    "category": "deep",
+    "source_type": "substack",
+    "source": "Noahpinion（Noah Smith）",
+    "lang": "en",
+    "url": "https://www.noahpinion.blog/p/will-ai-make-companies-outsource",
+    "title_zh": "Noah Smith：AI 会让公司更多外包，还是更少？关键看“交易成本”",
+    "summary_zh": "经济学家 Noah Smith 用科斯的交易成本理论分析 AI 对企业边界的影响：如果 AI 智能体之间的长期、平等协作因不可靠而抬高交易成本，AI 时代反而会属于“更大的公司”。结果可能是一个两极分化的经济——大量单人公司，加上少数雇佣大量工薪者的巨型企业。",
+    "original_quote": "If AI brings about a world of higher transaction costs, due to the inherent unreliability of long-term arm's-length dealings between AI agents, then the AI age will probably be one of bigger companies. We may thus see a bifurcated distribution of company sizes and job types — a vast horde of solopreneurs, and a few monster companies employing huge numbers of wage earners.",
+    "entities": [
+      "Noah Smith",
+      "交易成本",
+      "科斯"
+    ],
+    "topics": [
+      "AI 与经济",
+      "企业组织",
+      "劳动力市场"
+    ],
+    "importance": 0.75,
+    "consensus_count": 0,
+    "insight_zh": "用交易成本这一经典框架，把“AI 改变就业”的模糊讨论收敛成一个可证伪的判断：成本升→大公司，成本降→单人公司。"
+  },
+  {
+    "id": "dp-clark-import-ai-463",
+    "collected_at": "2026-06-30T07:00:00+08:00",
+    "category": "deep",
+    "source_type": "substack",
+    "source": "Import AI（Jack Clark）",
+    "lang": "en",
+    "url": "https://importai.substack.com/feed",
+    "title_zh": "Jack Clark（Import AI 463）：自改进机器人、万卡中国集群，与一篇“人类时代的挽歌”",
+    "summary_zh": "Anthropic 联合创始人 Jack Clark 在 Import AI 463 期指出：前沿编码智能体已能自主开发策略，在真实世界高难度灵巧操作任务上达到 99% 成功率（ENPIRE）；另有一套 ARGUS 系统已在万卡级中国 GPU 生产集群上稳定运行超过半年。他还引述了一篇被他称为“人类自主选择命运那个时代的安魂曲”的长文。",
+    "original_quote": "Frontier coding agents can autonomously develop a policy to achieve a 99% success rate on challenging, dexterous manipulation tasks in the real world. [ARGUS] has been deployed on a 10,000+ GPU production cluster for over six months, running stably alongside production training.",
+    "entities": [
+      "Jack Clark",
+      "Anthropic",
+      "ENPIRE",
+      "ARGUS"
+    ],
+    "topics": [
+      "机器人",
+      "自改进 AI",
+      "算力",
+      "中国"
+    ],
+    "importance": 0.78,
+    "consensus_count": 0,
+    "insight_zh": "在资本市场担心 AI 泡沫的同时，圈内人给出的是“能力仍在硬性、快速进步”的第一手信号——技术叙事与资本叙事正在背离。"
+  },
+  {
+    "id": "dp-altman-ai-policy",
+    "collected_at": "2026-06-30T07:00:00+08:00",
+    "category": "deep",
+    "source_type": "x",
+    "source": "Sam Altman（经媒体转引，X MCP 未接入）",
+    "lang": "en",
+    "url": "https://www.startuphub.ai/ai-news/ai-figures/2026/figure-sam-altman-public-position-evolution-2026-06-13",
+    "title_zh": "Sam Altman 谈美国 AID 政策：靠最好的模型 + 安全 + 把网络工具交给可信防御者来领跑",
+    "summary_zh": "在与国会议员及白宫官员讨论 AI 行政令期间，OpenAI CEO Sam Altman 表达了对“美国应如何在 AI 上领跑”的立场，并认为新版行政令在监管与发展之间“取得了平衡”。（本条原话来自媒体转引；X 原始推文待 X MCP 接入后直采。）",
+    "original_quote": "The U.S. should lead on AI by continuing to develop the very best models, making sure they're safe, and getting cyber tools into the hands of trusted defenders.",
+    "entities": [
+      "Sam Altman",
+      "OpenAI",
+      "白宫",
+      "AI 行政令"
+    ],
+    "topics": [
+      "AI 政策",
+      "国家安全",
+      "监管"
+    ],
+    "importance": 0.6,
+    "consensus_count": 0,
+    "insight_zh": "头部厂商把“安全”与“国家竞争力”绑定的话术，正成为塑造监管落地方向的关键力量。"
+  },
+  {
+    "id": "dp-qwen-local-hn",
+    "collected_at": "2026-06-30T07:00:00+08:00",
+    "category": "deep",
+    "source_type": "reddit_hn",
+    "source": "Hacker News 首页（832 分 / 582 评论）",
+    "lang": "en",
+    "url": "https://news.ycombinator.com/",
+    "title_zh": "HN 圈层信号：开发者把 Qwen 3.6 27B 视为“本地开发的甜点位”",
+    "summary_zh": "一篇关于 Qwen 3.6 27B 是“本地开发甜点位（sweet spot）”的帖子登上 Hacker News 首页，获 832 分、582 条评论，热度居首。反映出开发者圈层对中型、可本地运行的开源模型（且为中国出品）的强烈偏好正在上升。",
+    "original_quote": "Qwen 3.6 27B is the sweet spot for local development",
+    "entities": [
+      "Qwen",
+      "阿里巴巴",
+      "Hacker News",
+      "开源模型"
+    ],
+    "topics": [
+      "开源 AI",
+      "本地模型",
+      "中国 AI"
+    ],
+    "importance": 0.58,
+    "consensus_count": 0,
+    "insight_zh": "与“资本担心 AI 融资”相反，技术圈的注意力在转向更便宜、可自托管、且非美国出品的模型——降本与去中心化是另一条暗线。"
+  },
+  {
+    "id": "dp-sama-redteaming",
+    "collected_at": "2026-06-30T09:00:00+08:00",
+    "category": "deep",
+    "source_type": "x",
+    "source": "@sama (Sam Altman)",
+    "lang": "en",
+    "url": "https://x.com/sama/status/2070609190977228893",
+    "title_zh": "Sam Altman 谈 AI 监管:可接受发布前强制红队测试期,但反对政府来挑客户",
+    "summary_zh": "针对 AI 行政令与监管,OpenAI CEO Sam Altman 在 X 上表示:为新模型设置一段强制的、用于扩展红队测试(red-teaming)的预览期『并不是坏主意』;但他明确反对『由政府来挑选客户』,并称有信心最终会走到更好的状态。",
+    "original_quote": "actually i think a required preview period for extended redteaming is not a bad idea. i just dont like the idea of the government picking the customers. confident we will get to a better place.",
+    "entities": [
+      "Sam Altman",
+      "OpenAI",
+      "AI 行政令",
+      "红队测试"
+    ],
+    "topics": [
+      "AI 监管",
+      "AI 安全",
+      "政策"
+    ],
+    "importance": 0.66,
+    "consensus_count": 0,
+    "insight_zh": "头部厂商在监管上的『可接受边界』正公开成形:接受安全测试、拒绝政府干预市场——这会直接影响行政令/立法的落点。"
+  },
+  {
+    "id": "dp-karpathy-llm-uiux",
+    "collected_at": "2026-06-30T09:00:00+08:00",
+    "category": "deep",
+    "source_type": "x",
+    "source": "@karpathy (Andrej Karpathy)",
+    "lang": "en",
+    "url": "https://x.com/karpathy/status/2069547676849557725",
+    "title_zh": "Karpathy:这是 LLM 交互范式的第三次大改版——AI 成为『与人类团队并肩工作的常驻异步实体』",
+    "summary_zh": "Andrej Karpathy 认为大模型 UIUX 正经历第三次范式转变:第一代是『你去访问的网站』,第二代是『下载到电脑的 App』,第三代则是一个自包含、持久、异步、拥有组织级工具与上下文、与人类团队并肩工作的实体。他说一旦把底层工程(工具、集成、计算环境、记忆、安全)打通,Claude 就像无缝加入了团队。",
+    "original_quote": "Imo this is the 3rd major redesign of LLM UIUX. The first paradigm was that the LLM is a website you go to, the second was that it is an app you download to your computer. This third one is that it is a self-contained, persistent, asynchronous entity with org-wide tools and context, working alongside teams of humans.",
+    "entities": [
+      "Andrej Karpathy",
+      "Claude",
+      "Anthropic",
+      "AI 智能体"
+    ],
+    "topics": [
+      "AI 智能体",
+      "人机交互",
+      "产品范式"
+    ],
+    "importance": 0.74,
+    "consensus_count": 0,
+    "insight_zh": "把『聊天框』升维成『组织里的常驻同事』——这是 agent 产品形态的关键判断,也解释了各家为何都在做组织级集成与记忆。"
+  },
+  {
+    "id": "dp-elerian-fed-dovish",
+    "collected_at": "2026-06-30T09:00:00+08:00",
+    "category": "deep",
+    "source_type": "x",
+    "source": "@elerianm (Mohamed El-Erian)",
+    "lang": "en",
+    "url": "https://x.com/elerianm/status/2071693892236329136",
+    "title_zh": "El-Erian:市场对美联储『过于鹰派』,今年若再加息我会很意外",
+    "summary_zh": "安联首席经济顾问 Mohamed El-Erian 在 CNBC《Squawk on the Street》表示:他认为『市场过于鹰派』——7 月若加息他会很震惊,今年再加息也会让他意外。这与同期市场押注(美银预计年内三次加息)及鹰派新美联储主席沃什的预期形成鲜明对立。",
+    "original_quote": "I think the market is too hawkish — I would be shocked if we get a rate hike in July, and I would be surprised if we get a rate hike this year.",
+    "entities": [
+      "Mohamed El-Erian",
+      "美联储",
+      "安联",
+      "利率"
+    ],
+    "topics": [
+      "货币政策",
+      "利率",
+      "通胀"
+    ],
+    "importance": 0.7,
+    "consensus_count": 0,
+    "insight_zh": "在『通胀粘性→鹰派加息』的主流叙事里,El-Erian 给出反向判断;这种共识缺口往往是利率拐点的早期信号。"
+  },
+  {
+    "id": "co-qualcomm-tenstorrent",
+    "collected_at": "2026-06-30T09:00:00+08:00",
+    "category": "consensus",
+    "source_type": "media",
+    "source": "Tom's Hardware / The Register / Reuters",
+    "lang": "en",
+    "url": "https://www.tomshardware.com/tech-industry/artificial-intelligence/qualcomm-mulls-taking-over-jim-kellers-tenstorrent-report-claims-deal-for-ai-chipmaker-would-value-the-company-at-between-usd8-billion-and-usd10-billion",
+    "title_zh": "高通洽购 Jim Keller 的 RISC-V AI 芯片公司 Tenstorrent,估值 80–100 亿美元",
+    "summary_zh": "据多家媒体报道,高通正洽谈以 80 亿–100 亿美元收购由传奇芯片架构师 Jim Keller 创立的 RISC-V AI 芯片公司 Tenstorrent,较其去年约 32 亿美元估值翻约 2.5–3 倍。此举被视为高通借开放 RISC-V 架构切入数据中心、挑战英伟达;英特尔亦表达兴趣形成竞购。交易尚未确认。",
+    "original_quote": "",
+    "entities": [
+      "高通",
+      "Tenstorrent",
+      "Jim Keller",
+      "英伟达",
+      "RISC-V"
+    ],
+    "topics": [
+      "半导体",
+      "AI 芯片",
+      "并购"
+    ],
+    "importance": 0.68,
+    "consensus_count": 4,
+    "insight_zh": ""
+  },
+  {
+    "id": "co-anthropic-mythos",
+    "collected_at": "2026-06-30T09:00:00+08:00",
+    "category": "consensus",
+    "source_type": "media",
+    "source": "CNBC/AP · SecurityWeek · The Hill",
+    "lang": "en",
+    "url": "https://www.cnbc.com/2026/06/23/anthropics-mythos-model-found-vulnerabilities-in-classified-us-government-systems-official-says.html",
+    "title_zh": "Anthropic 未发布前沿模型 Mythos 数小时内攻破美国机密系统,Glasswing 扩至 150 家机构",
+    "summary_zh": "据 AP/CNBC,Anthropic 与美国情报机构测试中,其未发布的前沿模型 Claude Mythos 在数小时(而非数周)内即在几乎所有受测机密系统中发现漏洞;参议员 Mark Warner 引述 NSA 负责人称该工具『数小时内攻入了我们几乎所有机密系统』。Anthropic 随后通过 Project Glasswing 把相关能力扩展至 15 国逾 150 家关键基础设施机构(电力、水务、医疗、电信)。",
+    "original_quote": "",
+    "entities": [
+      "Anthropic",
+      "Claude Mythos",
+      "Project Glasswing",
+      "NSA",
+      "Mark Warner"
+    ],
+    "topics": [
+      "AI 安全",
+      "网络安全",
+      "前沿模型",
+      "国家安全"
+    ],
+    "importance": 0.8,
+    "consensus_count": 4,
+    "insight_zh": ""
+  },
+  {
+    "id": "co-skorea-1t-chips",
+    "collected_at": "2026-06-30T09:00:00+08:00",
+    "category": "consensus",
+    "source_type": "media",
+    "source": "Ars Technica",
+    "lang": "en",
+    "url": "https://arstechnica.com/ai/2026/06/south-korea-to-spend-1t-on-more-memory-chip-production-and-humanoid-robots/",
+    "title_zh": "韩国计划投入约 1 万亿美元扩建存储芯片产能并发展人形机器人",
+    "summary_zh": "据 Ars Technica,韩国计划投入约 1 万亿美元,用于扩大存储芯片(memory)产能并大力发展人形机器人,押注 AI 时代的算力硬件与具身智能。该计划凸显国家级产业资本仍在向 AI 基础设施大举倾斜。",
+    "original_quote": "",
+    "entities": [
+      "韩国",
+      "存储芯片",
+      "人形机器人"
+    ],
+    "topics": [
+      "半导体",
+      "具身智能",
+      "产业政策",
+      "算力"
+    ],
+    "importance": 0.66,
+    "consensus_count": 2,
+    "insight_zh": ""
+  },
+  {
+    "id": "co-pce-fed-hikes",
+    "collected_at": "2026-06-30T09:00:00+08:00",
+    "category": "consensus",
+    "source_type": "media",
+    "source": "Fortune / Charles Schwab / 市场综述",
+    "lang": "en",
+    "url": "https://fortune.com/2026/06/23/stock-markets-fed-interest-rate-expectations-400-billion-spacex/",
+    "title_zh": "通胀粘性推升加息预期:PCE 升至 4.1%,美银预计年内三度加息,科技股拖累美股",
+    "summary_zh": "美国核心通胀压力顽固——整体 PCE 通胀加速至 4.1%,为 2023 年 4 月以来最高;美银预计美联储将在 9、10、12 月各加息 25 个基点,把政策利率推至 4.25%–4.5%。受更鹰预期与大型科技/AI 股走弱拖累,纳指与标普承压(标普距历史高点约 3%);日经 225 年内领涨 37.8%,港股恒指领跌约 11.5%。",
+    "original_quote": "",
+    "entities": [
+      "美联储",
+      "美国银行",
+      "PCE 通胀",
+      "纳斯达克",
+      "标普500"
+    ],
+    "topics": [
+      "货币政策",
+      "通胀",
+      "资本市场"
+    ],
+    "importance": 0.7,
+    "consensus_count": 3,
+    "insight_zh": ""
+  }
+]

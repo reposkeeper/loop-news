@@ -10,8 +10,9 @@ schedule:
 site:
   title: "Loop News · 事实新闻汇总"
   subtitle: "多语种采集 · 中文呈现 · 深层关联 · 每日进化"
-  url: "https://reposkeeper.github.io/loop-news/"
+  url: "https://news.xdzq.org"
   author: reposkeeper
+  repo: "reposkeeper/loop-news"   # 反馈按钮指向该仓库的 GitHub Issues
   language: zh-CN
 
 output:
@@ -24,3 +25,20 @@ thresholds:
   importance_min: 0.30        # 低于此重要性的条目不进入网页
   consensus_min_sources: 2    # 至少几家媒体在报才算"共识"
   title_similarity_dedup: 0.85  # 标题相似度去重阈值(共识类强去重)
+
+# X API 成本控制(pay-per-use:Posts Read $0.005/条、User Read $0.010/个;同一 UTC 日内同资源去重只收一次费)
+# 仅 ln-collect 调用 X MCP 读推文会花 credit;其余来源(RSS/WebSearch/HN/x-docs)与编译/发布都免费。
+x_cost:
+  collect_batches: [am]              # X 只在这些批次抓;晚班(pm)只用免费的 RSS/WebSearch
+  per_person_max_tweets: 5           # 每位名人每次最多取几条(= search_tweets 的 max_results)
+  prefer_search_over_timeline: true  # 用 search_tweets("from:handle") 取代 get_user+get_timeline,省每人 $0.010 用户读
+  cache_user_ids: true               # 万不得已用 get_timeline 时,缓存 user_id 回写 people.yaml,避免重复 get_user
+  no_write_calls: true               # 只读:绝不调用 post/reply/like/retweet(各 $0.015,带链接发推 $0.20)
+
+# 反馈服务器:承载页面弹窗反馈(赞/踩/采用 + 自定义文字 + 常用词),跨设备可用。
+# 本地: python3 server/feedback_server.py;部署到带 HTTPS 的公网后把 api_url 改成公网地址。
+feedback:
+  enabled: true
+  api_url: "https://feedback.xdzq.org"   # Cloudflare Worker(反馈 API);本地开发可临时改回 http://localhost:8099
+  actions: ["up", "down", "adopt"]   # 👍 赞 / 👎 踩 / ✓ 采用(我在自媒体已采用此内容)
+  highlight_max: 2                   # 每块新闻最多高亮处数(== 文本 == → <mark>)

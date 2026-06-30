@@ -17,7 +17,12 @@ description: Loop News 汇总分析步骤。加载前一天语料 + 相关历史
    - 相关历史:用 `data/entities/index.json` 按实体/话题,从更早的 `data/corpus/*.json` 检索出相关旧条目(跨时间关联的素材)。
 3. **逐透镜分析**:对素材依次套用 8 个透镜(时间线追踪、二阶效应、共识缺口、跨域模式、跟着钱走、矛盾检测、沉默信号、主体网络)。适用才产出。
 4. **筛选呈现**:按 `config/loop.yaml` 的 `output.*` 上限,挑出要进网页的共识条目、深度条目、关联、结论。
-5. **写盘**:`data/analysis/<date>.json`(schema 见下);更新 `state/metrics.json`(结论数、各透镜命中数)。
+   - **关联与结论的 `evidence` 可跨日期**:既能引用今天的条目 id,也能引用历史条目 id(编译时会自动链到那一天)。
+5. **维护跨日期线索 `data/threads.json`**:这是"话题/实体线索时间线"的数据源。
+   - 对识别出的**跨多天**主题/主体(如"AI 监管"、"OpenAI"),把今天的相关条目**接到已有线索的 `timeline`** 上;没有就新建一条 thread。
+   - 每条 thread 必须真正**跨日期**(timeline 含 ≥2 个不同日期),否则不要建(单日的放当天 `connections` 即可)。
+   - 更新 `summary_zh` / `status_zh` 反映最新进展。线索条目的 `item_id` 必须能在某天 corpus 里找到(可回溯)。
+6. **写盘**:`data/analysis/<date>.json`(schema 见下)+ `data/threads.json`;更新 `state/metrics.json`(结论数、各透镜命中数、线索数)。
 
 ## 分析产物 schema(`data/analysis/<date>.json`)—— 被 web/compile.py 消费
 ```json
@@ -43,6 +48,26 @@ description: Loop News 汇总分析步骤。加载前一天语料 + 相关历史
       "confidence": 0.7, "evidence": ["id1","id2"] }
   ],
   "methodology_note_zh": "本期主要用了哪些透镜、为何"
+}
+```
+
+## 跨日期线索 schema(`data/threads.json`)—— 被 web/compile.py 渲染成"线索时间线"
+```json
+{
+  "generated_at": "2026-06-30T07:30:00+08:00",
+  "threads": [
+    {
+      "id": "thread-ai-regulation",
+      "title_zh": "线索标题",
+      "key_entities": ["AI 监管", "..."],
+      "summary_zh": "这条线索在讲什么、进展到哪",
+      "status_zh": "进行中 · 简短状态",
+      "timeline": [
+        { "date": "2026-06-04", "item_id": "co0604-...", "title_zh": "...", "note_zh": "这步是什么" },
+        { "date": "2026-06-30", "item_id": "co-...",     "title_zh": "...", "note_zh": "这步是什么" }
+      ]
+    }
+  ]
 }
 ```
 

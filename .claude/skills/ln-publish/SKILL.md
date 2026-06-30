@@ -1,30 +1,28 @@
 ---
 name: ln-publish
-description: Loop News 发布步骤。运行 scripts/publish.sh,把编译好的 docs/ 提交并 push 到 GitHub,GitHub Pages 自动上线。当用户说"发布"、"上线"、"publish"、"ln-publish"、"推到 pages"时使用。
+description: Loop News 发布步骤。运行 scripts/deploy-cloudflare.sh,把编译好的 docs/ 部署到 Cloudflare Pages(站点)+ Worker(反馈 API)+ R2(常用词)。当用户说"发布"、"上线"、"publish"、"ln-publish"、"部署"时使用。
 ---
 
-# ln-publish · 发布步骤
+# ln-publish · 发布步骤(Cloudflare)
 
-把 `docs/` 的最新网页发布到 GitHub Pages。确定性脚本。
+把 `docs/` 部署到 **Cloudflare**。托管已从 GitHub Pages 迁出,**不再依赖 GitHub Pages**;GitHub 仅作源码/历史。确定性脚本。
 
 ## 前提(一次性)
-- 仓库已 `git init` 并关联 GitHub 远程 `loop-news`。
-- GitHub 仓库 Settings → Pages 设为 **从 `main` 分支 `/docs` 目录** 托管。
+- `npx wrangler login` 已登录;R2 桶 `loop-news` 与 Pages 项目 `loop-news` 已建(见 [CLOUDFLARE.md](../../../CLOUDFLARE.md))。
+- `config/loop.yaml` 的 `feedback.api_url` 指向 Worker(`https://feedback.xdzq.org`);`site.url` = `https://news.xdzq.org`。
 
 ## 运行
 ```bash
-bash scripts/publish.sh "<commit message>"   # 默认 message: "publish: <date>"
+bash scripts/deploy-cloudflare.sh
 ```
+它做:`python3 web/compile.py` → `wrangler pages deploy docs`(站点)→ 同步 `config/feedback_tags.json` 到 R2 → `wrangler deploy`(反馈 Worker)。
 
-## 它做什么
-1. `git add docs/ data/ state/ prompts/ config/`(数据与产物都入库,便于回溯与进化)。
-2. `git commit -m "<message>"`(无改动则跳过)。
-3. `git push origin main`。
-4. 打印上线地址 `config/loop.yaml` 的 `site.url`。
+## 源码备份(与发布解耦,可选)
+`bash scripts/publish.sh "<msg>"` 把改动 commit + push 到 GitHub —— **仅留源码/历史,不用于托管**。
 
 ## 验证
-push 后等 ~1 分钟,浏览器访问站点 URL 确认新一期已上线。
+浏览器开 `site.url`(`https://news.xdzq.org`)确认新一期已上线;`curl https://feedback.xdzq.org/health` 确认反馈 API 正常。
 
 ## 纪律
-- 不强推(no force-push);冲突先 `git pull --rebase`。
-- 不提交密钥/token;`.gitignore` 已排除敏感文件。
+- 发布是公开操作;早班默认人工确认(见 ln-daily 的发布门)。
+- 不提交密钥/token;`.gitignore` 已排除敏感文件与 `vendor/`。

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Loop News 发布:提交 docs/ 与数据,推到 GitHub,Pages 自动上线。
+# Loop News 源码备份:提交全部改动并推到 GitHub(仅源码/历史)。
+# 托管在 Cloudflare(站点 Pages + 反馈 Worker),发布/上线用 scripts/deploy-cloudflare.sh,不依赖 GitHub Pages。
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -16,5 +17,4 @@ fi
 git pull --rebase origin main 2>/dev/null || true
 git push origin main
 
-URL=$(grep -E '^\s*url:' config/loop.yaml | head -1 | sed -E 's/.*url:\s*"?([^"]*)"?.*/\1/')
-echo "[publish] 已推送。站点:${URL:-https://reposkeeper.github.io/loop-news/}"
+echo "[publish] 已推送到 GitHub(源码备份)。托管/上线请用 bash scripts/deploy-cloudflare.sh。"

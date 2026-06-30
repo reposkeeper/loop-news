@@ -15,8 +15,11 @@ description: Loop News 采集步骤。从四类来源(主流媒体/RSS、X名人
 1. 读 `config/loop.yaml`、`config/sources.yaml`、`config/people.yaml`。
 2. 读策略提示词:`prompts/collect.consensus.md` 与 `prompts/collect.deep.md`,**严格按其规则执行**。
 3. **共识类采集**:用 WebSearch 跑 `consensus.web_search_queries`;用 WebFetch 抓 `consensus.rss`。按 collect.consensus.md 强去重、多源合并。
-4. **深度类采集**:抓 `people.yaml` 名人原声(X/文章/采访)、`deep.substack_rss` 全文、`deep.reddit`/`hackernews` 讨论。按 collect.deep.md **必留 `original_quote` 原文**。
-   - X 抓取:本环境若无直接抓取能力,依次尝试 nitter 镜像 / 官方 API / 退化为文章与采访来源(并在本轮 metrics 标记)。
+4. **深度类采集**:按 `prompts/collect.deep.md` 的**实测来源梯子**执行,**必留 `original_quote` 原文**:
+   - Substack/博客 RSS → ✅ 主力(WebFetch 全文)。
+   - 名人原声 → **优先 X MCP,低成本模式**(详见 `prompts/collect.deep.md` 与 `config/loop.yaml` 的 `x_cost`):**仅在 `x_cost.collect_batches`(默认 am)批次**抓;优先 `search_tweets("from:handle", max_results=x_cost.per_person_max_tweets)`(省 $0.010 用户读);**只读不写**;按需缓存 `x_id`。X MCP 未连接(未配 `.env`)时退化为 WebSearch 还原引用。
+   - HackerNews → ✅ Algolia API;Reddit → ❌ 被拦,只能用 WebSearch 限域取信号。
+   - 任何来源抓取失败都写进本轮 metrics,不静默跳过。
 5. **归一化**:每条转成下方 schema 的对象;`id` 用 url 的 sha1(无 url 用 标题+source 的 sha1)。
 6. **去重**:读 `state/seen.json`(已见 id/指纹集合);丢弃已存在的;共识类还要按标题相似度合并同事件。
 7. **写盘**:

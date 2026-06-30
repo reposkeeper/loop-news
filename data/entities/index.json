@@ -1,0 +1,279 @@
+{
+  "OpenAI": [
+    {
+      "date": "2026-06-30",
+      "id": "co-nasdaq-openai-ipo",
+      "title_zh": "纳斯达克连跌五日，因报道称 OpenAI 或推迟上市"
+    },
+    {
+      "date": "2026-06-30",
+      "id": "dp-altman-ai-policy",
+      "title_zh": "Sam Altman 谈美国 AI 政策"
+    },
+    {
+      "date": "2026-06-30",
+      "id": "dp-sama-redteaming",
+      "title_zh": "Sam Altman 谈 AI 监管:可接受发布前强制红队测试期,但反对政府来挑客户"
+    }
+  ],
+  "Anthropic": [
+    {
+      "date": "2026-06-30",
+      "id": "co-anthropic-fraud-accounts",
+      "title_zh": "Anthropic 称遭近 2.5 万个欺诈账号探测 Claude"
+    },
+    {
+      "date": "2026-06-30",
+      "id": "dp-clark-import-ai-463",
+      "title_zh": "Jack Clark：自改进机器人、万卡中国集群"
+    },
+    {
+      "date": "2026-06-30",
+      "id": "dp-karpathy-llm-uiux",
+      "title_zh": "Karpathy:这是 LLM 交互范式的第三次大改版——AI 成为『与人类团队并肩工作的常驻异步实体』"
+    },
+    {
+      "date": "2026-06-30",
+      "id": "co-anthropic-mythos",
+      "title_zh": "Anthropic 未发布前沿模型 Mythos 数小时内攻破美国机密系统,Glasswing 扩至 150 家机构"
+    }
+  ],
+  "美联储": [
+    {
+      "date": "2026-06-30",
+      "id": "co-warsh-fed-chair",
+      "title_zh": "凯文·沃什获确认出任新一任美联储主席"
+    },
+    {
+      "date": "2026-06-30",
+      "id": "co-central-bank-divergence",
+      "title_zh": "全球货币政策显著分化"
+    },
+    {
+      "date": "2026-06-30",
+      "id": "dp-elerian-fed-dovish",
+      "title_zh": "El-Erian:市场对美联储『过于鹰派』,今年若再加息我会很意外"
+    },
+    {
+      "date": "2026-06-30",
+      "id": "co-pce-fed-hikes",
+      "title_zh": "通胀粘性推升加息预期:PCE 升至 4.1%,美银预计年内三度加息,科技股拖累美股"
+    }
+  ],
+  "中国": [
+    {
+      "date": "2026-06-30",
+      "id": "dp-clark-import-ai-463",
+      "title_zh": "万卡级中国 GPU 集群稳定运行半年"
+    },
+    {
+      "date": "2026-06-30",
+      "id": "dp-qwen-local-hn",
+      "title_zh": "开发者把 Qwen 3.6 27B 视为本地开发甜点位"
+    },
+    {
+      "date": "2026-06-30",
+      "id": "co-central-bank-divergence",
+      "title_zh": "中国人民银行连续 13 个月维持 LPR 不变"
+    }
+  ],
+  "AI 监管": [
+    {
+      "date": "2026-06-30",
+      "id": "co-colorado-ai-law",
+      "title_zh": "科罗拉多 AI 法 6/30 生效"
+    },
+    {
+      "date": "2026-06-30",
+      "id": "dp-altman-ai-policy",
+      "title_zh": "Sam Altman 谈 AI 行政令平衡"
+    }
+  ],
+  "AI 资本开支": [
+    {
+      "date": "2026-06-30",
+      "id": "co-nasdaq-openai-ipo",
+      "title_zh": "OpenAI 或推迟上市，AI 股抛售"
+    },
+    {
+      "date": "2026-06-30",
+      "id": "dp-noah-transaction-costs",
+      "title_zh": "Noah Smith 谈交易成本与公司规模"
+    }
+  ],
+  "Sam Altman": [
+    {
+      "date": "2026-06-30",
+      "id": "dp-sama-redteaming",
+      "title_zh": "Sam Altman 谈 AI 监管:可接受发布前强制红队测试期,但反对政府来挑客户"
+    }
+  ],
+  "AI 行政令": [
+    {
+      "date": "2026-06-30",
+      "id": "dp-sama-redteaming",
+      "title_zh": "Sam Altman 谈 AI 监管:可接受发布前强制红队测试期,但反对政府来挑客户"
+    }
+  ],
+  "红队测试": [
+    {
+      "date": "2026-06-30",
+      "id": "dp-sama-redteaming",
+      "title_zh": "Sam Altman 谈 AI 监管:可接受发布前强制红队测试期,但反对政府来挑客户"
+    }
+  ],
+  "Andrej Karpathy": [
+    {
+      "date": "2026-06-30",
+      "id": "dp-karpathy-llm-uiux",
+      "title_zh": "Karpathy:这是 LLM 交互范式的第三次大改版——AI 成为『与人类团队并肩工作的常驻异步实体』"
+    }
+  ],
+  "Claude": [
+    {
+      "date": "2026-06-30",
+      "id": "dp-karpathy-llm-uiux",
+      "title_zh": "Karpathy:这是 LLM 交互范式的第三次大改版——AI 成为『与人类团队并肩工作的常驻异步实体』"
+    }
+  ],
+  "AI 智能体": [
+    {
+      "date": "2026-06-30",
+      "id": "dp-karpathy-llm-uiux",
+      "title_zh": "Karpathy:这是 LLM 交互范式的第三次大改版——AI 成为『与人类团队并肩工作的常驻异步实体』"
+    }
+  ],
+  "Mohamed El-Erian": [
+    {
+      "date": "2026-06-30",
+      "id": "dp-elerian-fed-dovish",
+      "title_zh": "El-Erian:市场对美联储『过于鹰派』,今年若再加息我会很意外"
+    }
+  ],
+  "安联": [
+    {
+      "date": "2026-06-30",
+      "id": "dp-elerian-fed-dovish",
+      "title_zh": "El-Erian:市场对美联储『过于鹰派』,今年若再加息我会很意外"
+    }
+  ],
+  "利率": [
+    {
+      "date": "2026-06-30",
+      "id": "dp-elerian-fed-dovish",
+      "title_zh": "El-Erian:市场对美联储『过于鹰派』,今年若再加息我会很意外"
+    }
+  ],
+  "高通": [
+    {
+      "date": "2026-06-30",
+      "id": "co-qualcomm-tenstorrent",
+      "title_zh": "高通洽购 Jim Keller 的 RISC-V AI 芯片公司 Tenstorrent,估值 80–100 亿美元"
+    }
+  ],
+  "Tenstorrent": [
+    {
+      "date": "2026-06-30",
+      "id": "co-qualcomm-tenstorrent",
+      "title_zh": "高通洽购 Jim Keller 的 RISC-V AI 芯片公司 Tenstorrent,估值 80–100 亿美元"
+    }
+  ],
+  "Jim Keller": [
+    {
+      "date": "2026-06-30",
+      "id": "co-qualcomm-tenstorrent",
+      "title_zh": "高通洽购 Jim Keller 的 RISC-V AI 芯片公司 Tenstorrent,估值 80–100 亿美元"
+    }
+  ],
+  "英伟达": [
+    {
+      "date": "2026-06-30",
+      "id": "co-qualcomm-tenstorrent",
+      "title_zh": "高通洽购 Jim Keller 的 RISC-V AI 芯片公司 Tenstorrent,估值 80–100 亿美元"
+    }
+  ],
+  "RISC-V": [
+    {
+      "date": "2026-06-30",
+      "id": "co-qualcomm-tenstorrent",
+      "title_zh": "高通洽购 Jim Keller 的 RISC-V AI 芯片公司 Tenstorrent,估值 80–100 亿美元"
+    }
+  ],
+  "Claude Mythos": [
+    {
+      "date": "2026-06-30",
+      "id": "co-anthropic-mythos",
+      "title_zh": "Anthropic 未发布前沿模型 Mythos 数小时内攻破美国机密系统,Glasswing 扩至 150 家机构"
+    }
+  ],
+  "Project Glasswing": [
+    {
+      "date": "2026-06-30",
+      "id": "co-anthropic-mythos",
+      "title_zh": "Anthropic 未发布前沿模型 Mythos 数小时内攻破美国机密系统,Glasswing 扩至 150 家机构"
+    }
+  ],
+  "NSA": [
+    {
+      "date": "2026-06-30",
+      "id": "co-anthropic-mythos",
+      "title_zh": "Anthropic 未发布前沿模型 Mythos 数小时内攻破美国机密系统,Glasswing 扩至 150 家机构"
+    }
+  ],
+  "Mark Warner": [
+    {
+      "date": "2026-06-30",
+      "id": "co-anthropic-mythos",
+      "title_zh": "Anthropic 未发布前沿模型 Mythos 数小时内攻破美国机密系统,Glasswing 扩至 150 家机构"
+    }
+  ],
+  "韩国": [
+    {
+      "date": "2026-06-30",
+      "id": "co-skorea-1t-chips",
+      "title_zh": "韩国计划投入约 1 万亿美元扩建存储芯片产能并发展人形机器人"
+    }
+  ],
+  "存储芯片": [
+    {
+      "date": "2026-06-30",
+      "id": "co-skorea-1t-chips",
+      "title_zh": "韩国计划投入约 1 万亿美元扩建存储芯片产能并发展人形机器人"
+    }
+  ],
+  "人形机器人": [
+    {
+      "date": "2026-06-30",
+      "id": "co-skorea-1t-chips",
+      "title_zh": "韩国计划投入约 1 万亿美元扩建存储芯片产能并发展人形机器人"
+    }
+  ],
+  "美国银行": [
+    {
+      "date": "2026-06-30",
+      "id": "co-pce-fed-hikes",
+      "title_zh": "通胀粘性推升加息预期:PCE 升至 4.1%,美银预计年内三度加息,科技股拖累美股"
+    }
+  ],
+  "PCE 通胀": [
+    {
+      "date": "2026-06-30",
+      "id": "co-pce-fed-hikes",
+      "title_zh": "通胀粘性推升加息预期:PCE 升至 4.1%,美银预计年内三度加息,科技股拖累美股"
+    }
+  ],
+  "纳斯达克": [
+    {
+      "date": "2026-06-30",
+      "id": "co-pce-fed-hikes",
+      "title_zh": "通胀粘性推升加息预期:PCE 升至 4.1%,美银预计年内三度加息,科技股拖累美股"
+    }
+  ],
+  "标普500": [
+    {
+      "date": "2026-06-30",
+      "id": "co-pce-fed-hikes",
+      "title_zh": "通胀粘性推升加息预期:PCE 升至 4.1%,美银预计年内三度加息,科技股拖累美股"
+    }
+  ]
+}

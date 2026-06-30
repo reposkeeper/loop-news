@@ -1,0 +1,67 @@
+{
+  "date": "2026-06-04",
+  "generated_at": "2026-06-05T07:30:00+08:00",
+  "summary_zh": "AI 的「政策 + 产品」双线同时升温：联邦层面公布迄今最全面的《Great American AI Act》讨论稿、特朗普签署修订版 AI 行政令；产品层面 ChatGPT 月活破 10 亿、OpenAI 推出 Dreaming V3 记忆升级。监管与采用同步加速，为月底的州级落地与资本承压埋下伏笔。",
+  "consensus": [
+    {
+      "id": "co0604-great-american-ai-act",
+      "title_zh": "美国国会公布《Great American AI Act》269 页讨论稿，最全面的联邦 AI 框架",
+      "summary_zh": "众议员 Obernolte 与 Trahan 于 6 月 4 日晚公布 269 页《Great American AI Act》讨论稿，被称为国会迄今最全面的联邦 AI 监管框架。",
+      "sources": ["David Akpovi/Medium", "AI 政策综述"],
+      "consensus_count": 2,
+      "url": "https://medium.com/@davidakpovi/ai-news-week-of-june-1-to-june-7-2026-7957940c805a",
+      "topics": ["AI 监管", "联邦立法"]
+    },
+    {
+      "id": "co0604-trump-ai-eo",
+      "title_zh": "特朗普签署修订版 AI 与网络安全行政令",
+      "summary_zh": "特朗普签署修订版 AI/网络安全行政令，取代此前对前沿系统含更严要求的提案，在监管与发展间重新权衡。",
+      "sources": ["David Akpovi/Medium", "AI 政策综述"],
+      "consensus_count": 2,
+      "url": "https://medium.com/@davidakpovi/ai-news-week-of-june-1-to-june-7-2026-7957940c805a",
+      "topics": ["AI 监管", "网络安全"]
+    },
+    {
+      "id": "co0604-chatgpt-1b-mau",
+      "title_zh": "ChatGPT 月活突破 10 亿的象征性里程碑",
+      "summary_zh": "ChatGPT 月活跃用户突破 10 亿，凸显生成式 AI 在消费端的大规模采用仍在加速。",
+      "sources": ["MarketingProfs", "AI 行业综述"],
+      "consensus_count": 2,
+      "url": "https://www.marketingprofs.com/opinions/2026/54909/ai-update-june-5-2026-ai-news-and-views-from-the-past-week",
+      "topics": ["AI 采用", "里程碑"]
+    },
+    {
+      "id": "co0604-openai-dreaming-v3",
+      "title_zh": "OpenAI 推出最重要记忆升级 Dreaming V3",
+      "summary_zh": "OpenAI 的 Dreaming V3 架构于 6 月 4 日开始向美国 ChatGPT Plus/Pro 用户推送，是自初版 ChatGPT 以来最重要的记忆升级。",
+      "sources": ["BuildFastWithAI", "AI 行业综述"],
+      "consensus_count": 2,
+      "url": "https://www.buildfastwithai.com/blogs/ai-news-today-june-8-2026",
+      "topics": ["大模型", "记忆", "产品"]
+    }
+  ],
+  "deep": [],
+  "connections": [
+    {
+      "lens": "时间线追踪",
+      "title_zh": "AI 监管从「行政令」走向「成文立法」",
+      "narrative_zh": "同一周里，行政令（特朗普修订版）与立法（Great American AI Act 讨论稿）双管齐下，标志美国 AI 监管正从行政手段转向更具约束力的成文法路径。",
+      "evidence": ["co0604-great-american-ai-act", "co0604-trump-ai-eo"]
+    }
+  ],
+  "conclusions": [
+    {
+      "text_zh": "美国联邦 AI 监管进入成文立法讨论阶段：《Great American AI Act》269 页讨论稿公布。",
+      "grade": "事实",
+      "confidence": 0.9,
+      "evidence": ["co0604-great-american-ai-act"]
+    },
+    {
+      "text_zh": "监管（立法+行政令）与采用（ChatGPT 破 10 亿、记忆升级）正同步加速，二者张力将在后续显现。",
+      "grade": "推断",
+      "confidence": 0.55,
+      "evidence": ["co0604-great-american-ai-act", "co0604-chatgpt-1b-mau", "co0604-openai-dreaming-v3"]
+    }
+  ],
+  "methodology_note_zh": "本期以「时间线追踪」为主，记录 AI 监管从行政令向成文立法演进的起点，作为后续州级落地（见 6/30）的对照基线。"
+}
