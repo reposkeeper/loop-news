@@ -25,6 +25,7 @@
       <a class="nav-link" data-target="view-threads" href="#threads">🧵 线索时间线</a>
       <a class="nav-link" data-target="view-evolution" href="#evolution">⚙️ 自进化日志</a>
       <a class="nav-link" data-target="view-favorites" href="#favorites">★ 我的收藏</a>
+      {{DOSSIER_NAV}}
       <div class="nav-section">每日</div>
       {{DATE_NAV}}
     </nav>
@@ -33,6 +34,7 @@
     {{THREADS_VIEW}}
     {{EVOLUTION_VIEW}}
     {{FAVORITES_VIEW}}
+    {{DOSSIER_VIEWS}}
     {{DAY_VIEWS}}
   </main>
 </div>
@@ -60,7 +62,13 @@
   function showTarget(){
     var raw=(location.hash||"").replace(/^#/, ""), date=raw, item="";
     if(raw.indexOf("__")>-1){var p=raw.split("__");date=p[0];item=p[1];}
-    var targetId=(date==="threads"||date==="")?"view-threads":(date==="evolution"?"view-evolution":(date==="favorites"?"view-favorites":"day-"+date)), found=false;
+    var targetId;
+    if(date==="threads"||date==="") targetId="view-threads";
+    else if(date==="evolution") targetId="view-evolution";
+    else if(date==="favorites") targetId="view-favorites";
+    else if(date.indexOf("dossier-")===0) targetId=date;
+    else targetId="day-"+date;
+    var found=false;
     document.querySelectorAll(".view").forEach(function(v){var on=(v.id===targetId);v.classList.toggle("active",on);if(on)found=true;});
     if(!found){var first=document.querySelector(".view.day");if(first){first.classList.add("active");targetId=first.id;}}
     document.querySelectorAll(".nav-link").forEach(function(a){a.classList.toggle("current",a.getAttribute("data-target")===targetId);});

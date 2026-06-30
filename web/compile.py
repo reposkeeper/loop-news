@@ -16,6 +16,7 @@ ANALYSIS_DIR = os.path.join(ROOT, "data", "analysis")
 CORPUS_DIR = os.path.join(ROOT, "data", "corpus")
 THREADS_PATH = os.path.join(ROOT, "data", "threads.json")
 SERIES_DIR = os.path.join(ROOT, "data", "series")
+DOSSIERS_DIR = os.path.join(ROOT, "data", "dossiers")
 DOCS_DIR = os.environ.get("LN_DOCS_DIR") or os.path.join(ROOT, "docs")  # 自检时可指向临时目录
 TPL = os.path.join(ROOT, "web", "templates", "page.html")
 ASSETS_SRC = os.path.join(ROOT, "web", "assets")
@@ -495,6 +496,76 @@ def render_favorites():
             '</section>')
 
 
+def _render_graded(items, id_to_date):
+    out = []
+    for c in items or []:
+        g = c.get("grade", "推断"); gc = GRADE_CLASS.get(g, "grade-infer")
+        conf = c.get("confidence")
+        confhtml = f'<span class="conf">置信度 {int(conf*100)}%</span>' if isinstance(conf, (int, float)) else ""
+        ev = ev_links(c.get("evidence", []), id_to_date)
+        evhtml = f'<div class="evidence">证据:{ev}</div>' if ev else ""
+        out.append(f'<div class="concl"><p><span class="grade {gc}">{e(g)}</span>{hl(c.get("text_zh"))} {confhtml}</p>{evhtml}</div>')
+    return "".join(out)
+
+
+def render_dossier(d, id_to_date):
+    """领域专题(产业级深度报告):综述 + KOL原声 + 历年数据 + 脉络 + 未来 + 周边产业 + 洞察。"""
+    did = e(d.get("id", ""))
+    P = [f'<div class="dossier-head"><h1 class="day-date">📂 {e(d.get("name",""))}</h1>'
+         f'<span class="dossier-upd">持续追踪 · 更新 {e(d.get("updated",""))}</span></div>']
+    if d.get("summary_zh"):
+        P.append(f'<p class="day-summary">{hl(d.get("summary_zh"))}</p>')
+    voices = []
+    for v in d.get("kol_voices", []):
+        q = v.get("original_quote", "")
+        pq = f'<blockquote class="pq" lang="{e(v.get("lang","en"))}">{e(q)}</blockquote>' if q else ""
+        url = v.get("url", "")
+        link = f'<a class="src-link" href="{e(url)}" target="_blank" rel="noopener">来源 ↗</a>' if url else ""
+        voices.append(f'<article class="card deep"><div class="byline"><span class="byline-src">{e(v.get("source",""))}</span><span class="topic">{e(v.get("date",""))}</span>{link}</div>{pq}<p class="deep-sum">{e(v.get("summary_zh",""))}</p></article>')
+    if voices:
+        P.append('<section class="section"><h2 class="section-title">KOL / KOC 在说什么</h2>' + "".join(voices) + "</section>")
+    charts = render_charts(d.get("data"))
+    if charts:
+        P.append('<section class="section"><h2 class="section-title">历年数据 · 变化</h2>' + charts + "</section>")
+    tl = d.get("timeline", [])
+    if tl:
+        items = "".join(f'<li class="tl-entry"><span class="tl-date">{e(t.get("date",""))}</span> <span class="tl-note">{e(t.get("note_zh",""))}</span></li>' for t in tl)
+        P.append('<section class="section"><h2 class="section-title">脉络</h2><ul class="timeline">' + items + "</ul></section>")
+    if d.get("outlook"):
+        P.append('<section class="section"><h2 class="section-title">未来展望</h2>' + _render_graded(d.get("outlook"), id_to_date) + "</section>")
+    adj = d.get("adjacent", [])
+    if adj:
+        cards = []
+        for a in adj:
+            ev = ev_links(a.get("evidence", []), id_to_date)
+            evhtml = f'<div class="evidence">证据:{ev}</div>' if ev else ""
+            cards.append(f'<div class="adj"><h3>{e(a.get("name",""))}</h3><p>{e(a.get("note_zh",""))}</p>{evhtml}</div>')
+        P.append('<section class="section"><h2 class="section-title">周边产业</h2>' + "".join(cards) + "</section>")
+    if d.get("conclusions"):
+        P.append('<section class="section"><h2 class="section-title">综合洞察</h2>' + _render_graded(d.get("conclusions"), id_to_date) + "</section>")
+    if d.get("methodology_note_zh"):
+        P.append('<div class="section"><h2 class="section-title">本专题的搜索方式(自进化)</h2><p>' + e(d.get("methodology_note_zh")) + "</p></div>")
+    return f'<section class="view dossier-view" id="dossier-{did}">' + "".join(P) + "</section>"
+
+
+def load_dossiers():
+    out = []
+    for p in sorted(glob.glob(os.path.join(DOSSIERS_DIR, "*.json"))):
+        dd = load_json(p, None)
+        if isinstance(dd, dict) and dd.get("id"):
+            out.append(dd)
+    return out
+
+
+def render_dossier_nav(dossiers):
+    if not dossiers:
+        return ""
+    links = ['<div class="nav-section">专题</div>']
+    for d in dossiers:
+        links.append(f'<a class="nav-link dossier" data-target="dossier-{e(d["id"])}" href="#dossier-{e(d["id"])}">📂 {e(d.get("name",""))}</a>')
+    return "\n".join(links)
+
+
 def render_nav(dates, analyses):
     links = []
     for d in dates:
@@ -526,6 +597,9 @@ def main():
     threads_view = render_threads(threads)
     evolution_view = render_evolution(changelog_md)
     favorites_view = render_favorites()
+    dossiers = load_dossiers()
+    dossier_nav = render_dossier_nav(dossiers)
+    dossier_views = "\n".join(render_dossier(d, id_to_date) for d in dossiers)
     day_views = "\n".join(render_day(analyses[d], cfg, id_to_date) for d in dates)
     date_nav = render_nav(dates, analyses)
 
@@ -542,6 +616,8 @@ def main():
         "{{THREADS_VIEW}}": threads_view,
         "{{EVOLUTION_VIEW}}": evolution_view,
         "{{FAVORITES_VIEW}}": favorites_view,
+        "{{DOSSIER_NAV}}": dossier_nav,
+        "{{DOSSIER_VIEWS}}": dossier_views,
         "{{DAY_VIEWS}}": day_views,
         "{{FOOTER}}": footer,
         "{{FEEDBACK_ENABLED}}": "true" if cfg_get(cfg, "feedback.enabled", True) else "false",

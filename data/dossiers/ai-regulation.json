@@ -1,0 +1,43 @@
+{
+  "id": "ai-regulation",
+  "name": "AI 监管",
+  "updated": "2026-07-01",
+  "summary_zh": "AI 监管在 2026 上半年走完「行政令 → 联邦立法讨论 → 州级成文法生效」一条链路;美国各州 AI 法案数四年增约 ==25 倍==,头部厂商开始公开框定可接受边界。本专题持续追踪这条产业级主线。",
+  "kol_voices": [
+    {
+      "source": "@sama (Sam Altman)",
+      "date": "2026-06-30",
+      "lang": "en",
+      "url": "https://x.com/sama/status/2070609190977228893",
+      "original_quote": "actually i think a required preview period for extended redteaming is not a bad idea. i just dont like the idea of the government picking the customers. confident we will get to a better place.",
+      "summary_zh": "接受发布前强制红队测试,但反对政府挑客户——头部 lab 在给监管划「可接受边界」。"
+    },
+    {
+      "source": "Jack Clark (Import AI)",
+      "date": "2026-06-30",
+      "lang": "en",
+      "url": "https://importai.substack.com/feed",
+      "original_quote": "Frontier coding agents can autonomously develop a policy to achieve a 99% success rate on challenging, dexterous manipulation tasks in the real world.",
+      "summary_zh": "前沿能力的硬进步,正是监管紧迫性的来源——能力越强,攻防与合规压力越大。"
+    }
+  ],
+  "data": [
+    { "type": "line", "title": "美国各州 AI 法案数(逐年提出)", "series": "us_state_ai_bills", "recent": 5, "note": "据 MultiState / BSA 等公开统计;仅供参考" }
+  ],
+  "timeline": [
+    { "date": "2026-06-04", "note_zh": "联邦:《Great American AI Act》269 页讨论稿 + 特朗普修订版 AI 行政令" },
+    { "date": "2026-06-30", "note_zh": "州级:科罗拉多《AI 消费者保护法》生效(全美首部综合性州级法)" }
+  ],
+  "outlook": [
+    { "text_zh": "州法快速分裂(2026 已破 2000 件/年)将抬高合规成本,可能倒逼联邦统一立法或先占(preemption)。", "grade": "预测", "confidence": 0.45, "evidence": ["us_state_ai_bills", "co-colorado-ai-law"] },
+    { "text_zh": "前沿模型攻防能力(如 Mythos)会持续推动关键基础设施安全立法加速。", "grade": "预测", "confidence": 0.4, "evidence": ["co-anthropic-mythos", "dp-clark-import-ai-463"] }
+  ],
+  "adjacent": [
+    { "name": "算力 / 芯片", "note_zh": "前沿模型能力(攻防、自改进)是监管紧迫性的根源,见 Mythos 数小时攻破机密系统。", "evidence": ["co-anthropic-mythos", "dp-clark-import-ai-463"] },
+    { "name": "云服务 / 合规", "note_zh": "高风险系统的披露与防歧视义务,外溢到部署方与云厂商。", "evidence": ["co-colorado-ai-law"] }
+  ],
+  "conclusions": [
+    { "text_zh": "监管已从纸面进入成本:州级成文法落地 + 法案数指数级增长。", "grade": "事实", "confidence": 0.85, "evidence": ["co-colorado-ai-law", "us_state_ai_bills"] }
+  ],
+  "methodology_note_zh": "本专题的独特搜索方式(由 ln-evolve 进化):盯头部 lab 的公开立场(KOL 原声)+ 逐年法案数(历年数据变化)+ 联邦/州落地差(脉络)+ 周边产业外溢(算力/合规)。后续按关注与新料持续加深。"
+}

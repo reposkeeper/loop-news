@@ -28,6 +28,7 @@
 - 改"怎么呈现" → `web/templates/page.html` + `web/assets/style.css`(改后 `python3 web/compile.py` 重建单页)
 - 数据 schema:语料 → `.claude/skills/ln-collect/SKILL.md`;分析 + 跨日期线索 → `.claude/skills/ln-synthesize/SKILL.md`
 - 跨日期关联 → `data/threads.json`(由 ln-synthesize 维护,编译成"线索时间线")
+- 领域专题(产业纵深)→ `config/domains.yaml`(领域剧本,ln-evolve 进化)+ `data/dossiers/<id>.json`(由 `ln-dossier` 生成/更新,编译成「📂 专题」);历年数据序列 → `data/series/<id>.json`(累积沉淀)
 - 人类反馈 → 网页弹窗(👍赞/👎踩/✓采用 + 常用词 + 文字)经 `server/feedback_server.py` 写入 `data/feedback.jsonl` + `feedback.md`(`bash scripts/feedback.sh` 读取;ln-evolve 消化并进化 `config/feedback_tags.json`)
 
 ## 网站(单页)

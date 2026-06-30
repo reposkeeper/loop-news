@@ -32,6 +32,7 @@ description: Loop News 采集步骤。从四类来源(主流媒体/RSS、X名人
 用户在网页「+ 关注」过的新闻,经反馈服务聚合成**追踪话题/实体**。**每轮采集先拉取**:线上 `curl "<feedback.api_url>/follows"`(取 `topics`/`entities` 聚合),把它们并入本轮搜索议程,**主动搜这些话题的最新进展**(共识与深度都查),而不是等它们偶然出现。
 - 某关注话题**连续多轮无新内容** → 在 `state/metrics.json` 标 `stale`、降优先;**确实长期无更新才停**(对应用户「除非确实没有更新的内容」)。
 - 这让系统对用户在意的线索保持跟进,正是北极星「跨时间洞察」的素材来源。
+- 对 `config/domains.yaml` 里 `status=tracking/dossier` 的领域,按其 `playbook`(angles/kol/adjacent)跑**领域专属搜索**(原声 / 历年数据 / 周边产业),为 `ln-dossier` 攒料。
 
 ## 语料库条目 schema(`data/corpus/<date>.json` 数组元素)
 ```json

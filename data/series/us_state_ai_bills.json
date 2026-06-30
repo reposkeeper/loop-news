@@ -1,0 +1,14 @@
+{
+  "id": "us_state_ai_bills",
+  "name": "美国各州 AI 相关法案数(逐年提出)",
+  "unit": "件",
+  "source": "MultiState / BSA / 公开统计",
+  "updated": "2026-07-01",
+  "points": [
+    { "period": "2022", "value": 61 },
+    { "period": "2023", "value": 190 },
+    { "period": "2024", "value": 635 },
+    { "period": "2025", "value": 1208 },
+    { "period": "2026", "value": 2191 }
+  ]
+}

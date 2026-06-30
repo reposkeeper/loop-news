@@ -1,0 +1,23 @@
+# 领域剧本 —— 系统按「关注」自进化出的领域专属研究方式。由 ln-evolve 维护、ln-collect/ln-dossier 使用。
+# 每个领域记:KOL/KOC、要追的历年数据 series、周边产业、独特搜索角度、未来问题。
+# status: tracking(追踪中,攒料)/ dossier(已长出专题)/ dormant(休眠)
+# 进化逻辑:某领域的关注/线索/实体反复出现并够深 → 提升 status、细化 playbook;长期无料 → dormant。
+
+domains:
+  - id: ai-regulation
+    name: AI 监管
+    status: dossier
+    since: "2026-06-30"
+    promote_reason: "关注 + 监管线索(6/04→6/30)反复出现,且有可追踪的历年数据"
+    playbook:
+      kol: ["@sama", "@ylecun", "Jack Clark(Import AI)", "白宫 / 国会相关账号"]
+      koc: ["r/MachineLearning 合规讨论", "法律 / 政策圈 Substack"]
+      series: ["us_state_ai_bills"]                 # 历年数据:逐年法案数
+      adjacent: ["算力 / 芯片", "云服务 / 合规", "保险 / 责任认定"]
+      angles:
+        - "联邦行政令 vs 州级成文法 的落地差"
+        - "头部 lab 对监管的公开立场与游说"
+        - "合规成本如何外溢到部署方 / 中小企业"
+      outlook_questions:
+        - "明年是否出现联邦统一立法?"
+        - "州法分裂会不会逼出联邦先占(preemption)?"
