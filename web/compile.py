@@ -633,6 +633,7 @@ def main():
         "{{FEEDBACK_ENABLED}}": "true" if cfg_get(cfg, "feedback.enabled", True) else "false",
         "{{FEEDBACK_API}}": e(cfg_get(cfg, "feedback.api_url", "")),
         "{{SHARE_API}}": e(cfg_get(cfg, "feedback.share_api_url", "")),
+        "{{SYS_OWNER_NAV}}": "",  # owner 专属系统按钮(生成分享链接等),由后续功能注入
         "{{FEEDBACK_TAGS}}": json.dumps(fb_tags, ensure_ascii=False),
     }
     for k, v in repl.items():

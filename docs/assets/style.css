@@ -37,8 +37,8 @@ a:hover{text-decoration:none}
 .nav-link:last-child{border-bottom:none;}
 .nav-link .nd{display:block;font-size:11px;letter-spacing:.04em;color:var(--faint);margin-top:2px;}
 .nav-link:hover{color:var(--accent);}
-.nav-action{border-bottom:none;background:var(--accent);color:#fff;font-family:var(--sans);font-weight:600;font-size:13.5px;border-radius:8px;padding:9px 12px;margin:2px 0 12px;cursor:pointer;text-align:left;width:100%;}
-.nav-action:hover{filter:brightness(1.08);color:#fff;}
+.nav-sys{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);}
+.nav-sys .nav-section{margin-top:0;}
 .nav-link.current{color:var(--ink);font-weight:600;}
 .nav-link.current .nd{color:var(--muted);}
 .nav-link.day{font-family:var(--serif);font-size:17px;}
@@ -207,13 +207,15 @@ mark.hl{background:linear-gradient(transparent 56%, rgba(232,198,110,.6) 56%);co
 .rn-item strong,.rn-sub strong,.release-note strong{color:var(--ink);font-weight:700;}
 code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em;background:#1f5c570f;color:#2a4f4b;padding:1px 5px;border-radius:3px;}
 
-/* ── 全局反馈按钮(owner 专属,浮动) ── */
-.fab-feedback{position:fixed;right:22px;bottom:22px;z-index:40;display:none;
-  font-family:var(--sans);font-size:14px;font-weight:600;color:#fff;background:var(--ink);
-  border:none;border-radius:999px;padding:11px 18px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.22);}
-.fab-feedback:hover{background:var(--accent);}
-body.is-owner .fab-feedback{display:inline-flex;align-items:center;gap:6px;}
-@media(max-width:860px){.fab-feedback{right:16px;bottom:16px;}}
+/* ── 浮动操作:想看的话题(所有访客)+ 全局反馈(owner 专属),右下堆叠 ── */
+.fab-stack{position:fixed;right:22px;bottom:22px;z-index:40;display:flex;flex-direction:column-reverse;gap:12px;align-items:flex-end;}
+.fab-feedback,.fab-req{font-family:var(--sans);font-size:14px;font-weight:600;color:#fff;background:var(--ink);
+  border:none;border-radius:999px;padding:11px 18px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.22);align-items:center;gap:6px;white-space:nowrap;}
+.fab-req{display:inline-flex;}
+.fab-feedback{display:none;}
+.fab-feedback:hover,.fab-req:hover{background:var(--accent);}
+body.is-owner .fab-feedback{display:inline-flex;}
+@media(max-width:860px){.fab-stack{right:16px;bottom:16px;}}
 
 /* ── 页脚 ── */
 .site-footer{border-top:2px solid var(--ink);margin-top:24px;}
@@ -244,7 +246,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
   .section{margin:34px 0;}
   .fb,.act{font-size:12.5px;padding:7px 12px;}               /* 更大触控目标 */
   .act.fav{margin-left:0;}                                    /* 窄屏不右推,顺势换行 */
-  .fab-feedback{right:15px;bottom:calc(15px + env(safe-area-inset-bottom));}
+  .fab-stack{right:15px;bottom:calc(15px + env(safe-area-inset-bottom));}
   .fb-modal{align-items:flex-end;padding:0;}                  /* 弹窗 → 底部抽屉 */
   .fb-card{max-width:none;border-radius:16px 16px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));animation:sheet .26s cubic-bezier(.4,0,.2,1) both;}
   @keyframes sheet{from{transform:translateY(100%)}to{transform:none}}
