@@ -1,0 +1,38 @@
+# 新闻来源清单 —— ln-collect 读取本文件决定抓什么。
+# 两大类:consensus(求快求广) / deep(求原汁原味)。
+# 进化步骤(ln-evolve)可增删来源,并在 prompts/CHANGELOG.md 记录原因。
+
+# ── 共识类:各大媒体都在报道的、最新的 Breaking News ──
+consensus:
+  # 用 WebSearch 跑这些 query 抓最新共识热点(跨语种)
+  web_search_queries:
+    - "AI 人工智能 重大新闻 今天"
+    - "global economy breaking news today"
+    - "technology breaking news today"
+    - "美联储 / 央行 政策 最新"
+    - "geopolitics breaking news today"
+  # 主流媒体 RSS(WebFetch 抓取 + 解析)
+  rss:
+    - { name: "Reuters World",  url: "https://www.reuters.com/arc/outboundfeeds/news-sitemap-index/?outputType=xml" }
+    - { name: "AP Top News",    url: "https://feeds.apnews.com/rss/apf-topnews" }
+    - { name: "BBC World",      url: "https://feeds.bbci.co.uk/news/world/rss.xml" }
+    - { name: "NYT World",      url: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml" }
+    - { name: "财新网",         url: "https://www.caixin.com/rss/all.xml" }
+
+# ── 深度类:不在大众视野、但能引发圈层共鸣的原声 ──
+deep:
+  # 深度长文 / 独立观点(Substack、博客 RSS;抓全文)
+  substack_rss:
+    - { name: "Stratechery (Ben Thompson)", url: "https://stratechery.com/feed/" }
+    - { name: "Import AI (Jack Clark)",      url: "https://importai.substack.com/feed" }
+    - { name: "One Useful Thing (Ethan Mollick)", url: "https://www.oneusefulthing.org/feed" }
+    - { name: "Noahpinion (Noah Smith)",     url: "https://www.noahpinion.blog/feed" }
+  # 圈层讨论(交叉验证一条新闻在专业圈的真实反应)
+  reddit:
+    - r/MachineLearning
+    - r/LocalLLaMA
+    - r/Economics
+    - r/singularity
+  hackernews:
+    - frontpage   # Top stories
+  # X 名人原声见 config/people.yaml

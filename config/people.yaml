@@ -1,0 +1,21 @@
+# 重点追踪的"名人"原声来源(深度类核心)。
+# ln-collect 优先抓这些人的第一手发言(X 推文 / 文章 / 采访),保留原文 + 中文翻译。
+# x 字段为空表示无活跃账号,改走文章/采访渠道。
+
+ai:
+  - { name: "Sam Altman",       x: "sama" }
+  - { name: "Andrej Karpathy",  x: "karpathy" }
+  - { name: "Demis Hassabis",   x: "demishassabis" }
+  - { name: "Yann LeCun",       x: "ylecun" }
+  - { name: "Andrew Ng",        x: "AndrewYNg" }
+  - { name: "François Chollet",  x: "fchollet" }
+  - { name: "Jim Fan",          x: "DrJimFan" }
+  - { name: "Dario Amodei",     x: "" }   # 无活跃账号,走 Anthropic 博客/采访
+
+economics:
+  - { name: "Paul Krugman",     x: "paulkrugman" }
+  - { name: "Mohamed El-Erian", x: "elerianm" }
+  - { name: "Noah Smith",       x: "Noahpinion" }
+  - { name: "Jason Furman",     x: "jasonfurman" }
+  - { name: "Cathie Wood",      x: "CathieDWood" }
+  - { name: "Ray Dalio",        x: "RayDalio" }

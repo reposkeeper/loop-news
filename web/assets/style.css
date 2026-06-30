@@ -1,0 +1,67 @@
+/* Loop News · 纯静态样式(零框架) */
+:root{
+  --bg:#f7f6f3; --surface:#ffffff; --ink:#1c1b19; --muted:#6b6760;
+  --line:#e6e3dd; --accent:#3a5a8c; --accent-soft:#eef2f8;
+  --fact:#2f7d56; --infer:#a9722b; --predict:#6d4aa0;
+  --maxw:780px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px}
+a{color:var(--accent); text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* header / footer */
+.site-header{background:var(--surface); border-bottom:1px solid var(--line); padding:22px 0 16px}
+.brand{font-size:22px; font-weight:700; color:var(--ink); letter-spacing:.5px}
+.subtitle{margin:4px 0 10px; color:var(--muted); font-size:13px}
+.topnav{font-size:14px}
+.site-footer{margin-top:48px; padding:24px 0 40px; border-top:1px solid var(--line); color:var(--muted); font-size:13px}
+
+/* day meta */
+.day-meta{margin:26px 0 10px}
+.day-date{font-size:28px; font-weight:700; margin:0}
+.day-summary{margin:8px 0 0; font-size:17px; color:#33312d; background:var(--accent-soft); border-left:3px solid var(--accent); padding:12px 16px; border-radius:0 8px 8px 0}
+
+/* sections */
+.section{margin:34px 0}
+.section-title{font-size:14px; font-weight:700; letter-spacing:1px; color:var(--accent); text-transform:uppercase; border-bottom:2px solid var(--line); padding-bottom:6px; margin:0 0 16px}
+
+/* cards */
+.card{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin:0 0 14px}
+.card h3{margin:0 0 6px; font-size:18px; line-height:1.5}
+.card p{margin:6px 0; color:#3a3833}
+.meta-row{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px; font-size:12.5px; color:var(--muted)}
+
+/* badges */
+.badge{display:inline-block; padding:1px 9px; border-radius:999px; font-size:12px; line-height:1.8; border:1px solid var(--line); background:#faf9f6}
+.badge-consensus{background:var(--accent-soft); border-color:#d6e0ef; color:var(--accent)}
+.badge-src{background:#f3f1ec}
+.topic{color:var(--muted)}
+
+/* deep quote */
+.quote-toggle{cursor:pointer; font-size:12.5px; color:var(--accent); background:none; border:1px dashed #cdd7e6; border-radius:6px; padding:2px 10px; margin-top:8px}
+.quote-box{display:none; margin-top:10px; padding:12px 14px; background:#fbfaf7; border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:0 8px 8px 0; font-style:italic; color:#403d37; white-space:pre-wrap}
+.quote-box.open{display:block}
+.insight{font-size:14px; color:#5a564e; background:#fbfaf7; border-radius:6px; padding:6px 10px; margin-top:6px}
+
+/* connections & conclusions */
+.conn{border-left:3px solid var(--accent); padding:6px 0 6px 14px; margin:0 0 14px}
+.conn .lens{display:inline-block; font-size:12px; font-weight:700; color:var(--accent); background:var(--accent-soft); padding:1px 9px; border-radius:999px; margin-bottom:4px}
+.concl{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin:0 0 12px}
+.grade{font-size:12px; font-weight:700; padding:1px 9px; border-radius:999px; color:#fff; margin-right:8px}
+.grade-fact{background:var(--fact)} .grade-infer{background:var(--infer)} .grade-predict{background:var(--predict)}
+.conf{font-size:12px; color:var(--muted)}
+.evidence{font-size:12px; color:var(--muted); margin-top:6px}
+
+/* archive */
+.archive-list{list-style:none; padding:0; margin:18px 0}
+.archive-list li{padding:12px 0; border-bottom:1px solid var(--line)}
+.archive-list .d{font-weight:700; margin-right:10px}
+
+.empty{color:var(--muted); font-style:italic}
+@media(max-width:560px){ .day-date{font-size:24px} .card h3{font-size:17px} }

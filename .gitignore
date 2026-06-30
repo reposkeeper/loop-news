@@ -1,0 +1,12 @@
+# 系统/缓存
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo
+
+# 密钥(永不入库)
+config/secrets.yaml
+config/secrets.yml
+.env
+*.key
+*.token

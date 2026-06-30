@@ -1,0 +1,26 @@
+# Loop Engineering 运行配置
+# 被各 skill 与 web/compile.py 读取。修改后下一轮循环生效。
+
+timezone: Asia/Shanghai
+
+schedule:
+  collect_am: "07:00"   # 早班:采集(早) → 汇总前一天 → 编译 → 发布 → 进化
+  collect_pm: "19:00"   # 晚班:仅采集(晚)
+
+site:
+  title: "Loop News · 事实新闻汇总"
+  subtitle: "多语种采集 · 中文呈现 · 深层关联 · 每日进化"
+  url: "https://reposkeeper.github.io/loop-news/"
+  author: reposkeeper
+  language: zh-CN
+
+output:
+  max_consensus_items: 15   # 每期"今日要闻(共识类)"最多条数
+  max_deep_items: 12        # 每期"深度原声"最多条数
+  max_connections: 6        # 每期"关联"最多条数
+  max_conclusions: 8        # 每期"结论"最多条数
+
+thresholds:
+  importance_min: 0.30        # 低于此重要性的条目不进入网页
+  consensus_min_sources: 2    # 至少几家媒体在报才算"共识"
+  title_similarity_dedup: 0.85  # 标题相似度去重阈值(共识类强去重)

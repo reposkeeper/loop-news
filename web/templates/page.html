@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PAGE_TITLE}}</title>
+<meta name="description" content="{{PAGE_DESC}}">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">{{SITE_TITLE}}</a>
+    <p class="subtitle">{{SITE_SUBTITLE}}</p>
+    <nav class="topnav"><a href="index.html">最新一期</a> · <a href="archive.html">历史归档</a></nav>
+  </div>
+</header>
+<main class="wrap">
+{{CONTENT}}
+</main>
+<footer class="site-footer">
+  <div class="wrap">{{FOOTER}}</div>
+</footer>
+<script>
+// 深度原声"显示原文"折叠
+document.addEventListener('click', function(e){
+  var b = e.target.closest('.quote-toggle');
+  if(!b) return;
+  var box = b.nextElementSibling;
+  var open = box.classList.toggle('open');
+  b.textContent = open ? '收起原文' : '显示原文';
+});
+</script>
+</body>
+</html>
