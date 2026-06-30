@@ -26,7 +26,7 @@
       <a class="nav-link" data-target="view-evolution" href="#evolution">⚙️ 自进化日志</a>
       <a class="nav-link" data-target="view-favorites" href="#favorites">★ 我的收藏</a>
       <div class="nav-section">专题</div>
-<a class="nav-link dossier" data-target="dossier-ai-regulation" href="#dossier-ai-regulation">📂 AI 监管</a>
+<a class="nav-link dossier" data-target="dossier-ai-regulation" data-updated="2026-07-01" href="#dossier-ai-regulation">📂 AI 监管<span class="dot"></span></a>
       <div class="nav-section">每日</div>
       <a class="nav-link day" data-target="day-2026-06-30" href="#2026-06-30">2026-06-30<br><span class="nd">18 条</span></a>
 <a class="nav-link day" data-target="day-2026-06-04" href="#2026-06-04">2026-06-04<br><span class="nd">4 条</span></a>
@@ -422,12 +422,14 @@
     if(item){var el=document.getElementById("item-"+item);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("flash");setTimeout(function(){el.classList.remove("flash");},1600);}}
     else{window.scrollTo(0,0);}
     if(targetId==="view-favorites") loadFavorites();
+    if(targetId.indexOf("dossier-")===0) markRead(targetId);
     document.getElementById("sidebar").classList.remove("open");
   }
   window.addEventListener("hashchange",showTarget);
   document.addEventListener("DOMContentLoaded",function(){
     if(!location.hash){var first=document.querySelector(".nav-link.day");if(first){location.hash=first.getAttribute("href");}}
     showTarget();
+    loadReads();
   });
 
   /* ---- 反馈弹窗 ---- */
@@ -485,6 +487,25 @@
       if(!d.items||!d.items.length){box.innerHTML='<p class="empty">还没有收藏。点新闻底部的「★ 收藏」即可加入。</p>';return;}
       box.innerHTML=d.items.map(function(it){var href="#"+(it.date||"")+"__"+it.item_id;return '<div class="fav-item"><a href="'+href+'"><span class="fav-date">'+esc(it.date||"")+'</span> '+esc(it.title||it.item_id)+'</a><button class="fav-remove" data-item="'+esc(it.item_id)+'">取消</button></div>';}).join("");
     }).catch(function(){box.innerHTML='<p class="empty">加载失败:反馈服务未连接?</p>';});
+  }
+
+  /* ---- 专题更新红点(per-user,已读存 R2 reads/<token>)---- */
+  function loadReads(){
+    var tok=ck("lnt"); if(!FB.enabled||!API||!tok)return;
+    fetch(API+"/reads?token="+encodeURIComponent(tok)).then(function(r){return r.json();}).then(function(m){
+      if(!m||m.error)m={};
+      document.querySelectorAll(".nav-link.dossier").forEach(function(a){
+        var id=a.getAttribute("data-target").replace("dossier-",""), up=a.getAttribute("data-updated")||"";
+        if(up&&(!m[id]||m[id]<up)) a.classList.add("has-update");
+      });
+    }).catch(function(){});
+  }
+  function markRead(targetId){
+    var a=document.querySelector('.nav-link.dossier[data-target="'+targetId+'"]'); if(!a)return;
+    a.classList.remove("has-update");
+    var tok=ck("lnt"); if(!API||!tok)return;
+    var id=targetId.replace("dossier-",""), up=a.getAttribute("data-updated")||"";
+    fetch(API+"/read",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token:tok,id:id,ts:up})}).catch(function(){});
   }
 
   /* ---- 统一点击处理 ---- */

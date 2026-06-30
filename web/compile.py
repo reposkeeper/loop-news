@@ -562,7 +562,7 @@ def render_dossier_nav(dossiers):
         return ""
     links = ['<div class="nav-section">专题</div>']
     for d in dossiers:
-        links.append(f'<a class="nav-link dossier" data-target="dossier-{e(d["id"])}" href="#dossier-{e(d["id"])}">📂 {e(d.get("name",""))}</a>')
+        links.append(f'<a class="nav-link dossier" data-target="dossier-{e(d["id"])}" data-updated="{e(d.get("updated",""))}" href="#dossier-{e(d["id"])}">📂 {e(d.get("name",""))}<span class="dot"></span></a>')
     return "\n".join(links)
 
 

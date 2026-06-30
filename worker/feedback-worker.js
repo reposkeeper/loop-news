@@ -144,6 +144,28 @@ export default {
       return json({ count: items.length, items, topics, entities: ents });
     }
 
+    // ── 已读状态(per-user;专题更新小红点)──
+    if (p === "/reads" && req.method === "GET") {
+      const tok = url.searchParams.get("token") || "";
+      if (!validTokens(env)[tok]) return json({ error: "invalid token" }, 403);
+      const o = await env.BUCKET.get(`reads/${tok}.json`);
+      let m = {};
+      if (o) { try { m = JSON.parse(await o.text()); } catch (_) {} }
+      return json(m);
+    }
+    if (p === "/read" && req.method === "POST") {
+      let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
+      const tok = String(d.token || "");
+      if (!validTokens(env)[tok]) return json({ error: "invalid token" }, 403);
+      const key = `reads/${tok}.json`;
+      const o = await env.BUCKET.get(key);
+      let m = {};
+      if (o) { try { m = JSON.parse(await o.text()); } catch (_) {} }
+      m[String(d.id || "").slice(0, 80)] = String(d.ts || "").slice(0, 32);
+      await env.BUCKET.put(key, JSON.stringify(m), { httpMetadata: { contentType: "application/json" } });
+      return json({ ok: true });
+    }
+
     return json({ error: "not found" }, 404);
   },
 };
