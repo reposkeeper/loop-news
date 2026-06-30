@@ -22,6 +22,7 @@
 <div class="layout">
   <aside class="sidebar" id="sidebar">
     <nav>
+      <button class="nav-link nav-action" id="reqBtn">➕ 想看的话题</button>
       <a class="nav-link" data-target="view-threads" href="#threads">🧵 线索时间线</a>
       <a class="nav-link" data-target="view-evolution" href="#evolution">⚙️ 自进化日志</a>
       <a class="nav-link" data-target="view-favorites" href="#favorites">★ 我的收藏</a>
@@ -87,17 +88,17 @@
 
   /* ---- 反馈弹窗 ---- */
   var FB=window.__FB||{enabled:false}, API=(FB.api||"").replace(/\/$/,"");
-  var ACT={up:"👍 赞",down:"👎 踩",adopt:"✓ 采用",ask:"✍ 提问 / 全局反馈"}, tags=FB.tags||{}, picked, current=null;
+  var ACT={up:"👍 赞",down:"👎 踩",adopt:"✓ 采用",ask:"✍ 提问 / 全局反馈",request:"➕ 想看的话题"}, tags=FB.tags||{}, picked, current=null;
   function ck(n){var m=document.cookie.match(new RegExp("(?:^|;\\s*)"+n+"=([^;]+)"));return m?decodeURIComponent(m[1]):"";}
   if(ck("lnrole")==="owner") document.body.classList.add("is-owner");
   var modal=document.getElementById("fbModal"),elAct=document.getElementById("fbAct"),elItem=document.getElementById("fbItem"),
       elChips=document.getElementById("fbChips"),elText=document.getElementById("fbText"),elMsg=document.getElementById("fbMsg"),elSubmit=document.getElementById("fbSubmit");
   /* 启动时从服务器拉一次最新常用词(失败则用编译进来的) */
   if(FB.enabled&&API){fetch(API+"/tags").then(function(r){return r.json();}).then(function(t){if(t&&!t.error)tags=Object.assign({},tags,t);}).catch(function(){});}
-  function openModal(btn){
-    current={action:btn.dataset.act,item_id:btn.dataset.item,date:btn.dataset.date,title:btn.dataset.title};
-    picked=new Set();elAct.textContent=ACT[current.action]||"反馈";elItem.textContent="「"+(current.title||"")+"」";
+  function showFbModal(cur){
+    current=cur;picked=new Set();elAct.textContent=ACT[current.action]||"反馈";elItem.textContent="「"+(current.title||"")+"」";
     elText.value="";elMsg.textContent="";elSubmit.disabled=false;
+    elText.placeholder=current.action==="request"?"描述想持续看到的新闻类型 / 话题…":"补充说明(可不写)…";
     elChips.innerHTML="";(tags[current.action]||[]).forEach(function(tag){
       var c=document.createElement("button");c.type="button";c.className="fb-chip";c.textContent=tag;
       c.onclick=function(){if(picked.has(tag)){picked.delete(tag);c.classList.remove("on");}else{picked.add(tag);c.classList.add("on");}};
@@ -105,14 +106,17 @@
     });
     modal.hidden=false;setTimeout(function(){elText.focus();},40);
   }
+  function openModal(btn){showFbModal({action:btn.dataset.act,item_id:btn.dataset.item,date:btn.dataset.date,title:btn.dataset.title});}
+  function openRequest(){showFbModal({action:"request",item_id:"__request__",date:"",title:"想持续看到的新闻类型 / 话题(下次采集会去找)"});}
   function closeModal(){modal.hidden=true;current=null;}
   function submitFb(){
     if(!current)return;
     if(!FB.enabled||!API){elMsg.textContent="未配置反馈服务器(config/loop.yaml → feedback.api_url)";return;}
+    var isReq=current.action==="request";
     var payload={action:current.action,item_id:current.item_id,date:current.date,title:current.title,tags:Array.from(picked),text:elText.value,token:ck("lnt")};
     elSubmit.disabled=true;elMsg.textContent="提交中…";
-    fetch(API+"/feedback",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
-      .then(function(r){return r.json();}).then(function(){elMsg.textContent="已记录,谢谢!";setTimeout(closeModal,650);})
+    fetch(API+(isReq?"/request":"/feedback"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+      .then(function(r){return r.json();}).then(function(x){if(x&&x.error){elMsg.textContent="失败:"+x.error;elSubmit.disabled=false;}else{elMsg.textContent=isReq?"已加入,下次采集会找相关内容!":"已记录,谢谢!";setTimeout(closeModal,800);}})
       .catch(function(){elMsg.textContent="提交失败:反馈服务器未启动?";elSubmit.disabled=false;});
   }
 
@@ -163,6 +167,7 @@
 
   /* ---- 统一点击处理 ---- */
   document.addEventListener("click",function(e){
+    if(e.target.closest("#reqBtn")){openRequest();return;}
     var act=e.target.closest(".act");if(act){toggleAct(act);return;}
     var rm=e.target.closest(".fav-remove");if(rm){removeFav(rm.dataset.item);return;}
     var fb=e.target.closest(".fb");if(fb){openModal(fb);return;}

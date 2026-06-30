@@ -144,6 +144,26 @@ export default {
       return json({ count: items.length, items, topics, entities: ents });
     }
 
+    // ── 采集请求(任意用户:想持续看到的新闻类型 → 下次采集去找)──
+    if (p === "/request" && req.method === "POST") {
+      let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
+      const tok = String(d.token || "");
+      const who = validTokens(env)[tok];
+      if (!who) return json({ error: "invalid token" }, 403);
+      const text = String(d.text || "").trim().slice(0, 500);
+      const tags = (Array.isArray(d.tags) ? d.tags : []).slice(0, 8).map((x) => String(x).slice(0, 40));
+      if (!text && !tags.length) return json({ error: "empty" }, 400);
+      const id = `${new Date().toISOString()}-${crypto.randomUUID().slice(0, 8)}`;
+      const rec = { text, tags, by: who.name || "", ts: new Date().toISOString(), status: "new" };
+      await env.BUCKET.put(`request/${tok}/${id}.json`, JSON.stringify(rec), { httpMetadata: { contentType: "application/json" } });
+      return json({ ok: true });
+    }
+    if (p === "/requests" && req.method === "GET") {
+      const items = await listAll(env, "request/");
+      items.sort((a, b) => (a.ts < b.ts ? 1 : -1));
+      return json({ count: items.length, items });
+    }
+
     // ── 已读状态(per-user;专题更新小红点)──
     if (p === "/reads" && req.method === "GET") {
       const tok = url.searchParams.get("token") || "";
