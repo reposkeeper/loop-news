@@ -35,6 +35,7 @@
       <div class="nav-sys">
         <div class="nav-section">系统</div>
         <a class="nav-link" data-target="view-evolution" href="#evolution">⚙️ 自进化日志</a>
+        <a class="nav-link" data-target="view-feedback" href="#feedback">📋 反馈台账</a>
         <button class="nav-link nav-owner" id="tokenBtn">🔗 生成分享链接</button>
       </div>
     </nav>
@@ -93,6 +94,11 @@
 </li></ul>
 </div></section>
     <section class="view" id="view-evolution"><div class="release-masthead"><h1 class="release-h1">更新日志 · Release Notes</h1><p class="release-lead">系统每轮自进化(ln-evolve)的产品式变更记录——改了什么、为什么、如何回滚。最新在上。</p></div><article class="release">
+  <div class="release-head"><span class="release-tag">发布</span><time class="release-date">2026-07-01</time></div>
+  <p class="release-note">反馈台账页 + 分享图预览/复制 + 更高清</p>
+  <ul class="release-body"><li class="rn-item"><strong>改了什么</strong>:</li><li class="rn-sub">1. <strong>📋 反馈台账</strong>(系统区新页):实时拉 <code>/requests</code>+<code>/feedback</code> 显示大家的反馈,并对照 <code>data/feedback_ledger.json</code> 标注每条在<strong>哪一轮进化被覆盖</strong>;下方列出每轮进化覆盖了什么(ln-evolve 每轮维护台账)。</li><li class="rn-sub">2. <strong>分享图改为预览 + 下载/复制</strong>:生成后先在弹窗展示,下面两个按钮(下载 / 复制图片到剪贴板),不再直接下载。</li><li class="rn-sub">3. <strong>分享图更高清</strong>:输出分辨率 1200 → 2000px(HTML 里所有 px 统一缩放,图表用占位符避免误改),治糊。</li><li class="rn-item"><strong>为什么</strong>:让反馈透明可追溯(哪条被哪轮消化);分享前先看效果、支持复制;更高分辨率更清晰。</li><li class="rn-item"><strong>如何回滚</strong>:<code>git revert</code> 对应提交。</li></ul>
+  <div class="release-actions"><button class="act share" data-kind="release" data-title="反馈台账页 + 分享图预览/复制 + 更高清" data-date="2026-07-01" data-badge="发布" data-items="[&quot;📋 反馈台账&quot;, &quot;分享图改为预览 + 下载/复制&quot;, &quot;分享图更高清&quot;]">⤴ 分享卡片</button></div>
+</article><article class="release">
   <div class="release-head"><span class="release-tag">进化</span><time class="release-date">2026-07-01</time></div>
   <p class="release-note">消化反馈:更多 AI + 即刻 + 🎙️ 播客环节</p>
   <ul class="release-body"><li class="rn-item"><strong>依据</strong>:线上 <code>/requests</code>(「AI 在企业中的应用 / harness engineering」「机器人 / 具身智能创业融资」)+ <code>/follows</code>(AI 安全 / 前沿模型)+ metrics(ylecun/DrJimFan/paulkrugman/RayDalio 多口水/格言/无实质);站长指令「AI 内容太少、加即刻、新增播客」。</li><li class="rn-item"><strong>改了什么</strong>:</li><li class="rn-sub">1. <strong>更多 AI</strong>:<code>sources.yaml</code> 加 AI 专项 query(企业 AI/harness、机器人具身融资、AI 安全/前沿模型)+ AI RSS(TechCrunch AI / VentureBeat AI / MIT Tech Review);<code>people.yaml</code> 新增高信号声音(Mira Murati / Noam Shazeer / Jared Kaplan / Aidan Gomez / Arvind Narayanan),低产者标 <code>priority: low</code> 降权(ylecun/DrJimFan/paulkrugman/RayDalio)。</li><li class="rn-sub">2. <strong>即刻 Jike</strong>:<code>sources.cn_platforms</code> 加即刻(WebSearch 限定 okjike.com 找一手,抓不到只作信号,不臆造)。</li><li class="rn-sub">3. <strong>🎙️ 播客环节(新)</strong>:<code>config/podcasts.yaml</code>(Dwarkesh / Lex / No Priors / Latent Space … + 重点 AI 嘉宾);ln-collect 加播客采集步、ln-synthesize schema 加 <code>podcasts</code>、compile 新增「🎙️ 播客 · AI 人物访谈」区(节目 / 主持×嘉宾 / 要点 / 原话 / 收听);示例接入 3 集真实访谈(Dwarkesh×Amodei、Lex×Hassabis、Lex×Pichai)。</li><li class="rn-item"><strong>为什么</strong>:反馈明确要更多 AI 与高质量中文平台;知名主持 × 知名 AI 人物的整集深访是「非显然洞察」的富矿(北极星)。</li><li class="rn-item"><strong>如何回滚</strong>:<code>git revert</code> 对应提交;播客/即刻/AI 源均为配置与提示词,删对应段即回退。</li></ul>
@@ -124,6 +130,7 @@
   <div class="release-actions"><button class="act share" data-kind="release" data-title="工程初始化" data-date="2026-06-30" data-badge="工程初始化" data-items="[&quot;改了什么&quot;, &quot;为什么&quot;, &quot;如何回滚&quot;]">⤴ 分享卡片</button></div>
 </article></section>
     <section class="view" id="view-favorites"><h1 class="day-date">★ 我的收藏</h1><p class="intro">你收藏的新闻(按访问令牌区分,各看各的)。点条目跳到原文位置;可在此取消收藏。</p><div id="favList" class="fav-list"><p class="empty">加载中…</p></div></section>
+    <section class="view" id="view-feedback"><h1 class="day-date">📋 反馈台账</h1><p class="intro">大家的反馈,以及每条在哪一轮自进化里被消化。反馈实时来自服务;台账由 ln-evolve 每轮维护。</p><section class="section"><h2 class="section-title">反馈现状 · 实时</h2><div id="fbLedgerLive"><p class="empty">加载中…</p></div></section><section class="section"><h2 class="section-title">进化台账 · 哪一轮覆盖了什么</h2><article class="ledger-cycle"><div class="lg-head"><time class="release-date">2026-07-01</time><span class="lg-cl">进化(消化反馈:更多 AI + 即刻 + 🎙️ 播客环节)</span></div><ul class="lg-list"><li class="lg-item"><span class="lg-type">请求</span><span class="lg-text">AI在企业中的应用。尤其是 harness engerning</span><span class="lg-how">→ sources.yaml 加「AI harness eval agent 企业落地」query,提升 AI 企业应用产出</span></li><li class="lg-item"><span class="lg-type">请求</span><span class="lg-text">机器人/具身智能创业公司融资</span><span class="lg-how">→ sources.yaml 加「机器人 具身智能 embodied AI 创业公司 融资」query</span></li><li class="lg-item"><span class="lg-type">关注</span><span class="lg-text">AI 安全 / 前沿模型</span><span class="lg-how">→ sources.yaml 加「AI 安全 前沿模型 frontier model safety」query</span></li><li class="lg-item"><span class="lg-type">指标</span><span class="lg-text">低产名人(ylecun/DrJimFan/paulkrugman/RayDalio)</span><span class="lg-how">→ people.yaml 标 priority:low 降权,配额让给高信号 AI 声音</span></li><li class="lg-item"><span class="lg-type">指令</span><span class="lg-text">AI 内容太少 + 加即刻 + 新增播客</span><span class="lg-how">→ AI 源/RSS 扩充、sources.cn_platforms 加即刻、新增 config/podcasts.yaml + 🎙️ 播客区</span></li></ul></article></section></section>
     <section class="view dossier-view" id="dossier-ai-regulation"><div class="dossier-head"><span class="dossier-kicker">📂 AI 监管 · 深度报道</span><h1 class="dossier-title">AI 监管的重心落到了州:1200 项法案、一场 99–1 的联邦预占失败,和一次集体降温</h1><p class="dossier-dek">2025 年全美 50 个州第一次都在立法管 AI;联邦想用十年禁令一锅端,被参议院 99 比 1 否决;而州自己又在给最硬的规则松绑。</p><span class="dossier-upd">持续追踪 · 更新 2026-07-01</span></div><div class="dossier-lede"><p>2025 年,美国 50 个州第一次全部在立法管人工智能——全年提出约 1208 项 AI 相关法案,145 项落地成法(据 NCSL)。管 AI 的规则,重心已从迟迟没有综合性联邦法律的华盛顿,转移到各州议会。</p><p>就在这股浪潮最猛时,联邦试图一锅端:一项写进预算法案的条款要给各州 AI 立法按下十年暂停键。2025 年 7 月 1 日,参议院以 99 比 1 把它删除——反对者横跨两党,还包括 40 位州总检察长与 17 位共和党州长。但同一时间,州又在给最硬的规则松绑:科罗拉多把全美首部综合性州级 AI 法大改、推迟到 2027 年。扩张、预占、降温三股力量,正同时拉扯这条产业主线。</p></div><section class="section"><h2 class="section-title">背景与脉络</h2><p>管 AI 的法律主要由州在写,而非联邦。据 NCSL,各州提出的 AI 相关法案从 2022 年的数十件增至 2025 年的约 1208 件,2025 年成为<mark class="hl">每个州都至少提出一项</mark>的第一年;进入 2026 年,截至 3 月已有 45 州提出 1561 件。与之对照,联邦层面至今没有一部综合性 AI 法律——这正是后面&#x27;预占之争&#x27;的关键背景:要预占的东西,联邦自己还没拿出来。</p></section><section class="section"><h2 class="section-title">数据透视</h2><p>把&#x27;提出&#x27;和&#x27;落地&#x27;分开看很重要:2025 年提出约 1208 件,但真正成法的只有约 145 件(约 12%),多数止步于委员会。口径也需谨慎——不同机构(NCSL、MultiState)对&#x27;AI 相关&#x27;的界定不同,决议、深度伪造、聊天机器人披露是否计入会让总数差出一截,图中 2026 为 running 的不完全统计。趋势是稳的:四年数量级跳升、已铺满所有州;但绝对数字请按口径打折看。</p><figure class="chart"><figcaption class="chart-title">美国各州 AI 相关法案数(逐年提出)</figcaption><svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg" class="chart-svg" role="img"><polyline points="34.0,175.2 181.0,167.6 328.0,141.2 475.0,107.1 622.0,48.8" fill="none" stroke="#1F5C57" stroke-width="2.5"/><circle cx="34.0" cy="175.2" r="3.5" fill="#1F5C57"/><text x="34.0" y="165.2" text-anchor="middle" font-size="12" fill="#33333A">61件</text><text x="34.0" y="224" text-anchor="middle" font-size="11.5" fill="#6B6B70">2022</text><circle cx="181.0" cy="167.6" r="3.5" fill="#1F5C57"/><text x="181.0" y="157.6" text-anchor="middle" font-size="12" fill="#33333A">190件</text><text x="181.0" y="224" text-anchor="middle" font-size="11.5" fill="#6B6B70">2023</text><circle cx="328.0" cy="141.2" r="3.5" fill="#1F5C57"/><text x="328.0" y="131.2" text-anchor="middle" font-size="12" fill="#33333A">635件</text><text x="328.0" y="224" text-anchor="middle" font-size="11.5" fill="#6B6B70">2024</text><circle cx="475.0" cy="107.1" r="3.5" fill="#1F5C57"/><text x="475.0" y="97.1" text-anchor="middle" font-size="12" fill="#33333A">1208件</text><text x="475.0" y="224" text-anchor="middle" font-size="11.5" fill="#6B6B70">2025</text><circle cx="622.0" cy="48.8" r="3.5" fill="#1F5C57"/><text x="622.0" y="38.8" text-anchor="middle" font-size="12" fill="#33333A">2191件</text><text x="622.0" y="224" text-anchor="middle" font-size="11.5" fill="#6B6B70">2026</text></svg><figcaption class="chart-cap">来源:MultiState / NCSL · 提出数(非成法数);2026 为不完全统计,口径随机构而异</figcaption></figure></section><section class="section"><h2 class="section-title">各方立场</h2><p>这场争论的两端都很清楚,而州自身的动作又给它加了第三个注脚。</p><article class="card deep voice"><div class="byline"><span class="voice-role">主推预占</span><span class="byline-src">Ted Cruz(参议院商业委员会主席)</span><a class="src-link" href="https://www.texastribune.org/2025/06/27/ted-cruz-ai-moratorium-reconciliation-republicans-congress-trump/" target="_blank" rel="noopener">来源 ↗</a></div><blockquote class="pq" lang="en">A single state should not have the power to set AI rules for the entire country ... to prevent an unworkable patchwork of disparate and conflicting state AI laws and to encourage states to adopt commonsense tech-neutral policies.</blockquote><p class="deep-sum">主张联邦预占、反对&#x27;各州法律拼盘&#x27;;9 月又推 SANDBOX 监管沙盒框架,并称禁令&#x27;远没有死&#x27;。</p></article><article class="card deep voice"><div class="byline"><span class="voice-role">反对预占</span><span class="byline-src">Ed Markey(马萨诸塞州参议员)</span><a class="src-link" href="https://www.markey.senate.gov/news/press-releases/after-weeks-of-markey-raising-the-alarm-senate-strikes-ai-moratorium-from-budget-reconciliation-bill-overnight-in-overwhelming-99-1-vote" target="_blank" rel="noopener">来源 ↗</a></div><blockquote class="pq" lang="en">This 99-1 vote sent a clear message that Congress will not sell out our kids and local communities in order to pad the pockets of Big Tech billionaires.</blockquote><p class="deep-sum">连续数周示警并牵头把禁令删除;主张在没有联邦替代方案时预占等于捆住州的手。</p></article><article class="card deep voice"><div class="byline"><span class="voice-role">州内降温</span><span class="byline-src">科罗拉多州(SB 205 → SB 189)</span><a class="src-link" href="https://www.hunton.com/privacy-and-cybersecurity-law-blog/colorado-ai-act-amended-and-effective-date-delayed" target="_blank" rel="noopener">来源 ↗</a></div><p class="deep-sum">全美首部综合性州级 AI 法,临生效前被大改:删去防算法歧视的注意义务、部署者风险管理与影响评估,生效推迟到 2027 年 1 月——说明&#x27;州更严&#x27;并非单调趋势。</p></article></section><section class="section"><h2 class="section-title">深度分析</h2><p>把三件事放在一起,浮现的不是&#x27;监管越来越严&#x27;,而是<mark class="hl">三股力量的角力</mark>。扩张:立法权事实上在州,联邦真空把球推给了 50 个各行其是的议会。预占:联邦(以 Cruz 与白宫 AI 行政令为代表)想用暂停键换统一,但在&#x27;没有联邦替代就先捆住州&#x27;这点上,连共和党州长和 40 位州总检察长都不买账,才有了 99 比 1。降温:州拿到权力后,真正落地时又向产业让步(科罗拉多);1208 提出只 145 成法,本身就说明&#x27;提出&#x27;远不等于&#x27;管住&#x27;。</p><p>对读者的信息优势在于:别把&#x27;AI 法案数暴涨&#x27;读成&#x27;监管在收紧&#x27;。更接近事实的是——谁来管(州 vs 联邦)比管多严更早有了答案,而管多严仍在向后拖、向轻处走。</p></section><section class="section"><h2 class="section-title">分级结论</h2><div class="concl"><p><span class="grade grade-fact">事实</span>2025 年全美 50 州均提出 AI 法案(约 1208 件、145 件成法);联邦十年禁令于 2025-07-01 被参议院 99–1 删除。 <span class="conf">置信度 95%</span></p></div><div class="concl"><p><span class="grade grade-infer">推断</span>&#x27;监管重心在州、联邦暂无综合法&#x27;是各州法案数暴涨的结构性原因,而非监管一致收紧的信号。 <span class="conf">置信度 70%</span></p></div><div class="concl"><p><span class="grade grade-predict">预测</span>联邦预占不会消失:Cruz 已承诺重推(SANDBOX/框架)、白宫行政令也在推动,未来 12–18 个月大概率再起预占之争。 <span class="conf">置信度 55%</span></p></div></section><section class="section"><h2 class="section-title">反方与不确定</h2><ul class="counter-list"><li>拼盘成本是真的:50 州各行其是确会抬高合规成本,预占派并非无理——若出现一部可信的联邦综合法,天平可能迅速倒向统一。</li><li>口径存疑:1208 / 2191 随追踪机构与&#x27;AI 相关&#x27;定义波动,把决议、深伪、聊天机器人披露都计入会放大数字;别把体量当强度。</li><li>还不知道:多数新法尚未进入执法期,真实约束力要到 2026–2027 才见分晓(科罗拉多 2027、纽约 RAISE Act)。</li></ul></section><section class="section"><h2 class="section-title">后续看点</h2><ul class="watch-list"><li>Cruz 是否在 2026 年把 AI 预占/禁令重新塞进某部法案或单独立法(他称&#x27;没有死&#x27;)。</li><li>科罗拉多 2027-01-01 新生效日是否再变;是否有其他州跟进&#x27;先立后松&#x27;。</li><li>纽约 RAISE Act(前沿模型安全)进入执法后的第一起适用案例。</li></ul></section><section class="section"><h2 class="section-title">来源</h2><p class="dossier-sources"><a class="src-link" href="https://www.ncsl.org/technology-and-communication/artificial-intelligence-2025-legislation" target="_blank" rel="noopener">NCSL:2025 AI 立法综述 ↗</a> · <a class="src-link" href="https://www.commerce.senate.gov/2025/7/senate-strikes-ai-moratorium-from-budget-reconciliation-bill-in-overwhelming-99-1-vote/8415a728-fd1d-4269-98ac-101d1d0c71e0" target="_blank" rel="noopener">参议院商业委员会:99–1 删除禁令 ↗</a> · <a class="src-link" href="https://www.markey.senate.gov/news/press-releases/after-weeks-of-markey-raising-the-alarm-senate-strikes-ai-moratorium-from-budget-reconciliation-bill-overnight-in-overwhelming-99-1-vote" target="_blank" rel="noopener">Markey 参议院办公室 ↗</a> · <a class="src-link" href="https://www.texastribune.org/2025/06/27/ted-cruz-ai-moratorium-reconciliation-republicans-congress-trump/" target="_blank" rel="noopener">Texas Tribune:Cruz 与共和党的分歧 ↗</a> · <a class="src-link" href="https://www.hunton.com/privacy-and-cybersecurity-law-blog/colorado-ai-act-amended-and-effective-date-delayed" target="_blank" rel="noopener">Hunton:科罗拉多法大改 + 推迟 ↗</a> · <a class="src-link" href="https://www.multistate.ai/artificial-intelligence-ai-legislation" target="_blank" rel="noopener">MultiState:2026 州 AI 立法追踪 ↗</a></p></section><section class="section dossier-method"><h2 class="section-title">方法与局限</h2><p>综合 NCSL / MultiState 的立法统计、参议院与议员办公室一手稿、以及律所对科罗拉多法的解读;只用可回溯来源,&#x27;提出&#x27;与&#x27;成法&#x27;分列,口径差异已在正文标注。局限:2026 为 running 统计;多数新法尚未进入执法期,约束力有待观察。</p></section></section>
     <section class="view day" id="day-2026-06-30"><div class="day-meta">
   <h1 class="day-date">2026-06-30</h1>
@@ -471,7 +478,20 @@
   </div>
 </div>
 
-<script>window.__FB={enabled:true,api:"https://feedback.xdzq.org",share:"https://share.xdzq.org/share",tags:{"_note": "弹窗里的常用反馈词(chips)。由 ln-evolve 根据实际使用频次自动增删进化;手改也可。", "up": ["有洞察", "信息密度高", "正是我想看的", "角度新颖", "证据扎实"], "down": ["噪音/水文", "太旧了", "来源不可靠", "与我无关", "重复了"], "adopt": ["已发微博/X", "已写进 newsletter", "已做视频选题", "已转发社群", "已存为选题库"], "ask": ["多挖跨域关联", "洞察不够/太显然", "信息密度不够", "加某个来源", "换个分析角度", "某主题想深挖"], "request": ["某公司/产品动态", "某地区/市场", "某技术方向", "某行业赛道", "某人物/KOL"]}};</script>
+<!-- 分享图预览(生成后展示,下面下载 / 复制) -->
+<div class="fb-modal" id="shareModal" hidden>
+  <div class="fb-card share-modal-card" role="dialog" aria-modal="true" aria-label="分享图">
+    <div class="fb-head"><span class="fb-act">分享图</span><button class="fb-x" id="shareClose" aria-label="关闭">✕</button></div>
+    <div class="share-preview" id="sharePreview"><span class="share-loading">生成中…</span></div>
+    <div class="share-actions">
+      <button class="share-btn-dl" id="shareDownload">⬇ 下载</button>
+      <button class="share-btn-cp" id="shareCopy">⧉ 复制图片</button>
+      <span class="fb-msg" id="shareMsg"></span>
+    </div>
+  </div>
+</div>
+
+<script>window.__FB={enabled:true,api:"https://feedback.xdzq.org",share:"https://share.xdzq.org/share",tags:{"_note": "弹窗里的常用反馈词(chips)。由 ln-evolve 根据实际使用频次自动增删进化;手改也可。", "up": ["有洞察", "信息密度高", "正是我想看的", "角度新颖", "证据扎实"], "down": ["噪音/水文", "太旧了", "来源不可靠", "与我无关", "重复了"], "adopt": ["已发微博/X", "已写进 newsletter", "已做视频选题", "已转发社群", "已存为选题库"], "ask": ["多挖跨域关联", "洞察不够/太显然", "信息密度不够", "加某个来源", "换个分析角度", "某主题想深挖"], "request": ["某公司/产品动态", "某地区/市场", "某技术方向", "某行业赛道", "某人物/KOL"]}};window.__LEDGER={"note": "由 ln-evolve 维护:每轮进化把「消化了哪些反馈」记在这里;网页「📋 反馈台账」据此显示每条反馈在哪一轮被覆盖。", "cycles": [{"date": "2026-07-01", "changelog": "进化(消化反馈:更多 AI + 即刻 + 🎙️ 播客环节)", "covered": [{"type": "request", "text": "AI在企业中的应用。尤其是 harness engerning", "how": "sources.yaml 加「AI harness eval agent 企业落地」query,提升 AI 企业应用产出"}, {"type": "request", "text": "机器人/具身智能创业公司融资", "how": "sources.yaml 加「机器人 具身智能 embodied AI 创业公司 融资」query"}, {"type": "follow", "text": "AI 安全 / 前沿模型", "how": "sources.yaml 加「AI 安全 前沿模型 frontier model safety」query"}, {"type": "metrics", "text": "低产名人(ylecun/DrJimFan/paulkrugman/RayDalio)", "how": "people.yaml 标 priority:low 降权,配额让给高信号 AI 声音"}, {"type": "directive", "text": "AI 内容太少 + 加即刻 + 新增播客", "how": "AI 源/RSS 扩充、sources.cn_platforms 加即刻、新增 config/podcasts.yaml + 🎙️ 播客区"}]}]};</script>
 <script>
 (function(){
   /* ---- hash 路由:同页切换日期/线索 ---- */
@@ -482,6 +502,7 @@
     if(date==="threads"||date==="") targetId="view-threads";
     else if(date==="evolution") targetId="view-evolution";
     else if(date==="favorites") targetId="view-favorites";
+    else if(date==="feedback") targetId="view-feedback";
     else if(date.indexOf("dossier-")===0) targetId=date;
     else targetId="day-"+date;
     var found=false;
@@ -491,6 +512,7 @@
     if(item){var el=document.getElementById("item-"+item);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("flash");setTimeout(function(){el.classList.remove("flash");},1600);}}
     else{window.scrollTo(0,0);}
     if(targetId==="view-favorites") loadFavorites();
+    if(targetId==="view-feedback") loadFeedbackLedger();
     if(targetId.indexOf("dossier-")===0) markRead(targetId);
     document.getElementById("sidebar").classList.remove("open");
   }
@@ -561,6 +583,26 @@
     }).catch(function(){box.innerHTML='<p class="empty">加载失败:反馈服务未连接?</p>';});
   }
 
+  /* ---- 反馈台账:实时反馈 + 覆盖状态(对照 window.__LEDGER)---- */
+  function loadFeedbackLedger(){
+    var box=document.getElementById("fbLedgerLive"); if(!box)return;
+    if(!FB.enabled||!API){box.innerHTML='<p class="empty">未配置反馈服务。</p>';return;}
+    var covered=[];(((window.__LEDGER||{}).cycles)||[]).forEach(function(cy){(cy.covered||[]).forEach(function(c){covered.push({text:c.text||"",date:cy.date});});});
+    function cov(t){t=t||"";for(var i=0;i<covered.length;i++){var x=covered[i].text;if(x&&t&&(t.indexOf(x)>-1||x.indexOf(t)>-1))return covered[i].date;}return null;}
+    box.innerHTML='<p class="empty">加载中…</p>';
+    Promise.all([
+      fetch(API+"/requests").then(function(r){return r.json();}).catch(function(){return{items:[]};}),
+      fetch(API+"/feedback").then(function(r){return r.json();}).catch(function(){return{items:[]};})
+    ]).then(function(res){
+      var reqs=((res[0]||{}).items||[]).map(function(it){return {kind:"请求",text:it.text||(it.tags||[]).join(" ")};});
+      var LAB={up:"赞",down:"踩",adopt:"采用",ask:"提问"};
+      var fbs=((res[1]||{}).items||[]).map(function(it){return {kind:(LAB[it.action]||it.action),text:(it.text||(it.tags||[]).join(" "))+(it.title?(" · 「"+it.title+"」"):"")};});
+      var all=reqs.concat(fbs);
+      if(!all.length){box.innerHTML='<p class="empty">还没有反馈。点新闻底部的 👍/👎/✓,或右下「➕ 想看的话题」。</p>';return;}
+      box.innerHTML=all.map(function(x){var d=cov(x.text);var badge=d?'<span class="lg-cov">✓ 已覆盖 · '+esc(d)+'</span>':'<span class="lg-pending">待处理</span>';return '<div class="lg-live"><span class="lg-type">'+esc(x.kind)+'</span><span class="lg-text">'+esc(x.text||"(无文字)")+'</span>'+badge+'</div>';}).join("");
+    }).catch(function(){box.innerHTML='<p class="empty">加载失败:反馈服务未连接?</p>';});
+  }
+
   /* ---- 专题更新红点(per-user,已读存 R2 reads/<token>)---- */
   function loadReads(){
     var tok=ck("lnt"); if(!FB.enabled||!API||!tok)return;
@@ -581,17 +623,31 @@
   }
 
   /* ---- 统一点击处理 ---- */
-  function shareCard(btn){                                            // 分享 → 服务端按手机卡片出图 → 自动下载
+  /* ---- 分享出图:生成后预览,可下载/复制 ---- */
+  var shareModal=document.getElementById("shareModal"),sharePreview=document.getElementById("sharePreview"),
+      shareMsg=document.getElementById("shareMsg"),_shareBlob=null,_shareName="loop-news";
+  function shareCard(btn){
     if(!SHARE_API){return;}
     var card=btn.closest(".card"),cs=card&&card.querySelector(".chart-svg"),chart="";
     if(cs){try{chart="data:image/svg+xml;base64,"+btoa(unescape(encodeURIComponent(cs.outerHTML)));}catch(_){}}
     var pay={title:btn.dataset.title||"",summary:btn.dataset.summary||"",source:btn.dataset.source||"",date:btn.dataset.date||"",kind:btn.dataset.kind||"consensus",badge:btn.dataset.badge||"",quote:btn.dataset.quote||"",chart:chart};
     if(btn.dataset.items){try{pay.items=JSON.parse(btn.dataset.items);}catch(_){}}   // 自进化日志:发布要点
-    var old=btn.textContent;btn.textContent="⤴ 生成中…";btn.disabled=true;
+    _shareName=((btn.dataset.title||"loop-news").replace(/[\/\\:*?"<>|\s]/g,"").slice(0,36)||"loop-news");
+    _shareBlob=null;shareMsg.textContent="";sharePreview.innerHTML='<span class="share-loading">生成中…</span>';shareModal.hidden=false;
     fetch(SHARE_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(pay)})
       .then(function(r){if(!r.ok)throw 0;return r.blob();})
-      .then(function(b){var u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=((btn.dataset.title||"loop-news").replace(/[\/\\:*?"<>|\s]/g,"").slice(0,36)||"loop-news")+".png";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},2000);btn.textContent="✓ 已下载";setTimeout(function(){btn.textContent=old;btn.disabled=false;},1600);})
-      .catch(function(){btn.textContent="✕ 失败,重试";setTimeout(function(){btn.textContent=old;btn.disabled=false;},1800);});
+      .then(function(b){_shareBlob=b;sharePreview.innerHTML='<img alt="分享图" src="'+URL.createObjectURL(b)+'">';})
+      .catch(function(){sharePreview.innerHTML='<span class="share-loading">生成失败,关闭重试</span>';});
+  }
+  function closeShare(){shareModal.hidden=true;}
+  function shareDownloadFn(){
+    if(!_shareBlob)return;var u=URL.createObjectURL(_shareBlob),a=document.createElement("a");a.href=u;a.download=_shareName+".png";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},2000);shareMsg.textContent="已下载";
+  }
+  function shareCopyFn(){
+    if(!_shareBlob){return;}
+    if(navigator.clipboard&&window.ClipboardItem){
+      navigator.clipboard.write([new ClipboardItem({"image/png":_shareBlob})]).then(function(){shareMsg.textContent="已复制到剪贴板";},function(){shareMsg.textContent="复制失败,请用下载";});
+    }else{shareMsg.textContent="此浏览器不支持复制图片,请用下载";}
   }
   /* ---- owner:生成分享链接(填名字区分分享给谁)---- */
   var tokenModal=document.getElementById("tokenModal"),tokenName=document.getElementById("tokenName"),
@@ -635,6 +691,10 @@
     var cp=e.target.closest(".token-copy");if(cp){copyUrl(cp);return;}
     if(e.target===tokenModal){closeTokenModal();return;}
     var sh=e.target.closest(".act.share");if(sh){shareCard(sh);return;}
+    if(e.target.closest("#shareClose")){closeShare();return;}
+    if(e.target.closest("#shareDownload")){shareDownloadFn();return;}
+    if(e.target.closest("#shareCopy")){shareCopyFn();return;}
+    if(e.target===shareModal){closeShare();return;}
     var act=e.target.closest(".act");if(act){toggleAct(act);return;}
     var rm=e.target.closest(".fav-remove");if(rm){removeFav(rm.dataset.item);return;}
     var fb=e.target.closest(".fb");if(fb){openModal(fb);return;}
@@ -645,7 +705,7 @@
     var sb=document.getElementById("sidebar");                       // 点抽屉外 → 关闭(移动端)
     if(sb&&sb.classList.contains("open")&&!e.target.closest("#sidebar")&&!e.target.closest(".menu-toggle")){sb.classList.remove("open");}
   });
-  document.addEventListener("keydown",function(e){if(e.key==="Escape"){if(!modal.hidden)closeModal();if(!tokenModal.hidden)closeTokenModal();}});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"){if(!modal.hidden)closeModal();if(!tokenModal.hidden)closeTokenModal();if(!shareModal.hidden)closeShare();}});
 })();
 </script>
 </body>

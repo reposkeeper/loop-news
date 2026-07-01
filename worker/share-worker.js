@@ -19,6 +19,12 @@ const CORS = {
 const SERIF = "Noto Serif SC", SANS = "Noto Sans SC";
 const C = { ink: "#1A1A1F", soft: "#3A3A42", muted: "#86868C", line: "#E5E4DF", paper: "#FBFAF7", accent: "#1F5C57", predict: "#5B3FB0", date: "#33333A" };
 const BRAND = "Playfair Display", MONO = "JetBrains Mono";
+// 分辨率:卡片按 1200 逻辑设计,输出放大到 OUT_W(更清晰)。scalePx 把 HTML 里所有 px 统一乘 K
+// (line-height/flex 等无单位值不受影响;图表 base64 用 __CHART_URI__ 占位、缩放后再填,避免被误改)。
+const OUT_W = 2000, K = OUT_W / 1200;
+function scalePx(html) {
+  return html.replace(/(-?\d*\.?\d+)px/g, (_, n) => +(parseFloat(n) * K).toFixed(2) + "px");
+}
 
 // workers-og 的 HTML 解析器不解码实体(&#160; / &amp; 会原样显示),故用形近字符中和 < > &(均罕见于中文标题)
 function esc(s) {
@@ -48,7 +54,7 @@ function cardHtml(d) {
     : "";
   const iw = 1020, ih = Math.round((iw * 240) / 640);
   const chartBlock = d.chart
-    ? `<div style="display:flex;margin-top:38px;padding:30px;background:#FFFFFF;border:2px solid ${C.line};border-radius:20px;"><img src="${d.chart}" width="${iw}" height="${ih}" style="width:${iw}px;height:${ih}px;"/></div>`
+    ? `<div style="display:flex;margin-top:38px;padding:30px;background:#FFFFFF;border:2px solid ${C.line};border-radius:20px;"><img src="__CHART_URI__" width="${iw}" height="${ih}" style="width:${iw}px;height:${ih}px;"/></div>`
     : "";
 
   return `
@@ -138,9 +144,11 @@ export default {
     if (!d.title && !d.quote) return new Response("nothing to render", { status: 400, headers: CORS });
 
     try {
-      const html = d.kind === "release" ? releaseHtml(d) : cardHtml(d);
+      let html = d.kind === "release" ? releaseHtml(d) : cardHtml(d);
+      html = scalePx(html);
+      if (d.chart) html = html.replace("__CHART_URI__", d.chart);
       const fonts = await fontsFor(d);
-      const img = new ImageResponse(html, { width: 1200, fonts });
+      const img = new ImageResponse(html, { width: OUT_W, fonts });
       const h = new Headers(img.headers);
       for (const [k, v] of Object.entries(CORS)) h.set(k, v);
       h.set("Content-Disposition", 'attachment; filename="loop-news.png"');

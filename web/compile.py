@@ -564,6 +564,31 @@ def render_favorites():
             '</section>')
 
 
+TYPE_LABEL = {"request": "请求", "follow": "关注", "adopt": "采用", "ask": "提问", "up": "赞", "down": "踩", "metrics": "指标", "directive": "指令"}
+
+
+def render_feedback(ledger):
+    """「📋 反馈台账」:实时反馈(前端拉服务)+ 进化台账(哪一轮覆盖了什么,来自 data/feedback_ledger.json)。"""
+    cards = []
+    for cyc in (ledger.get("cycles", []) if isinstance(ledger, dict) else []):
+        rows = "".join(
+            f'<li class="lg-item"><span class="lg-type">{e(TYPE_LABEL.get(c.get("type"), c.get("type","")))}</span>'
+            f'<span class="lg-text">{e(c.get("text",""))}</span>'
+            f'<span class="lg-how">→ {e(c.get("how",""))}</span></li>'
+            for c in cyc.get("covered", []))
+        cards.append(
+            f'<article class="ledger-cycle"><div class="lg-head"><time class="release-date">{e(cyc.get("date",""))}</time>'
+            f'<span class="lg-cl">{e(cyc.get("changelog",""))}</span></div><ul class="lg-list">{rows}</ul></article>')
+    cycles_html = "".join(cards) or '<p class="empty">暂无进化台账。</p>'
+    return ('<section class="view" id="view-feedback">'
+            '<h1 class="day-date">📋 反馈台账</h1>'
+            '<p class="intro">大家的反馈,以及每条在哪一轮自进化里被消化。反馈实时来自服务;台账由 ln-evolve 每轮维护。</p>'
+            '<section class="section"><h2 class="section-title">反馈现状 · 实时</h2>'
+            '<div id="fbLedgerLive"><p class="empty">加载中…</p></div></section>'
+            '<section class="section"><h2 class="section-title">进化台账 · 哪一轮覆盖了什么</h2>'
+            f'{cycles_html}</section></section>')
+
+
 def _render_graded(items, id_to_date):
     out = []
     for c in items or []:
@@ -719,6 +744,8 @@ def main():
     threads_view = render_threads(threads)
     evolution_view = render_evolution(changelog_md)
     favorites_view = render_favorites()
+    ledger = load_json(os.path.join(ROOT, "data", "feedback_ledger.json"), {}) or {}
+    feedback_view = render_feedback(ledger)
     dossiers = load_dossiers()
     dossier_nav = render_dossier_nav(dossiers)
     dossier_views = "\n".join(render_dossier(d, id_to_date) for d in dossiers)
@@ -738,6 +765,8 @@ def main():
         "{{THREADS_VIEW}}": threads_view,
         "{{EVOLUTION_VIEW}}": evolution_view,
         "{{FAVORITES_VIEW}}": favorites_view,
+        "{{FEEDBACK_VIEW}}": feedback_view,
+        "{{LEDGER_JSON}}": json.dumps(ledger, ensure_ascii=False),
         "{{DOSSIER_NAV}}": dossier_nav,
         "{{DOSSIER_VIEWS}}": dossier_views,
         "{{DAY_VIEWS}}": day_views,

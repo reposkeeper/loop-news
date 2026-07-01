@@ -33,6 +33,7 @@
       <div class="nav-sys">
         <div class="nav-section">系统</div>
         <a class="nav-link" data-target="view-evolution" href="#evolution">⚙️ 自进化日志</a>
+        <a class="nav-link" data-target="view-feedback" href="#feedback">📋 反馈台账</a>
         {{SYS_OWNER_NAV}}
       </div>
     </nav>
@@ -41,6 +42,7 @@
     {{THREADS_VIEW}}
     {{EVOLUTION_VIEW}}
     {{FAVORITES_VIEW}}
+    {{FEEDBACK_VIEW}}
     {{DOSSIER_VIEWS}}
     {{DAY_VIEWS}}
   </main>
@@ -77,7 +79,20 @@
   </div>
 </div>
 
-<script>window.__FB={enabled:{{FEEDBACK_ENABLED}},api:"{{FEEDBACK_API}}",share:"{{SHARE_API}}",tags:{{FEEDBACK_TAGS}}};</script>
+<!-- 分享图预览(生成后展示,下面下载 / 复制) -->
+<div class="fb-modal" id="shareModal" hidden>
+  <div class="fb-card share-modal-card" role="dialog" aria-modal="true" aria-label="分享图">
+    <div class="fb-head"><span class="fb-act">分享图</span><button class="fb-x" id="shareClose" aria-label="关闭">✕</button></div>
+    <div class="share-preview" id="sharePreview"><span class="share-loading">生成中…</span></div>
+    <div class="share-actions">
+      <button class="share-btn-dl" id="shareDownload">⬇ 下载</button>
+      <button class="share-btn-cp" id="shareCopy">⧉ 复制图片</button>
+      <span class="fb-msg" id="shareMsg"></span>
+    </div>
+  </div>
+</div>
+
+<script>window.__FB={enabled:{{FEEDBACK_ENABLED}},api:"{{FEEDBACK_API}}",share:"{{SHARE_API}}",tags:{{FEEDBACK_TAGS}}};window.__LEDGER={{LEDGER_JSON}};</script>
 <script>
 (function(){
   /* ---- hash 路由:同页切换日期/线索 ---- */
@@ -88,6 +103,7 @@
     if(date==="threads"||date==="") targetId="view-threads";
     else if(date==="evolution") targetId="view-evolution";
     else if(date==="favorites") targetId="view-favorites";
+    else if(date==="feedback") targetId="view-feedback";
     else if(date.indexOf("dossier-")===0) targetId=date;
     else targetId="day-"+date;
     var found=false;
@@ -97,6 +113,7 @@
     if(item){var el=document.getElementById("item-"+item);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("flash");setTimeout(function(){el.classList.remove("flash");},1600);}}
     else{window.scrollTo(0,0);}
     if(targetId==="view-favorites") loadFavorites();
+    if(targetId==="view-feedback") loadFeedbackLedger();
     if(targetId.indexOf("dossier-")===0) markRead(targetId);
     document.getElementById("sidebar").classList.remove("open");
   }
@@ -167,6 +184,26 @@
     }).catch(function(){box.innerHTML='<p class="empty">加载失败:反馈服务未连接?</p>';});
   }
 
+  /* ---- 反馈台账:实时反馈 + 覆盖状态(对照 window.__LEDGER)---- */
+  function loadFeedbackLedger(){
+    var box=document.getElementById("fbLedgerLive"); if(!box)return;
+    if(!FB.enabled||!API){box.innerHTML='<p class="empty">未配置反馈服务。</p>';return;}
+    var covered=[];(((window.__LEDGER||{}).cycles)||[]).forEach(function(cy){(cy.covered||[]).forEach(function(c){covered.push({text:c.text||"",date:cy.date});});});
+    function cov(t){t=t||"";for(var i=0;i<covered.length;i++){var x=covered[i].text;if(x&&t&&(t.indexOf(x)>-1||x.indexOf(t)>-1))return covered[i].date;}return null;}
+    box.innerHTML='<p class="empty">加载中…</p>';
+    Promise.all([
+      fetch(API+"/requests").then(function(r){return r.json();}).catch(function(){return{items:[]};}),
+      fetch(API+"/feedback").then(function(r){return r.json();}).catch(function(){return{items:[]};})
+    ]).then(function(res){
+      var reqs=((res[0]||{}).items||[]).map(function(it){return {kind:"请求",text:it.text||(it.tags||[]).join(" ")};});
+      var LAB={up:"赞",down:"踩",adopt:"采用",ask:"提问"};
+      var fbs=((res[1]||{}).items||[]).map(function(it){return {kind:(LAB[it.action]||it.action),text:(it.text||(it.tags||[]).join(" "))+(it.title?(" · 「"+it.title+"」"):"")};});
+      var all=reqs.concat(fbs);
+      if(!all.length){box.innerHTML='<p class="empty">还没有反馈。点新闻底部的 👍/👎/✓,或右下「➕ 想看的话题」。</p>';return;}
+      box.innerHTML=all.map(function(x){var d=cov(x.text);var badge=d?'<span class="lg-cov">✓ 已覆盖 · '+esc(d)+'</span>':'<span class="lg-pending">待处理</span>';return '<div class="lg-live"><span class="lg-type">'+esc(x.kind)+'</span><span class="lg-text">'+esc(x.text||"(无文字)")+'</span>'+badge+'</div>';}).join("");
+    }).catch(function(){box.innerHTML='<p class="empty">加载失败:反馈服务未连接?</p>';});
+  }
+
   /* ---- 专题更新红点(per-user,已读存 R2 reads/<token>)---- */
   function loadReads(){
     var tok=ck("lnt"); if(!FB.enabled||!API||!tok)return;
@@ -187,17 +224,31 @@
   }
 
   /* ---- 统一点击处理 ---- */
-  function shareCard(btn){                                            // 分享 → 服务端按手机卡片出图 → 自动下载
+  /* ---- 分享出图:生成后预览,可下载/复制 ---- */
+  var shareModal=document.getElementById("shareModal"),sharePreview=document.getElementById("sharePreview"),
+      shareMsg=document.getElementById("shareMsg"),_shareBlob=null,_shareName="loop-news";
+  function shareCard(btn){
     if(!SHARE_API){return;}
     var card=btn.closest(".card"),cs=card&&card.querySelector(".chart-svg"),chart="";
     if(cs){try{chart="data:image/svg+xml;base64,"+btoa(unescape(encodeURIComponent(cs.outerHTML)));}catch(_){}}
     var pay={title:btn.dataset.title||"",summary:btn.dataset.summary||"",source:btn.dataset.source||"",date:btn.dataset.date||"",kind:btn.dataset.kind||"consensus",badge:btn.dataset.badge||"",quote:btn.dataset.quote||"",chart:chart};
     if(btn.dataset.items){try{pay.items=JSON.parse(btn.dataset.items);}catch(_){}}   // 自进化日志:发布要点
-    var old=btn.textContent;btn.textContent="⤴ 生成中…";btn.disabled=true;
+    _shareName=((btn.dataset.title||"loop-news").replace(/[\/\\:*?"<>|\s]/g,"").slice(0,36)||"loop-news");
+    _shareBlob=null;shareMsg.textContent="";sharePreview.innerHTML='<span class="share-loading">生成中…</span>';shareModal.hidden=false;
     fetch(SHARE_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(pay)})
       .then(function(r){if(!r.ok)throw 0;return r.blob();})
-      .then(function(b){var u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=((btn.dataset.title||"loop-news").replace(/[\/\\:*?"<>|\s]/g,"").slice(0,36)||"loop-news")+".png";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},2000);btn.textContent="✓ 已下载";setTimeout(function(){btn.textContent=old;btn.disabled=false;},1600);})
-      .catch(function(){btn.textContent="✕ 失败,重试";setTimeout(function(){btn.textContent=old;btn.disabled=false;},1800);});
+      .then(function(b){_shareBlob=b;sharePreview.innerHTML='<img alt="分享图" src="'+URL.createObjectURL(b)+'">';})
+      .catch(function(){sharePreview.innerHTML='<span class="share-loading">生成失败,关闭重试</span>';});
+  }
+  function closeShare(){shareModal.hidden=true;}
+  function shareDownloadFn(){
+    if(!_shareBlob)return;var u=URL.createObjectURL(_shareBlob),a=document.createElement("a");a.href=u;a.download=_shareName+".png";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},2000);shareMsg.textContent="已下载";
+  }
+  function shareCopyFn(){
+    if(!_shareBlob){return;}
+    if(navigator.clipboard&&window.ClipboardItem){
+      navigator.clipboard.write([new ClipboardItem({"image/png":_shareBlob})]).then(function(){shareMsg.textContent="已复制到剪贴板";},function(){shareMsg.textContent="复制失败,请用下载";});
+    }else{shareMsg.textContent="此浏览器不支持复制图片,请用下载";}
   }
   /* ---- owner:生成分享链接(填名字区分分享给谁)---- */
   var tokenModal=document.getElementById("tokenModal"),tokenName=document.getElementById("tokenName"),
@@ -241,6 +292,10 @@
     var cp=e.target.closest(".token-copy");if(cp){copyUrl(cp);return;}
     if(e.target===tokenModal){closeTokenModal();return;}
     var sh=e.target.closest(".act.share");if(sh){shareCard(sh);return;}
+    if(e.target.closest("#shareClose")){closeShare();return;}
+    if(e.target.closest("#shareDownload")){shareDownloadFn();return;}
+    if(e.target.closest("#shareCopy")){shareCopyFn();return;}
+    if(e.target===shareModal){closeShare();return;}
     var act=e.target.closest(".act");if(act){toggleAct(act);return;}
     var rm=e.target.closest(".fav-remove");if(rm){removeFav(rm.dataset.item);return;}
     var fb=e.target.closest(".fb");if(fb){openModal(fb);return;}
@@ -251,7 +306,7 @@
     var sb=document.getElementById("sidebar");                       // 点抽屉外 → 关闭(移动端)
     if(sb&&sb.classList.contains("open")&&!e.target.closest("#sidebar")&&!e.target.closest(".menu-toggle")){sb.classList.remove("open");}
   });
-  document.addEventListener("keydown",function(e){if(e.key==="Escape"){if(!modal.hidden)closeModal();if(!tokenModal.hidden)closeTokenModal();}});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"){if(!modal.hidden)closeModal();if(!tokenModal.hidden)closeTokenModal();if(!shareModal.hidden)closeShare();}});
 })();
 </script>
 </body>

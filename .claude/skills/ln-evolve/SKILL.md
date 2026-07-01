@@ -30,7 +30,7 @@ description: Loop News 自我进化步骤。读质量指标 state/metrics.json +
    - **进化常用反馈词**:据 `feedback.jsonl` 里 `tags` 的使用频次,增删 `config/feedback_tags.json`(高频保留、补充用户在 `text` 里反复出现的新表述、删僵尸词)。
 5. **落地改动**:直接编辑相应 `prompts/*.md` / `config/*.yaml` / `config/feedback_tags.json`。**一次只改少量、有依据的点**,避免大改导致不可控。
 6. **记日志**:在 `prompts/CHANGELOG.md` 顶部追加一条:日期 · 改了什么 · 为什么(**引用具体反馈条目 / 指标 / 样本**) · 如何回滚。
-7. **闭环留痕**:弹窗反馈无 issue 可关;在 CHANGELOG 标注本轮已消化到 `feedback.jsonl` 的哪个时间点,避免下轮重复计入。
+7. **闭环留痕**:弹窗反馈无 issue 可关;在 CHANGELOG 标注本轮已消化到 `feedback.jsonl` 的哪个时间点,避免下轮重复计入。**并向 `data/feedback_ledger.json` 追加本轮 cycle**(`date` / `changelog` / `covered:[{type,text,how}]`)——网页「📋 反馈台账」据此显示每条反馈在哪一轮被覆盖。
 8. **变更落地自检**:跑 `bash scripts/check.sh` 必须通过——确认本轮所有改动已落进【代码】或【skill/提示词/文档】、且已记 `prompts/CHANGELOG.md`(契约见 [RUNBOOK](../../../RUNBOOK.md)「变更落地契约」)。不通过先修再继续。
 
 ## 纪律
