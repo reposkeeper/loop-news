@@ -8,6 +8,8 @@
  *   GET  /feedback  列出全部反馈(供 ln-evolve / 自查)
  * 部署见 CLOUDFLARE.md。
  */
+import { handleRequestCode, handleVerify, handleLogout, handleMe, identify } from "./lib/auth.js";
+
 const DEFAULT_TAGS = {
   up: ["有洞察", "信息密度高", "正是我想看的", "角度新颖", "证据扎实"],
   down: ["噪音/水文", "太旧了", "来源不可靠", "与我无关", "重复了"],
@@ -18,6 +20,15 @@ const CORS = {
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
+// 带凭证的 CORS(仅用于 OPTIONS 预检;auth 路由自身响应头见 lib/auth.js 的 J())。
+function corsHeaders(env) {
+  return {
+    "Access-Control-Allow-Origin": (env && env.SITE_ORIGIN) || "https://news.xdzq.org",
+    "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Credentials": "true",
+  };
+}
 const ALLOWED = new Set(["up", "down", "adopt", "ask"]);
 
 function validTokens(env) {
@@ -59,8 +70,13 @@ export default {
   async fetch(req, env) {
     const url = new URL(req.url);
     const p = url.pathname;
-    if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+    if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(env) });
     if (p === "/health") return json({ ok: true });
+
+    if (p === "/auth/request-code" && req.method === "POST") return handleRequestCode(req, env);
+    if (p === "/auth/verify" && req.method === "POST") return handleVerify(req, env);
+    if (p === "/auth/logout" && req.method === "POST") return handleLogout(req, env);
+    if (p === "/me" && req.method === "GET") return handleMe(req, env);
 
     if (p === "/tags" && req.method === "GET") {
       let tags = DEFAULT_TAGS;
