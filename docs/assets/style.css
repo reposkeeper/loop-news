@@ -24,7 +24,8 @@ a:hover{text-decoration:none}
 /* ── 报头 masthead ── */
 .site-header{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:2px solid var(--ink);}
 .hwrap{max-width:var(--maxw);margin:0 auto;padding:14px 24px 12px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;}
-.brand{font-family:var(--serif);font-size:23px;font-weight:600;letter-spacing:-.01em;color:var(--ink);}
+.brand{display:inline-flex;align-items:center;gap:9px;font-family:var(--serif);font-size:23px;font-weight:600;letter-spacing:-.01em;color:var(--ink);}
+.brand-mark{width:26px;height:26px;border-radius:6px;flex:none;}
 .subtitle{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
 .menu-toggle{display:none;font-size:17px;background:none;border:1px solid var(--line);border-radius:3px;padding:3px 11px;cursor:pointer;color:var(--ink);align-self:center;}
 
@@ -35,6 +36,9 @@ a:hover{text-decoration:none}
 .nav-section{font-size:10.5px;color:var(--faint);margin:22px 0 8px;}
 .nav-link{display:block;padding:7px 0;color:var(--ink);font-size:15px;border-bottom:1px solid var(--line-soft);line-height:1.3;}
 .nav-link:last-child{border-bottom:none;}
+/* button 变体(如「生成分享链接」):清掉原生按钮外观,与 <a> 导航项一致 */
+button.nav-link{width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--line-soft);font:inherit;font-size:15px;color:var(--ink);cursor:pointer;-webkit-appearance:none;appearance:none;}
+button.nav-link:hover{color:var(--accent);}
 .nav-link .nd{display:block;font-size:11px;letter-spacing:.04em;color:var(--faint);margin-top:2px;}
 .nav-link:hover{color:var(--accent);}
 .nav-sys{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);}

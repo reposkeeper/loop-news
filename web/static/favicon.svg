@@ -1,0 +1,5 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Loop News">
+  <rect width="64" height="64" rx="14" fill="#17171A"/>
+  <circle cx="32" cy="31" r="16.5" fill="none" stroke="#2EB398" stroke-width="6" stroke-linecap="round" stroke-dasharray="80 26" transform="rotate(52 32 31)"/>
+  <path d="M26 22 V40 H39" fill="none" stroke="#FBFAF7" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

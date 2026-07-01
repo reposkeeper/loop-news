@@ -736,6 +736,11 @@ def main():
     for fn in os.listdir(ASSETS_SRC):
         shutil.copy2(os.path.join(ASSETS_SRC, fn), os.path.join(ASSETS_DST, fn))
     print(f"[compile] 同步 assets → {ASSETS_DST}")
+    static_src = os.path.join(ROOT, "web", "static")   # favicon / logo 等根静态文件
+    if os.path.isdir(static_src):
+        for fn in os.listdir(static_src):
+            shutil.copy2(os.path.join(static_src, fn), os.path.join(DOCS_DIR, fn))
+        print(f"[compile] 同步 static(favicon 等)→ {DOCS_DIR}")
     print("[compile] 完成。")
 
 
