@@ -1,6 +1,6 @@
 export async function sendCode(env, email, code) {
   if (env.LN_DEV) return { ok: true, dev: true };
-  const from = env.MAIL_FROM || "Loop News <login@xdzq.org>";
+  const from = env.MAIL_FROM || "Loop News <login@news.xdzq.org>";  // 发件域须在 Resend 验证过(当前验证的是 news.xdzq.org)
   try {
     const resp = await fetch("https://api.resend.com/emails", {
       method: "POST",
