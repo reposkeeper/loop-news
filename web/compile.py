@@ -91,8 +91,9 @@ def hl(s):
 
 
 # ── 内联 SVG 图表(零依赖;趋势线 / 柱 / 饼)。仅渲染 analysis 条目的 charts 字段 ──
-CHART_PAL = ["#1F5C57", "#9A6B16", "#5B3FB0", "#2F6F4E", "#3A5A8C", "#7A5C9E"]
-CHART_POS, CHART_NEG = "#2F6F4E", "#B0413E"
+CHART_PAL = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)", "var(--chart-6)"]
+CHART_POS, CHART_NEG = "var(--chart-pos)", "var(--chart-neg)"
+CHART_LABEL, CHART_AXIS, CHART_LINE, CHART_HOLE = "var(--chart-label)", "var(--chart-axis)", "var(--chart-line)", "var(--raised)"
 
 
 def _num(v):
@@ -128,7 +129,7 @@ def _svg_bar(c):
     n = len(data)
     step = (x1 - x0) / n
     bw = min(56.0, step * 0.5)
-    p = [f'<line x1="{x0}" y1="{zeroY:.1f}" x2="{x1}" y2="{zeroY:.1f}" stroke="#d8d8d2"/>']
+    p = [f'<line x1="{x0}" y1="{zeroY:.1f}" x2="{x1}" y2="{zeroY:.1f}" style="stroke:{CHART_LINE}"/>']
     for i, (lab, v) in enumerate(zip(labels, vals)):
         cx = x0 + (i + 0.5) * step
         y = yv(v)
@@ -136,9 +137,9 @@ def _svg_bar(c):
         col = CHART_POS if v >= 0 else CHART_NEG
         vlab = ("+" if (signed and v > 0) else "") + _fmt(v) + unit
         vy = top - 7 if v >= 0 else top + h + 14
-        p.append(f'<rect x="{cx - bw / 2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{max(h, 0.6):.1f}" rx="2" fill="{col}"/>')
-        p.append(f'<text x="{cx:.1f}" y="{vy:.1f}" text-anchor="middle" font-size="12" fill="#33333A">{e(vlab)}</text>')
-        p.append(f'<text x="{cx:.1f}" y="222" text-anchor="middle" font-size="11.5" fill="#6B6B70">{e(lab)}</text>')
+        p.append(f'<rect x="{cx - bw / 2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{max(h, 0.6):.1f}" rx="2" style="fill:{col}"/>')
+        p.append(f'<text x="{cx:.1f}" y="{vy:.1f}" text-anchor="middle" font-size="12" style="fill:{CHART_LABEL}">{e(vlab)}</text>')
+        p.append(f'<text x="{cx:.1f}" y="222" text-anchor="middle" font-size="11.5" style="fill:{CHART_AXIS}">{e(lab)}</text>')
     return _svg_open("".join(p)) + "</svg>"
 
 
@@ -160,11 +161,11 @@ def _svg_line(c):
     xv = lambda i: x0 + (i / (n - 1)) * (x1 - x0)
     yv = lambda v: y1 - (v - vmin) / rng * (y1 - y0)
     pts = " ".join(f"{xv(i):.1f},{yv(v):.1f}" for i, v in enumerate(vals))
-    p = [f'<polyline points="{pts}" fill="none" stroke="{CHART_PAL[0]}" stroke-width="2.5"/>']
+    p = [f'<polyline points="{pts}" fill="none" style="stroke:{CHART_PAL[0]}" stroke-width="2.5"/>']
     for i, v in enumerate(vals):
-        p.append(f'<circle cx="{xv(i):.1f}" cy="{yv(v):.1f}" r="3.5" fill="{CHART_PAL[0]}"/>')
-        p.append(f'<text x="{xv(i):.1f}" y="{yv(v) - 10:.1f}" text-anchor="middle" font-size="12" fill="#33333A">{e(_fmt(v))}{e(unit)}</text>')
-        p.append(f'<text x="{xv(i):.1f}" y="224" text-anchor="middle" font-size="11.5" fill="#6B6B70">{e(labels[i])}</text>')
+        p.append(f'<circle cx="{xv(i):.1f}" cy="{yv(v):.1f}" r="3.5" style="fill:{CHART_PAL[0]}"/>')
+        p.append(f'<text x="{xv(i):.1f}" y="{yv(v) - 10:.1f}" text-anchor="middle" font-size="12" style="fill:{CHART_LABEL}">{e(_fmt(v))}{e(unit)}</text>')
+        p.append(f'<text x="{xv(i):.1f}" y="224" text-anchor="middle" font-size="11.5" style="fill:{CHART_AXIS}">{e(labels[i])}</text>')
     return _svg_open("".join(p)) + "</svg>"
 
 
@@ -184,15 +185,15 @@ def _svg_pie(c):
         x2c, y2c = cx + r * math.cos(a2), cy + r * math.sin(a2)
         large = 1 if frac > 0.5 else 0
         col = CHART_PAL[i % len(CHART_PAL)]
-        p.append(f'<path d="M {cx} {cy} L {x1c:.1f} {y1c:.1f} A {r} {r} 0 {large} 1 {x2c:.1f} {y2c:.1f} Z" fill="{col}"/>')
+        p.append(f'<path d="M {cx} {cy} L {x1c:.1f} {y1c:.1f} A {r} {r} 0 {large} 1 {x2c:.1f} {y2c:.1f} Z" style="fill:{col}"/>')
         ang = a2
-    p.append(f'<circle cx="{cx}" cy="{cy}" r="{ir}" fill="#fbfaf7"/>')
+    p.append(f'<circle cx="{cx}" cy="{cy}" r="{ir}" style="fill:{CHART_HOLE}"/>')
     lx, ly = 250, 46
     for i, d in enumerate(data):
         col = CHART_PAL[i % len(CHART_PAL)]
         pct = vals[i] / total * 100
-        p.append(f'<rect x="{lx}" y="{ly + i * 26}" width="12" height="12" rx="2" fill="{col}"/>')
-        p.append(f'<text x="{lx + 18}" y="{ly + i * 26 + 11}" font-size="12.5" fill="#33333A">{e(str(d.get("label", "")))} · {pct:.0f}%</text>')
+        p.append(f'<rect x="{lx}" y="{ly + i * 26}" width="12" height="12" rx="2" style="fill:{col}"/>')
+        p.append(f'<text x="{lx + 18}" y="{ly + i * 26 + 11}" font-size="12.5" style="fill:{CHART_LABEL}">{e(str(d.get("label", "")))} · {pct:.0f}%</text>')
     return _svg_open("".join(p)) + "</svg>"
 
 

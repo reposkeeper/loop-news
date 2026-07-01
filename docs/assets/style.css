@@ -11,6 +11,8 @@
   --serif:"Newsreader","Songti SC","Noto Serif SC",Georgia,"Times New Roman",serif;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
   --sidebar-w:236px; --maxw:1140px;
+  --chart-1:#1F5C57; --chart-2:#9A6B16; --chart-3:#5B3FB0; --chart-4:#2F6F4E; --chart-5:#3A5A8C; --chart-6:#7A5C9E;
+  --chart-pos:#2F6F4E; --chart-neg:#B0413E; --chart-label:#33333A; --chart-axis:#6B6B70; --chart-line:#D8D8D2;
 }
 /* ── 夜间模式:暖灰底 + 柔白字,分级色相不变、明度压暗(沿用墨×纸纪律) ── */
 :root[data-theme="dark"]{
@@ -20,6 +22,8 @@
   --accent:#5FB6AC;
   --fact:#5FB98C; --infer:#D0A24E; --predict:#A98BE6;
   --danger:#E0736F; --ok:#5FB98C; --sel:#5fb6ac33;
+  --chart-1:#5FB6AC; --chart-2:#D0A24E; --chart-3:#A98BE6; --chart-4:#5FB98C; --chart-5:#7FA8E0; --chart-6:#B79AE0;
+  --chart-pos:#5FB98C; --chart-neg:#E0736F; --chart-label:#C7C6C1; --chart-axis:#9A9AA0; --chart-line:#3A3A42;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -29,6 +33,8 @@
     --accent:#5FB6AC;
     --fact:#5FB98C; --infer:#D0A24E; --predict:#A98BE6;
     --danger:#E0736F; --ok:#5FB98C; --sel:#5fb6ac33;
+    --chart-1:#5FB6AC; --chart-2:#D0A24E; --chart-3:#A98BE6; --chart-4:#5FB98C; --chart-5:#7FA8E0; --chart-6:#B79AE0;
+    --chart-pos:#5FB98C; --chart-neg:#E0736F; --chart-label:#C7C6C1; --chart-axis:#9A9AA0; --chart-line:#3A3A42;
   }
 }
 *{box-sizing:border-box}
@@ -315,7 +321,7 @@ mark.hl{background:linear-gradient(transparent 56%, rgba(232,198,110,.6) 56%);co
 .empty{color:var(--faint);font-style:italic;}
 
 /* ── 内联图表(新闻后) ── */
-.chart{margin:13px 0 4px;padding:12px 14px;background:#fbfaf7;border:1px solid var(--line);border-radius:8px;}
+.chart{margin:13px 0 4px;padding:12px 14px;background:var(--raised);border:1px solid var(--line);border-radius:8px;}
 .chart-title{font-family:var(--sans);font-size:12.5px;font-weight:700;letter-spacing:.02em;color:var(--ink);margin:0 0 4px;}
 .chart-svg{width:100%;height:auto;display:block;font-family:var(--sans);}
 .chart-cap{font-family:var(--sans);font-size:11px;color:var(--faint);margin-top:4px;}
@@ -335,7 +341,7 @@ mark.hl{background:linear-gradient(transparent 56%, rgba(232,198,110,.6) 56%);co
 .rn-sub{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--muted);margin:3px 0 3px 22px;padding-left:12px;border-left:2px solid var(--line-soft);list-style:none;}
 .rn-item strong,.rn-sub strong,.release-note strong{color:var(--ink);font-weight:700;}
 .release-actions{margin-top:15px;padding-top:13px;border-top:1px solid var(--line-soft);}
-code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em;background:#1f5c570f;color:#2a4f4b;padding:1px 5px;border-radius:3px;}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em;background:var(--line-soft);color:var(--accent);padding:1px 5px;border-radius:3px;}
 
 /* ── 浮动操作:想看的话题(所有访客)+ 全局反馈(owner 专属),右下堆叠 ── */
 .fab-stack{position:fixed;right:22px;bottom:22px;z-index:40;display:flex;flex-direction:column-reverse;gap:12px;align-items:flex-end;}
