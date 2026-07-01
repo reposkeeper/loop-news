@@ -11,12 +11,14 @@ description: Loop News 自我进化步骤。读质量指标 state/metrics.json +
 
 ## 步骤
 1. **读人类反馈(Human-in-the-loop,最高优先)**:
-   - **弹窗反馈**:`bash scripts/feedback.sh`(读 `data/feedback.jsonl` 或线上 `curl <api>/feedback`:`up 赞 / down 踩 / adopt 采用 / ask 全局提问` + 常用词 `tags` + 自定义 `text`)。
-     - **`ask`(站长全局提问)= 最高优先**:当作本轮**必须落实**的指令(它是站长对整站的方向性要求)。
+   - **账号体系上线后(SP1-Core)**:反馈存 Cloudflare D1(`worker/schema.sql` 的 `feedback` 表,按 `user_id` 隔离,每账户独立),不再是全局 `data/feedback.jsonl` / 匿名 API。**全局进化只吃 `role=owner` 的反馈**——`bash scripts/feedback.sh`(内部 `wrangler d1 execute` 查 `feedback JOIN users WHERE role='owner'`,等价于 API 的 `GET /feedback?role=owner`)。
+     - **普通用户(viewer)的反馈是个人数据,不进本步骤**:它驱动的是各自账户的个人视图/个人进化,**属 SP2(千人千面)**,尚未构建;本轮进化**绝不能**因某个 viewer 的反馈去改全局 `prompts/*.md`/`config/*.yaml`。
+     - 反馈动作:`up 赞 / down 踩 / adopt 采用`,均看 `tags` 常用词 + 自定义 `text`。
+     - **`ask`(站长全局提问,若存在)= 最高优先**:当作本轮**必须落实**的指令(它是站长对整站的方向性要求)。
      - **`adopt 采用`**:说明该条被用进自媒体,据此加权对应来源/主题(校准"什么算有洞察")。
-   - **本轮必须把待处理反馈清空**(尤其 `ask`),处理不完也要给出最简处置并记 CHANGELOG,不积压到下一天。
-   - **本地**:若存在 `feedback.md`,一并读取(自然语言反馈)。
-   - 反馈**优先于**机器自评:用户明确说的(某来源是噪音、某类结论没用、想多看某主题)直接据此改。
+   - **本轮必须把待处理 owner 反馈清空**(尤其 `ask`),处理不完也要给出最简处置并记 CHANGELOG,不积压到下一天。
+   - **本地**:若存在 `feedback.md`,一并读取(自然语言反馈,视作 owner 随手记)。
+   - 反馈**优先于**机器自评:owner 明确说的(某来源是噪音、某类结论没用、想多看某主题)直接据此改。
 2. **读指标 + 系统分数**:`state/metrics.json` 最近若干轮(采集条数、去重率、深/共识占比、结论数、**各来源有效产出 vs 噪音**、X 抓取成功率、各透镜命中数、线索数);并读 `state/scores.json` 的四个分数(关联度/数量/分析整合/自进化广度 + 综合)与 delta。**本轮改进优先针对最低 / 较上轮下滑的那个分数**(数量低→补源加角度;关联低→强化跨日期/跨域透镜;分析低→严证据分级;广度低→加领域/角度),改完再跑 `python3 scripts/score.py` 确认回升。评分制度见 [prompts/scoring.md](../../../prompts/scoring.md)。
 3. **抽样产物**:看最近几期 `data/analysis/*.json`,评估:结论是否有证据回链?是否够"非显然"?深度类原文是否保真?共识去重是否干净?
 4. **诊断弱点**(**先看北极星**),例如:

@@ -2,9 +2,12 @@
 
 架构:
 - **Cloudflare Pages** 托管静态站(`docs/`)——对标 GitHub Pages,HTTPS + 自定义域 + 自动 index/路由。
-- **Cloudflare Worker**(`worker/feedback-worker.js`)跑反馈 API(`/tags` `/feedback`)。
-- **R2 桶** 存反馈(`fb/*.json`)与常用词(`config/feedback_tags.json`)。
-- 站点与反馈都在**你的域名**子域下、同源 HTTPS,手机/任意设备可用。
+- **Cloudflare Worker**(`worker/feedback-worker.js`)跑 API:账号体系(`/auth/*` `/me`)+ 反馈/收藏/关注/已读/请求/活动(`/feedback` `/favorite(s)` `/follow(s)` `/read(s)` `/request(s)` `/activity`)。
+- **D1 数据库**(`loop-news-db`,binding `DB`,见 `worker/schema.sql`)存用户/活动日志/反馈/收藏/关注/已读/请求,**全部按 `user_id` 隔离**。
+- **KV 命名空间**(`SESSIONS`)存验证码(otp)与会话(session),`functions/_middleware.js` 与 Worker 共用。
+- **R2 桶** 存分享出图缓存与常用词(`config/feedback_tags.json`)。
+- **Resend** 发登录验证码邮件。
+- 站点、API 都在**你的域名**子域下、同源 HTTPS,手机/任意设备可用。
 
 > 仓库继续留 GitHub(源码/管线/历史);只把**托管**搬到 Cloudflare。
 
@@ -45,24 +48,38 @@ feedback:
 ```bash
 bash scripts/deploy-cloudflare.sh
 ```
-它会:编译 `docs/` → `wrangler pages deploy docs` → 把 `feedback_tags.json` 同步进 R2 → `wrangler deploy`(Worker)。
+它会:编译 `docs/` → `wrangler pages deploy docs` → 把 `feedback_tags.json` 同步进 R2 → 应用 D1 schema(幂等)→ `wrangler deploy`(Worker,含账号体系 `/auth` `/me`)→ 部署分享出图 Worker。
 > 也可改用 **Pages 连 GitHub 仓库**(Build command 留空、Output 目录 `docs`),这样 `git push` 即自动发站;Worker 仍用 `wrangler deploy`。
 
-## ln-evolve 读反馈
-- 本地服务器模式:读 `data/feedback.jsonl`。
-- Cloudflare 模式:从 Worker 拉,`curl https://feedback.你的域名/feedback`(`scripts/feedback.sh` 可据此改造)。
+## 账号体系(邮箱验证码)
 
-## 访问令牌门(token 分享,简单防一下)
-站点不整站私有,而是**凭 token 访问**:每人一个长期 token,分享链接 `https://news.xdzq.org/?token=lnk_xxx`。
-- 实现:Pages 中间件 `functions/_middleware.js`(随 `wrangler pages deploy docs` 从仓库根自动编译部署)。无有效 token → 返回"输入令牌"门页,**内容不下发**(服务端校验,非前端遮挡)。
-- 令牌清单 = Pages 环境变量 **`SHARE_TOKENS`**(JSON:`{"<token>":{"name":..,"owner":bool}}`)。本地源 `config/share_tokens.json`(**不入库**)。
-- **生成 / 吊销**:
-  ```bash
-  bash scripts/share-token.sh 张三            # 普通访客;打印分享链接并同步到 Pages
-  bash scripts/share-token.sh 我自己 --owner   # 站长令牌:解锁全局反馈按钮,并同步 OWNER_TOKEN 给反馈 Worker
-  # 吊销:编辑 config/share_tokens.json 删该条,再随便跑一次本脚本同步
-  ```
-- 命中后写 cookie:`lnt`(令牌)+ `lnrole`(owner/viewer)。前端据 `lnrole==owner` 显示「✍ 提问」全局反馈按钮;Worker 端再校验 `OWNER_TOKEN` 才接受 `ask` 全局提问。
+登录身份从"分享 token"升级为"邮箱账号"(SP1-Core)。只有白名单邮箱(D1 `users` 表 status ∈ invited/active)能收到验证码登录;登录后按 `user_id` 隔离每个人的反馈/收藏/关注/已读/请求;全站行为记 `activity`。**一次性设置**(先后顺序很重要):
+
+```bash
+# 1) Resend:注册 → 在 Cloudflare 给你的域名(如 xdzq.org)加 DNS 记录(SPF/DKIM)验证发件域 → 拿到 API Key
+npx wrangler secret put RESEND_API_KEY
+
+# 2) 建 D1 数据库 + KV 命名空间,把返回的真实 id 填进 wrangler.toml(替换 PLACEHOLDER_D1_ID / PLACEHOLDER_KV_ID)
+npx wrangler d1 create loop-news-db
+npx wrangler kv namespace create SESSIONS
+
+# 3) 应用 schema(远端,幂等)
+npx wrangler d1 execute loop-news-db --remote --file worker/schema.sql
+
+# 4) 播种 owner 账号(会再次 apply schema,幂等,不重复)
+OWNER_EMAIL=you@example.com bash scripts/setup-auth.sh
+```
+
+- **Pages 项目还要在控制台绑定 KV**:Pages → loop-news → Settings → Functions → KV namespace bindings,把 `SESSIONS` 绑到同一个命名空间(`functions/_middleware.js` 用它查会话,`wrangler.toml` 里的绑定只对 Worker 生效,对 Pages 不生效)。
+- 日常部署 `bash scripts/deploy-cloudflare.sh` 已包含"应用 D1 schema"这一步(幂等,重复跑无副作用),不需要每次手动执行。
+- 验收:无痕访问站点 → 两步登录页(邮箱 → 验证码);用 owner 邮箱登录 → 看到内容;退出 → 回登录页。
+
+**旧的"访问令牌门"(`scripts/share-token.sh` + `SHARE_TOKENS` + `?token=`)已废弃**,`functions/_middleware.js` 不再校验它;不必再生成分享 token。
+
+## ln-evolve 读反馈
+反馈存 D1(按 `user_id` 隔离,见 `worker/schema.sql` 的 `feedback` 表),**只有 `role=owner` 的反馈驱动全局 prompts/config 进化**(普通用户反馈是个人数据,属 SP2 千人千面,尚未消费)。
+- **本地/owner 拉取**:`bash scripts/feedback.sh`(owner 本机已 `wrangler login`,直接 `wrangler d1 execute` 查询,无需带 session cookie)。
+- **等价的 HTTP 接口**(供前端/以后 admin 面板用):`GET https://feedback.你的域名/feedback?role=owner`(需带登录 session cookie)。
 
 ## 回退
-不想用 Cloudflare 时,`scripts/publish.sh` 仍可把 `docs/` 推回 GitHub Pages;本地仍可 `python3 server/feedback_server.py`。
+不想用 Cloudflare 时,`scripts/publish.sh` 仍可把 `docs/` 推回 GitHub Pages;本地仍可 `python3 server/feedback_server.py`(注意:本地反馈服务器是账号体系之前的旧路径,已不是当前反馈主存储)。

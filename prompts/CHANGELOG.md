@@ -5,6 +5,18 @@
 
 ---
 
+## 2026-07-01 · 账号体系(SP1-Core)
+- **改了什么**:
+  1. **访问门从 token 分享升级为邮箱验证码会话**:`POST /auth/request-code` 给白名单邮箱(D1 `users` 表)发 6 位码(Resend,10 分钟有效,KV 哈希存储,≤5 次尝试);`POST /auth/verify` 校验通过后签发 30 天会话(KV `session:<token>`),写 httpOnly cookie `lns`;`functions/_middleware.js` 改查会话放行,未登录返回两步登录页,内容不下发(旧的 `scripts/share-token.sh` + `SHARE_TOKENS` + `?token=` 已废弃)。
+  2. **反馈/收藏/关注/已读/请求按 `user_id` 隔离**:`worker/feedback-worker.js` 的 per-user 端点(`/feedback` `/favorite(s)` `/follow(s)` `/read(s)` `/request(s)` `/activity`)从会话身份(`identify`)推导用户,写读 D1(`worker/schema.sql`),各账户数据互不影响;`/follows`、`/requests` 仍为 owner-only。
+  3. **活动日志**:登录/退出/浏览/打开/反馈/收藏/关注/已读/请求/分享 全部记入 D1 `activity` 表,按 `user_id` 可查。
+  4. **ln-evolve 限定 owner 反馈**:`.claude/skills/ln-evolve/SKILL.md` 的"读人类反馈"步骤改为只消化 `role=owner` 的反馈(`bash scripts/feedback.sh` 直接 `wrangler d1 execute` 查 `feedback JOIN users WHERE role='owner'`)驱动全局 `prompts/*.md`/`config/*.yaml` 进化;普通账号反馈是个人数据,驱动各自视图,不进全局进化(留给 SP2 千人千面)。
+  5. 新增 `scripts/setup-auth.sh`(一次性 owner 引导:apply D1 schema + 播种 `OWNER_EMAIL`);`scripts/deploy-cloudflare.sh` 部署前加一步应用 D1 schema(幂等);`CLOUDFLARE.md`/`RUNBOOK.md`/`AGENTS.md`/`CLAUDE.md` 同步身份模型与反馈语义。
+- **为什么**:旧的 token 分享门下所有人共享同一份反馈,一个人的口味会改动全站看到的新闻;升级为邮箱账号后每人反馈独立沉淀,同时把"谁的反馈驱动系统进化"收窄为 owner 一人,避免访客反馈误伤全局提示词/配置。这是 SP1(账号地基)的收尾任务,SP2(千人千面/个人进化)将建在这份地基之上。
+- **如何回滚**:`git revert` 对应提交;数据库/KV 层面的资源创建(`wrangler d1 create`/`kv namespace create`)与 secret 需人工在 Cloudflare 控制台单独处理,代码回滚不会删除已创建的云资源。
+
+---
+
 ## 2026-07-01 · 发布(反馈台账页 + 分享图预览/复制 + 更高清)
 - **改了什么**:
   1. **📋 反馈台账**(系统区新页):实时拉 `/requests`+`/feedback` 显示大家的反馈,并对照 `data/feedback_ledger.json` 标注每条在**哪一轮进化被覆盖**;下方列出每轮进化覆盖了什么(ln-evolve 每轮维护台账)。

@@ -8,8 +8,8 @@
 - 完整流程 + 能力映射 + 数据 schema:[RUNBOOK.md](RUNBOOK.md)
 - 采集/分析策略(可编辑、会被自进化修改):`prompts/*.md`
 - 配置:`config/*.yaml`
-- 确定性脚本:`web/compile.py`(编译单页)、`scripts/publish.sh`(发布)、`scripts/feedback.sh`(读 `data/feedback.jsonl` 反馈)、`server/feedback_server.py`(网页弹窗反馈服务,零依赖)、`scripts/deploy-cloudflare.sh`(部署 Cloudflare)、`scripts/share-token.sh`(发/吊销访问令牌)
-- 网页能力:每条新闻可带 `charts`(synthesize 产规格、compile 渲染内联 SVG;只对可核实数字、标来源);站点是 **token 分享门**(`functions/_middleware.js` 服务端校验,非整站私有);站长**全局提问 `ask`**(页面右下「✍ 提问」→ ln-evolve 最高优先)。托管/部署/令牌详见 [CLOUDFLARE.md](CLOUDFLARE.md)
+- 确定性脚本:`web/compile.py`(编译单页)、`scripts/publish.sh`(发布)、`scripts/feedback.sh`(读 D1 owner 反馈,供 ln-evolve)、`server/feedback_server.py`(本地零依赖反馈服务,账号体系之前的旧路径)、`scripts/deploy-cloudflare.sh`(部署 Cloudflare,含 D1 schema 迁移)、`scripts/setup-auth.sh`(一次性:apply D1 schema + 播种 owner 账号)
+- 网页能力:每条新闻可带 `charts`(synthesize 产规格、compile 渲染内联 SVG;只对可核实数字、标来源);站点**登录门**(邮箱验证码 → 会话,`functions/_middleware.js` 服务端查 KV `SESSIONS` 校验,非整站私有,已替代旧的 token 分享门);每个账号的反馈/收藏/关注/已读/请求按 `user_id` 隔离存 D1,`ln-evolve` 只消化 `role=owner` 的反馈驱动全局进化。托管/部署/账号体系详见 [CLOUDFLARE.md](CLOUDFLARE.md)
 
 ## 手动跑一轮
 ```

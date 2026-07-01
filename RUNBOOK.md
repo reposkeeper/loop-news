@@ -20,7 +20,7 @@
 - **X/Twitter 访问**:已装 **X MCP**(`bash scripts/setup-mcp.sh` 构建到 `vendor/x-mcp`;`.mcp.json` 已配,凭证放不入库的 `.env`)。读工具:`search_tweets` / `get_timeline` / `get_user` / `get_tweet`。未配凭证时退化为"网页搜索还原引用"。Codex 等用各自的 MCP 配置指向同一 server(见 AGENTS.md)。
 - **X 官方文档**:已配远程 MCP `x-docs`(`https://docs.x.com/mcp`,只读、免凭证)。**开发或调用 X API 前优先用它查最新官方文档**,避免凭旧知识读错接口。
 - **shell**:`python3`(仅标准库,无需第三方)、`git`、`gh`(发布)。
-- **反馈服务(可选)**:`server/feedback_server.py`(零依赖)承载网页弹窗反馈 → `data/feedback.jsonl`。本地直接 `python3 server/feedback_server.py` 即可;要让手机/他人也能反馈,需部署到带 HTTPS 的公网,并把 `config/loop.yaml` 的 `feedback.api_url` 指过去(部署后 `ln-evolve` 可改用 `curl <api>/feedback` 拉取)。
+- **反馈服务**:生产走 Cloudflare(`worker/feedback-worker.js` + D1 `loop-news-db` + KV `SESSIONS`)——反馈/收藏/关注/已读/请求按登录账号的 `user_id` 隔离,全站行为记 `activity`。本地零依赖备选 `server/feedback_server.py`(`data/feedback.jsonl`,账号体系之前的旧路径)。
 - 时区:Asia/Shanghai。
 
 ## 每日循环
@@ -42,11 +42,11 @@
 
 ### 4. 发布 publish(= ln-publish)
 `bash scripts/publish.sh "<msg>"` → commit + push,GitHub Pages 上线。**默认早班把这步留人工确认**(发布是公开操作)。
-> 若托管在 **Cloudflare**:改用 `bash scripts/deploy-cloudflare.sh`(Pages 发站 + Worker 反馈 API + R2),详见 [CLOUDFLARE.md](CLOUDFLARE.md)。
-> 站点是 **token 分享门**(非整站私有):Pages 中间件 `functions/_middleware.js` 服务端校验令牌;`bash scripts/share-token.sh <名字> [--owner]` 发放/吊销。owner 令牌解锁页面右下「✍ 提问」全局反馈(→ `ask`)。
+> 若托管在 **Cloudflare**:改用 `bash scripts/deploy-cloudflare.sh`(Pages 发站 + Worker API + R2 + D1 schema),详见 [CLOUDFLARE.md](CLOUDFLARE.md)。
+> **访问门 = 邮箱账号登录**(非整站私有,也不再是 token 分享):`functions/_middleware.js` 校验会话(cookie `lns` → KV `SESSIONS` 查 session),未登录返回两步登录页(邮箱 → 6 位验证码,Resend 发信),内容不下发。白名单 = D1 `users` 表;owner 引导见 `scripts/setup-auth.sh`。每个账号的反馈/收藏/关注/已读/请求按 `user_id` 隔离存 D1;全站行为记 `activity`。
 
 ### 5. 进化 evolve(= ln-evolve)
-先读**人类反馈**(`bash scripts/feedback.sh`:网页弹窗写入的 `data/feedback.jsonl`〔`up 赞 / down 踩 / adopt 采用 / ask 全局提问` + 常用词 + 文字〕+ `feedback.md`)——**站长全局提问 `ask` 最高优先(本轮必须落实)**,采用次之;再读 `state/metrics.json`(含北极星指标 non_obvious/edge/cross_date/falsifiable)+ 抽样产物;小步改 `prompts/*.md` / `config/*.yaml` / `config/feedback_tags.json`;记 `prompts/CHANGELOG.md`。**早班顺序:本步在 synthesize 之前跑,进化修复完成后才生成当天总结。**
+先读**人类反馈**(`bash scripts/feedback.sh`:从 D1 `feedback` 表拉取〔`up 赞 / down 踩 / adopt 采用` + 常用词 + 文字〕+ `feedback.md`)——**只消化 `role=owner` 的反馈用于全局进化**(普通账号的反馈是个人数据,驱动各自视图,不改全局 `prompts/*.md`/`config/*.yaml`,属 SP2 千人千面尚未构建的部分);若存在站长全局提问 `ask`,最高优先(本轮必须落实),采用次之。再读 `state/metrics.json`(含北极星指标 non_obvious/edge/cross_date/falsifiable)+ 抽样产物;小步改 `prompts/*.md` / `config/*.yaml` / `config/feedback_tags.json`;记 `prompts/CHANGELOG.md`。**早班顺序:本步在 synthesize 之前跑,进化修复完成后才生成当天总结。**
 
 ## 数据 schema(agent 间的契约 —— 权威定义)
 - 语料条目:见 `.claude/skills/ln-collect/SKILL.md`

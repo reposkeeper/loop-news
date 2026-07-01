@@ -29,7 +29,8 @@
 - 数据 schema:语料 → `.claude/skills/ln-collect/SKILL.md`;分析 + 跨日期线索 → `.claude/skills/ln-synthesize/SKILL.md`
 - 跨日期关联 → `data/threads.json`(由 ln-synthesize 维护,编译成"线索时间线")
 - 领域专题(产业纵深)→ `config/domains.yaml`(领域剧本,ln-evolve 进化)+ `data/dossiers/<id>.json`(由 `ln-dossier` 生成/更新,编译成「📂 专题」);历年数据序列 → `data/series/<id>.json`(累积沉淀)
-- 人类反馈 → 网页弹窗(👍赞/👎踩/✓采用 + 常用词 + 文字)经 `server/feedback_server.py` 写入 `data/feedback.jsonl` + `feedback.md`(`bash scripts/feedback.sh` 读取;ln-evolve 消化并进化 `config/feedback_tags.json`)
+- 身份 / 访问 → 邮箱验证码登录(Resend 发信,会话存 KV `SESSIONS`,cookie `lns`),`functions/_middleware.js` 校验会话作访问门(替代旧 token 分享门);白名单/角色 = D1 `users` 表(owner/viewer);owner 引导用 `scripts/setup-auth.sh`
+- 人类反馈 → 网页弹窗(👍赞/👎踩/✓采用 + 常用词 + 文字)经 `worker/feedback-worker.js` 按登录账号 `user_id` 写入 D1(`worker/schema.sql` 的 `feedback` 表)+ `feedback.md`(`bash scripts/feedback.sh` 读取 D1 里 `role=owner` 的一份;ln-evolve **只消化 owner 反馈**驱动全局进化,普通账号反馈是个人数据、不改全局 `prompts/*.md`/`config/*.yaml`)
 
 ## 网站(单页)
 `docs/index.html` 是**唯一**页面:左侧日期列表 + 🧵线索 + ⚙️自进化日志(渲染自 `prompts/CHANGELOG.md`)入口,右侧主区,JS hash 路由同页切换(无 iframe)。现代杂志风(宋体+Newsreader 标题、抽印引文、分级配色)。每块正文最多 2 处高亮(`==文本==`)。每条新闻/结论**底部**有 👍赞/👎踩/✓采用,点击弹出页面内对话框(常用词 chips + 可选文字),提交到反馈服务器,**不跳转 GitHub**。
