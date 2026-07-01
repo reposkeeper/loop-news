@@ -1,14 +1,25 @@
 /**
  * Loop News 反馈 API —— Cloudflare Worker。
- * 反馈存入 R2 桶(binding: BUCKET);常用词从 R2 的 config/feedback_tags.json 读,缺则用内置默认。
- * 端点(CORS 全开,任何设备/页面可调):
- *   GET  /health    健康检查
- *   GET  /tags      常用反馈词(弹窗 chips)
- *   POST /feedback  追加一条反馈(写 R2:fb/<ts>-<rand>.json)
- *   GET  /feedback  列出全部反馈(供 ln-evolve / 自查)
+ * per-user 端点(反馈/收藏/关注/已读/请求)按会话身份(identify)写读 D1(binding: DB),真正按账号隔离;
+ * 常用词从 R2 的 config/feedback_tags.json 读,缺则用内置默认。
+ * 端点(CORS 全开,任何设备/页面可调,per-user 端点需登录 cookie):
+ *   GET  /health     健康检查
+ *   GET  /tags       常用反馈词(弹窗 chips)
+ *   POST /feedback   写一条反馈(D1 feedback,按当前会话 user_id)
+ *   GET  /feedback   列出反馈(普通用户只看自己;owner 看全部,?role=owner 只看 owner 一组,供 ln-evolve)
+ *   POST /favorite   收藏/取消收藏(D1 favorites)
+ *   GET  /favorites  我的收藏
+ *   POST /follow     关注/取消关注(D1 follows)
+ *   GET  /follows    全量关注聚合(owner-only,供采集管线)
+ *   POST /request    提采集请求(D1 requests)
+ *   GET  /requests   全量请求(owner-only)
+ *   GET  /reads      我的已读状态
+ *   POST /read       标记已读
  * 部署见 CLOUDFLARE.md。
  */
 import { handleRequestCode, handleVerify, handleLogout, handleMe, identify } from "./lib/auth.js";
+import { logActivity } from "./lib/activity.js";
+import { nowISO } from "./lib/store.js";
 
 const DEFAULT_TAGS = {
   up: ["有洞察", "信息密度高", "正是我想看的", "角度新颖", "证据扎实"],
@@ -29,35 +40,7 @@ function corsHeaders(env) {
     "Access-Control-Allow-Credentials": "true",
   };
 }
-const ALLOWED = new Set(["up", "down", "adopt", "ask"]);
-
-function validTokens(env) {
-  try { return JSON.parse(env.SHARE_TOKENS || "{}"); } catch (_) { return {}; }
-}
-// token 校验同时认两处:① env.SHARE_TOKENS(静态/owner)② R2 tokens/<tok>(owner 在网页自助生成的)
-async function resolveToken(env, tok) {
-  if (!tok) return null;
-  const t = validTokens(env)[tok];
-  if (t) return t;
-  try {
-    const o = await env.BUCKET.get(`tokens/${tok}.json`);
-    if (o) return JSON.parse(await o.text());
-  } catch (_) {}
-  return null;
-}
-async function listAll(env, prefix) {
-  const items = [];
-  let cursor;
-  do {
-    const l = await env.BUCKET.list({ prefix, cursor });
-    for (const o of l.objects) {
-      const g = await env.BUCKET.get(o.key);
-      if (g) { try { items.push(JSON.parse(await g.text())); } catch (_) {} }
-    }
-    cursor = l.truncated ? l.cursor : undefined;
-  } while (cursor);
-  return items;
-}
+const ALLOWED = new Set(["up", "down", "adopt"]);
 
 function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
@@ -88,81 +71,91 @@ export default {
     }
 
     if (p === "/feedback" && req.method === "POST") {
+      const who = await identify(req, env);
+      if (!who) return json({ error: "unauthorized" }, 401);
       let d;
       try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
-      if (!ALLOWED.has(d.action)) return json({ error: "action must be up|down|adopt|ask" }, 400);
-      // 全局提问(ask)只接受站长令牌(env.OWNER_TOKEN);其余反馈匿名可提
-      if (d.action === "ask" && env.OWNER_TOKEN && d.token !== env.OWNER_TOKEN) {
-        return json({ error: "global feedback requires owner token" }, 403);
-      }
-      const ts = new Date().toISOString();
-      const rec = {
-        ts,
-        action: d.action,
-        item_id: String(d.item_id || "").slice(0, 120),
-        date: String(d.date || "").slice(0, 20),
-        title: String(d.title || "").slice(0, 300),
-        tags: (Array.isArray(d.tags) ? d.tags : []).slice(0, 8).map((t) => String(t).slice(0, 40)),
-        text: String(d.text || "").trim().slice(0, 2000),
-      };
-      const key = `fb/${ts}-${crypto.randomUUID().slice(0, 8)}.json`;
-      await env.BUCKET.put(key, JSON.stringify(rec), { httpMetadata: { contentType: "application/json" } });
-      return json({ ok: true, saved: rec });
+      if (!ALLOWED.has(d.action)) return json({ error: "action must be up|down|adopt" }, 400);
+      await env.DB.prepare(
+        "INSERT INTO feedback (user_id,ts,action,item_id,date,title,tags,text) VALUES (?,?,?,?,?,?,?,?)"
+      ).bind(who.user_id, nowISO(), d.action, String(d.item_id || "").slice(0, 120),
+             String(d.date || "").slice(0, 20), String(d.title || "").slice(0, 300),
+             JSON.stringify((Array.isArray(d.tags) ? d.tags : []).slice(0, 8).map((t) => String(t).slice(0, 40))),
+             String(d.text || "").trim().slice(0, 2000)).run();
+      await logActivity(env, who.user_id, "feedback", d.item_id, d.action);
+      return json({ ok: true });
     }
 
     if (p === "/feedback" && req.method === "GET") {
-      const out = [];
-      let cursor;
-      do {
-        const list = await env.BUCKET.list({ prefix: "fb/", cursor });
-        for (const obj of list.objects) {
-          const o = await env.BUCKET.get(obj.key);
-          if (o) { try { out.push(JSON.parse(await o.text())); } catch (_) {} }
-        }
-        cursor = list.truncated ? list.cursor : undefined;
-      } while (cursor);
-      out.sort((a, b) => (a.ts < b.ts ? -1 : 1));
-      return json({ count: out.length, items: out });
+      const who = await identify(req, env);
+      if (!who) return json({ error: "unauthorized" }, 401);
+      const onlyOwner = url.searchParams.get("role") === "owner";
+      // owner 可看全部或按 role;普通用户只能看自己
+      let rows;
+      if (who.role === "owner" && onlyOwner) {
+        rows = await env.DB.prepare(
+          "SELECT f.* FROM feedback f JOIN users u ON u.id=f.user_id WHERE u.role='owner' ORDER BY f.ts").all();
+      } else if (who.role === "owner") {
+        rows = await env.DB.prepare("SELECT * FROM feedback ORDER BY ts").all();
+      } else {
+        rows = await env.DB.prepare("SELECT * FROM feedback WHERE user_id=? ORDER BY ts").bind(who.user_id).all();
+      }
+      return json({ count: rows.results.length, items: rows.results });
     }
 
-    // ── 收藏(per-user;按 token 隔离)──
+    // ── 收藏(per-user;按会话 user_id 隔离)──
     if (p === "/favorite" && req.method === "POST") {
+      const who = await identify(req, env);
+      if (!who) return json({ error: "unauthorized" }, 401);
       let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
-      const tok = String(d.token || "");
-      if (!(await resolveToken(env, tok))) return json({ error: "invalid token" }, 403);
-      const key = `fav/${tok}/${String(d.item_id || "").slice(0, 120)}.json`;
-      if (d.on === false) { await env.BUCKET.delete(key); return json({ ok: true, on: false }); }
-      const rec = { item_id: d.item_id, date: String(d.date || "").slice(0, 20), title: String(d.title || "").slice(0, 300), ts: new Date().toISOString() };
-      await env.BUCKET.put(key, JSON.stringify(rec), { httpMetadata: { contentType: "application/json" } });
+      const item_id = String(d.item_id || "").slice(0, 120);
+      if (d.on === false) {
+        await env.DB.prepare("DELETE FROM favorites WHERE user_id=? AND item_id=?").bind(who.user_id, item_id).run();
+        return json({ ok: true, on: false });
+      }
+      await env.DB.prepare(
+        "INSERT OR REPLACE INTO favorites (user_id,item_id,date,title,ts) VALUES (?,?,?,?,?)"
+      ).bind(who.user_id, item_id, String(d.date || "").slice(0, 20), String(d.title || "").slice(0, 300), nowISO()).run();
+      await logActivity(env, who.user_id, "favorite", item_id);
       return json({ ok: true, on: true });
     }
     if (p === "/favorites" && req.method === "GET") {
-      const tok = url.searchParams.get("token") || "";
-      if (!(await resolveToken(env, tok))) return json({ error: "invalid token" }, 403);
-      const items = await listAll(env, `fav/${tok}/`);
-      items.sort((a, b) => (a.ts < b.ts ? 1 : -1));
-      return json({ count: items.length, items });
+      const who = await identify(req, env);
+      if (!who) return json({ error: "unauthorized" }, 401);
+      const rows = await env.DB.prepare(
+        "SELECT item_id,date,title,ts FROM favorites WHERE user_id=? ORDER BY ts DESC").bind(who.user_id).all();
+      return json({ count: rows.results.length, items: rows.results });
     }
 
-    // ── 关注(驱动后续采集;按 token 存,读取时聚合话题/实体)──
+    // ── 关注(驱动后续采集;按会话 user_id 存,owner 读取时聚合话题/实体)──
     if (p === "/follow" && req.method === "POST") {
+      const who = await identify(req, env);
+      if (!who) return json({ error: "unauthorized" }, 401);
       let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
-      const tok = String(d.token || "");
-      const who = await resolveToken(env, tok);
-      if (!who) return json({ error: "invalid token" }, 403);
-      const key = `follow/${tok}/${String(d.item_id || "").slice(0, 120)}.json`;
-      if (d.on === false) { await env.BUCKET.delete(key); return json({ ok: true, on: false }); }
-      const rec = {
-        item_id: d.item_id, title: String(d.title || "").slice(0, 300),
-        topics: (Array.isArray(d.topics) ? d.topics : []).slice(0, 12).map((x) => String(x).slice(0, 40)),
-        entities: (Array.isArray(d.entities) ? d.entities : []).slice(0, 12).map((x) => String(x).slice(0, 40)),
-        by: who.name || "", ts: new Date().toISOString(),
-      };
-      await env.BUCKET.put(key, JSON.stringify(rec), { httpMetadata: { contentType: "application/json" } });
+      const item_id = String(d.item_id || "").slice(0, 120);
+      if (d.on === false) {
+        await env.DB.prepare("DELETE FROM follows WHERE user_id=? AND item_id=?").bind(who.user_id, item_id).run();
+        return json({ ok: true, on: false });
+      }
+      const topics = (Array.isArray(d.topics) ? d.topics : []).slice(0, 12).map((x) => String(x).slice(0, 40));
+      const entities = (Array.isArray(d.entities) ? d.entities : []).slice(0, 12).map((x) => String(x).slice(0, 40));
+      await env.DB.prepare(
+        "INSERT OR REPLACE INTO follows (user_id,item_id,title,topics,entities,ts) VALUES (?,?,?,?,?,?)"
+      ).bind(who.user_id, item_id, String(d.title || "").slice(0, 300), JSON.stringify(topics), JSON.stringify(entities), nowISO()).run();
+      await logActivity(env, who.user_id, "follow", item_id);
       return json({ ok: true, on: true });
     }
     if (p === "/follows" && req.method === "GET") {
-      const items = await listAll(env, "follow/");
+      const who = await identify(req, env);
+      if (!who) return json({ error: "unauthorized" }, 401);
+      if (who.role !== "owner") return json({ error: "owner only" }, 403);
+      const rows = await env.DB.prepare("SELECT * FROM follows").all();
+      const items = rows.results.map((r) => {
+        let topics = [], entities = [];
+        try { topics = JSON.parse(r.topics || "[]"); } catch (_) {}
+        try { entities = JSON.parse(r.entities || "[]"); } catch (_) {}
+        return { ...r, topics, entities };
+      });
       const topics = {}, ents = {};
       for (const it of items) {
         (it.topics || []).forEach((t) => (topics[t] = (topics[t] || 0) + 1));
@@ -173,75 +166,45 @@ export default {
 
     // ── 采集请求(任意用户:想持续看到的新闻类型 → 下次采集去找)──
     if (p === "/request" && req.method === "POST") {
+      const who = await identify(req, env);
+      if (!who) return json({ error: "unauthorized" }, 401);
       let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
-      const tok = String(d.token || "");
-      const who = await resolveToken(env, tok);
-      if (!who) return json({ error: "invalid token" }, 403);
       const text = String(d.text || "").trim().slice(0, 500);
       const tags = (Array.isArray(d.tags) ? d.tags : []).slice(0, 8).map((x) => String(x).slice(0, 40));
       if (!text && !tags.length) return json({ error: "empty" }, 400);
-      const id = `${new Date().toISOString()}-${crypto.randomUUID().slice(0, 8)}`;
-      const rec = { text, tags, by: who.name || "", ts: new Date().toISOString(), status: "new" };
-      await env.BUCKET.put(`request/${tok}/${id}.json`, JSON.stringify(rec), { httpMetadata: { contentType: "application/json" } });
+      await env.DB.prepare(
+        "INSERT INTO requests (user_id,ts,text,tags,status) VALUES (?,?,?,?,'new')"
+      ).bind(who.user_id, nowISO(), text, JSON.stringify(tags)).run();
+      await logActivity(env, who.user_id, "request");
       return json({ ok: true });
     }
     if (p === "/requests" && req.method === "GET") {
-      const items = await listAll(env, "request/");
-      items.sort((a, b) => (a.ts < b.ts ? 1 : -1));
-      return json({ count: items.length, items });
+      const who = await identify(req, env);
+      if (!who) return json({ error: "unauthorized" }, 401);
+      if (who.role !== "owner") return json({ error: "owner only" }, 403);
+      const rows = await env.DB.prepare("SELECT * FROM requests ORDER BY ts DESC").all();
+      return json({ count: rows.results.length, items: rows.results });
     }
 
     // ── 已读状态(per-user;专题更新小红点)──
     if (p === "/reads" && req.method === "GET") {
-      const tok = url.searchParams.get("token") || "";
-      if (!(await resolveToken(env, tok))) return json({ error: "invalid token" }, 403);
-      const o = await env.BUCKET.get(`reads/${tok}.json`);
-      let m = {};
-      if (o) { try { m = JSON.parse(await o.text()); } catch (_) {} }
+      const who = await identify(req, env);
+      if (!who) return json({ error: "unauthorized" }, 401);
+      const rows = await env.DB.prepare("SELECT item_id, ts FROM reads WHERE user_id=?").bind(who.user_id).all();
+      const m = {};
+      for (const r of rows.results) m[r.item_id] = r.ts;
       return json(m);
     }
     if (p === "/read" && req.method === "POST") {
+      const who = await identify(req, env);
+      if (!who) return json({ error: "unauthorized" }, 401);
       let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
-      const tok = String(d.token || "");
-      if (!(await resolveToken(env, tok))) return json({ error: "invalid token" }, 403);
-      const key = `reads/${tok}.json`;
-      const o = await env.BUCKET.get(key);
-      let m = {};
-      if (o) { try { m = JSON.parse(await o.text()); } catch (_) {} }
-      m[String(d.id || "").slice(0, 80)] = String(d.ts || "").slice(0, 32);
-      await env.BUCKET.put(key, JSON.stringify(m), { httpMetadata: { contentType: "application/json" } });
+      const item_id = String(d.id || "").slice(0, 80);
+      const ts = String(d.ts || "").slice(0, 32);
+      await env.DB.prepare(
+        "INSERT OR REPLACE INTO reads (user_id,item_id,ts) VALUES (?,?,?)"
+      ).bind(who.user_id, item_id, ts).run();
       return json({ ok: true });
-    }
-
-    // ── 分享令牌:owner 在网页自助生成,存 R2 tokens/<lnk>(带名字,便于区分分享给谁)──
-    if (p === "/mint" && req.method === "POST") {
-      let d; try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
-      if (!env.OWNER_TOKEN || d.ownerToken !== env.OWNER_TOKEN) return json({ error: "owner only" }, 403);
-      const name = String(d.name || "").trim().slice(0, 60) || "朋友";
-      const tok = "lnk_" + crypto.randomUUID().replace(/-/g, "").slice(0, 24);
-      const rec = { name, owner: false, created: new Date().toISOString() };
-      await env.BUCKET.put(`tokens/${tok}.json`, JSON.stringify(rec), { httpMetadata: { contentType: "application/json" } });
-      return json({ ok: true, token: tok, name, url: (env.SITE_URL || "https://news.xdzq.org") + "/?token=" + tok });
-    }
-    if (p === "/tokens" && req.method === "GET") {
-      if (!env.OWNER_TOKEN || url.searchParams.get("ownerToken") !== env.OWNER_TOKEN) return json({ error: "owner only" }, 403);
-      const items = [];
-      let cursor;
-      do {
-        const l = await env.BUCKET.list({ prefix: "tokens/", cursor });
-        for (const o of l.objects) {
-          const g = await env.BUCKET.get(o.key);
-          if (g) { try { const r = JSON.parse(await g.text()); r.token = o.key.slice(7, -5); items.push(r); } catch (_) {} }
-        }
-        cursor = l.truncated ? l.cursor : undefined;
-      } while (cursor);
-      items.sort((a, b) => (a.created < b.created ? 1 : -1));
-      return json({ count: items.length, items });
-    }
-    // token 校验(给 Pages 访问门用:env 或 R2 命中即放行)
-    if (p === "/validate" && req.method === "GET") {
-      const rec = await resolveToken(env, url.searchParams.get("token") || "");
-      return json(rec ? { valid: true, name: rec.name || "", owner: !!rec.owner } : { valid: false });
     }
 
     return json({ error: "not found" }, 404);
