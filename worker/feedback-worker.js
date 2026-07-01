@@ -18,7 +18,7 @@
  *   POST /activity   记一条浏览活动(view/open/share_link/share_image,D1 activity,按当前会话 user_id)
  * 部署见 CLOUDFLARE.md。
  */
-import { handleRequestCode, handleVerify, handleLogout, handleMe, identify } from "./lib/auth.js";
+import { handleRequestCode, handleVerify, handleLogout, handleMe, handleSetTheme, identify } from "./lib/auth.js";
 import { logActivity } from "./lib/activity.js";
 import { nowISO } from "./lib/store.js";
 
@@ -55,6 +55,7 @@ export default {
     if (p === "/auth/verify" && req.method === "POST") return handleVerify(req, env);
     if (p === "/auth/logout" && req.method === "POST") return handleLogout(req, env);
     if (p === "/me" && req.method === "GET") return handleMe(req, env);
+    if (p === "/me/theme" && req.method === "POST") return handleSetTheme(req, env);
 
     if (p === "/activity" && req.method === "POST") {
       const who = await identify(req, env);

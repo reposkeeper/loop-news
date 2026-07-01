@@ -81,3 +81,14 @@ export async function handleMe(req, env) {
   const u = await getUserByEmail(env, who.email);
   return J(env, { email: u.email, name: u.name, role: u.role, theme: u.theme });
 }
+
+export async function handleSetTheme(req, env) {
+  const who = await identify(req, env);
+  if (!who) return J(env, { error: "unauthorized" }, 401);
+  let d; try { d = await req.json(); } catch { return J(env, { error: "bad json" }, 400); }
+  const theme = String(d.theme || "");
+  if (!["auto", "light", "dark"].includes(theme)) return J(env, { error: "theme must be auto|light|dark" }, 400);
+  await env.DB.prepare("UPDATE users SET theme=? WHERE id=?").bind(theme, who.user_id).run();
+  await logActivity(env, who.user_id, "theme", theme);
+  return J(env, { ok: true, theme });
+}
