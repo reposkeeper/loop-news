@@ -28,8 +28,8 @@ function scalePx(html) {
 
 // workers-og 的 HTML 解析器不解码实体(&#160; / &amp; 会原样显示),故用形近字符中和 < > &(均罕见于中文标题)
 function esc(s) {
-  // 去掉 markdown 高亮标记 ==(分享图不做高亮,避免原样显示);再中和 < > &
-  return String(s == null ? "" : s).replace(/==/g, "").replace(/&/g, "＆").replace(/</g, "‹").replace(/>/g, "›");
+  // 去掉 markdown 标记 == 高亮与 ** 加粗(分享图不渲染,避免原样显示);再中和 < > &
+  return String(s == null ? "" : s).replace(/==/g, "").replace(/\*\*/g, "").replace(/&/g, "＆").replace(/</g, "‹").replace(/>/g, "›");
 }
 function clip(s, n) {
   s = String(s == null ? "" : s);

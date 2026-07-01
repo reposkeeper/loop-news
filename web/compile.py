@@ -74,18 +74,20 @@ def e(s):
 
 
 HL_RE = re.compile(r"==(.+?)==")
+BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
 HL_CAP = 2  # 每块最多高亮处数;main 中按 config 覆盖
 
 
 def hl(s):
-    """先转义,再把 ==文本== 转成 <mark>(最多 HL_CAP 处;多出的去掉 == 保留文字)。"""
+    """先转义;**文本**→<strong>(不限次、不占高亮额度);==文本==→<mark>(最多 HL_CAP 处,多出的去 == 留文字)。"""
     if s is None:
         return ""
+    out = BOLD_RE.sub(lambda m: f"<strong>{m.group(1)}</strong>", e(s))
     n = [0]
     def repl(m):
         n[0] += 1
         return f'<mark class="hl">{m.group(1)}</mark>' if n[0] <= HL_CAP else m.group(1)
-    return HL_RE.sub(repl, e(s))
+    return HL_RE.sub(repl, out)
 
 
 # ── 内联 SVG 图表(零依赖;趋势线 / 柱 / 饼)。仅渲染 analysis 条目的 charts 字段 ──
@@ -818,7 +820,7 @@ def main():
     repl = {
         "{{SITE_TITLE}}": e(cfg_get(cfg, "site.title", "Loop News")),
         "{{SITE_SUBTITLE}}": e(cfg_get(cfg, "site.subtitle")),
-        "{{PAGE_DESC}}": e(analyses[dates[0]].get("summary_zh", "").replace("==", "")),
+        "{{PAGE_DESC}}": e(analyses[dates[0]].get("summary_zh", "").replace("==", "").replace("**", "")),
         "{{DATE_NAV}}": date_nav,
         "{{THREADS_VIEW}}": threads_view,
         "{{EVOLUTION_VIEW}}": evolution_view,
