@@ -5,6 +5,17 @@
 
 ---
 
+## 2026-07-01 · 进化(消化反馈:更多 AI + 即刻 + 🎙️ 播客环节)
+- **依据**:线上 `/requests`(「AI 在企业中的应用 / harness engineering」「机器人 / 具身智能创业融资」)+ `/follows`(AI 安全 / 前沿模型)+ metrics(ylecun/DrJimFan/paulkrugman/RayDalio 多口水/格言/无实质);站长指令「AI 内容太少、加即刻、新增播客」。
+- **改了什么**:
+  1. **更多 AI**:`sources.yaml` 加 AI 专项 query(企业 AI/harness、机器人具身融资、AI 安全/前沿模型)+ AI RSS(TechCrunch AI / VentureBeat AI / MIT Tech Review);`people.yaml` 新增高信号声音(Mira Murati / Noam Shazeer / Jared Kaplan / Aidan Gomez / Arvind Narayanan),低产者标 `priority: low` 降权(ylecun/DrJimFan/paulkrugman/RayDalio)。
+  2. **即刻 Jike**:`sources.cn_platforms` 加即刻(WebSearch 限定 okjike.com 找一手,抓不到只作信号,不臆造)。
+  3. **🎙️ 播客环节(新)**:`config/podcasts.yaml`(Dwarkesh / Lex / No Priors / Latent Space … + 重点 AI 嘉宾);ln-collect 加播客采集步、ln-synthesize schema 加 `podcasts`、compile 新增「🎙️ 播客 · AI 人物访谈」区(节目 / 主持×嘉宾 / 要点 / 原话 / 收听);示例接入 3 集真实访谈(Dwarkesh×Amodei、Lex×Hassabis、Lex×Pichai)。
+- **为什么**:反馈明确要更多 AI 与高质量中文平台;知名主持 × 知名 AI 人物的整集深访是「非显然洞察」的富矿(北极星)。
+- **如何回滚**:`git revert` 对应提交;播客/即刻/AI 源均为配置与提示词,删对应段即回退。
+
+---
+
 ## 2026-07-01 · 进化(专题升级为深度报道 + 严肃媒体房规)
 - **改了什么**:
   1. 新增 `prompts/dossier.method.md`(深度报道方法论 + 严肃媒体写法 + 反煽动硬约束 + 自评口径);重写 `ln-dossier` skill:深挖一手/多元信源 → 写成结构化文章(核心判断 / 脉络 / 数据 / 各方 / 分析 / 反方 / 看点 / 来源)。

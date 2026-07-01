@@ -44,6 +44,11 @@ description: Loop News 汇总分析步骤。加载前一天语料 + 相关历史
       "original_quote": "原文原话...", "url": "https://...",
       "insight_zh": "为什么值得注意", "id": "..." }
   ],
+  "podcasts": [
+    { "id": "", "show": "Dwarkesh Podcast", "host": "Dwarkesh Patel", "guest": "Dario Amodei",
+      "guest_title": "Anthropic CEO", "title_zh": "", "date": "2026-02", "url": "https://...",
+      "summary_zh": "", "key_points_zh": ["", "", ""], "quote": "代表原话(英文保真)", "lang": "en", "topics": ["AGI"] }
+  ],
   "connections": [
     { "lens": "时间线追踪", "title_zh": "...", "narrative_zh": "把几条连成一件事的叙事",
       "evidence": ["id1","id2"] }

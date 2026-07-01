@@ -7,6 +7,10 @@ consensus:
   # 用 WebSearch 跑这些 query 抓最新共识热点(跨语种)
   web_search_queries:
     - "AI 人工智能 重大新闻 今天"
+    - "AI agent 智能体 企业应用 最新"                 # ↑AI 权重(反馈:AI 内容太少)
+    - "AI 安全 前沿模型 frontier model safety 最新"    # 关注聚合:AI 安全 / 前沿模型
+    - "机器人 具身智能 embodied AI 创业公司 融资 最新"  # 请求:机器人/具身智能创业融资
+    - "AI harness eval agent 企业落地 最新"            # 请求:AI 在企业中的应用(harness engineering)
     - "global economy breaking news today"
     - "technology breaking news today"
     - "美联储 / 央行 政策 最新"
@@ -18,6 +22,9 @@ consensus:
     - { name: "BBC World",      url: "https://feeds.bbci.co.uk/news/world/rss.xml" }
     - { name: "NYT World",      url: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml" }
     - { name: "财新网",         url: "https://www.caixin.com/rss/all.xml" }
+    - { name: "TechCrunch AI",  url: "https://techcrunch.com/category/artificial-intelligence/feed/" }   # ↑AI 权重
+    - { name: "VentureBeat AI", url: "https://venturebeat.com/category/ai/feed/" }
+    - { name: "MIT Tech Review", url: "https://www.technologyreview.com/feed/" }
 
 # ── 深度类:不在大众视野、但能引发圈层共鸣的原声 ──
 deep:
@@ -40,3 +47,13 @@ deep:
   x:
     via: mcp        # 待 X MCP 接入
     fallback: websearch
+
+# ── 中文高质量平台(反馈新增:即刻)──
+cn_platforms:
+  # 即刻(Jike):高质量 AI / 科技圈讨论。内容多需登录;可行做法:WebSearch 限定 okjike.com 找公开热帖 / 圈子方向,
+  #   顺到一手链接再 WebFetch;抓不到全文时仅作信号(话题热度),不臆造内容。
+  - { name: "即刻 Jike", method: "websearch site:okjike.com", topics: ["AI", "大模型", "AI 创业", "AI 产品"] }
+
+# ── 🎙️ 播客(知名主持 × 知名 AI 人物的整集深访)──
+# 节目清单与重点嘉宾见 config/podcasts.yaml;ln-collect 找最新集 → 当日「🎙️ 播客」区。
+podcasts_config: config/podcasts.yaml

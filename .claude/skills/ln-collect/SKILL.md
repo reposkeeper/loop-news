@@ -35,6 +35,17 @@ description: Loop News 采集步骤。从四类来源(主流媒体/RSS、X名人
 - 对 `config/domains.yaml` 里 `status=tracking/dossier` 的领域,按其 `playbook`(angles/kol/adjacent)跑**领域专属搜索**(原声 / 历年数据 / 周边产业),为 `ln-dossier` 攒料。
 - **用户请求的新闻类型**:`curl "<feedback.api_url>/requests"`(任意用户用网页「➕ 想看的话题」提交的 `text`/`tags`)→ **并入本轮搜索议程、优先采相关内容**;首次响应后在 `state/metrics.json` 记已响应,避免每轮重复全量采(持续追踪转入关注/领域机制)。
 
+## 🎙️ 播客采集(知名主持 × 知名 AI 人物)
+读 `config/podcasts.yaml`(节目 RSS/主页 + `key_guests`)。**每轮找这些节目的最新几集**(优先 RSS,WebFetch 抓 feed;或 WebSearch「<节目/主持> <AI 人物> podcast」),命中 `key_guests`(一线 AI 决策者/研究者)的**整集深访**即收入:
+- 抓:`show` / `host` / `guest`(+ `guest_title`)/ 标题 / `url` / 发布日;写**中文** `summary_zh` + **3–5 个** `key_points_zh` + 一句**代表原话** `quote`(英文保真,不臆造/不断章)。
+- 归一化为 corpus 条目(`category: "podcast"` + 上述字段);`ln-synthesize` 择近期/重磅者放进当日 `analysis.podcasts`(网页「🎙️ 播客」区)。
+- 只收整集深访,不收剪辑/资讯口播;拿不到内容不硬凑。
+
+## 更多 AI(反馈:AI 内容太少)+ 即刻
+- **AI 权重上调**:`config/sources.yaml` 已加 AI 专项 query/RSS 与请求话题(企业 AI/harness、机器人具身融资、AI 安全/前沿模型);本轮**优先保证 AI 类产出量**。
+- **`config/people.yaml` 的 `priority: low`**(ylecun/DrJimFan/paulkrugman/RayDalio):**少抓或跳过**(metrics 显示多口水/格言/无实质),配额让给高信号 AI 声音与新嘉宾。
+- **即刻 Jike**(`sources.cn_platforms`):WebSearch 限定 `okjike.com` 找公开 AI 热帖/圈子方向,顺到一手链接再 WebFetch;抓不到只作信号,不臆造。
+
 ## 语料库条目 schema(`data/corpus/<date>.json` 数组元素)
 ```json
 {

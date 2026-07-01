@@ -399,10 +399,36 @@ def render_conclusions(concls, cfg, date, id_to_date):
     return "\n".join(out)
 
 
+def render_podcasts(items, cfg, date):
+    """🎙️ 播客 · AI 人物访谈:知名播客主 × 知名 AI 人物的整集深访。"""
+    out = []
+    for it in items or []:
+        show, host = e(it.get("show", "")), e(it.get("host", ""))
+        guest = e(it.get("guest", ""))
+        gt = it.get("guest_title", "")
+        guest_line = f"<b>{guest}</b>" + (f" · {e(gt)}" if gt else "")
+        url = it.get("url", "")
+        link = f'<a class="src-link" href="{e(url)}" target="_blank" rel="noopener">收听 ↗</a>' if url else ""
+        pq = f'<blockquote class="pq" lang="{e(it.get("lang","en"))}">{e(it.get("quote"))}</blockquote>' if it.get("quote") else ""
+        pts = "".join(f"<li>{hl(p)}</li>" for p in it.get("key_points_zh", []))
+        pts_html = f'<ul class="pod-points">{pts}</ul>' if pts else ""
+        out.append(f"""<article class="card podcast" id="item-{e(it.get('id',''))}">
+  <div class="pod-head"><span class="pod-show">🎙 {show}</span><span class="pod-meta">{host} × {guest_line}</span><span class="pod-date">{e(it.get('date',''))}</span>{link}</div>
+  <h3>{e(it.get('title_zh'))}</h3>
+  {pq}
+  <p>{hl(it.get('summary_zh'))}</p>
+  {pts_html}
+  <div class="row-actions">{fb_row(cfg, date, it.get('id',''), it.get('title_zh',''))}{act_row(cfg, date, it)}</div>
+</article>""")
+    return "\n".join(out)
+
+
 def render_day(a, cfg, id_to_date):
     date = a.get("date", "")
     note = a.get("methodology_note_zh", "")
     note_html = f'<div class="section"><h2 class="section-title">方法论说明</h2><p>{e(note)}</p></div>' if note else ""
+    pods = render_podcasts(a.get("podcasts", []), cfg, date)
+    pod_section = f'<section class="section"><h2 class="section-title">🎙️ 播客 · AI 人物访谈</h2>{pods}</section>' if pods else ""
     inner = f"""<div class="day-meta">
   <h1 class="day-date">{e(date)}</h1>
   <p class="day-summary">{e(a.get('summary_zh'))}</p>
@@ -413,6 +439,7 @@ def render_day(a, cfg, id_to_date):
 <section class="section"><h2 class="section-title">深度原声</h2>
 {render_deep(a.get('deep', []), cfg, date)}
 </section>
+{pod_section}
 <section class="section"><h2 class="section-title">关联</h2>
 {render_connections(a.get('connections', []), id_to_date)}
 </section>

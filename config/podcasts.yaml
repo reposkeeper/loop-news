@@ -1,0 +1,48 @@
+# 播客源 —— 知名播客主 × 知名 AI 人物的整集深度访谈。
+# ln-collect 每轮找这些节目的最新集,命中「重点 AI 嘉宾」的整集访谈 → 更新进当日新闻的「🎙️ 播客」区。
+# 由 ln-evolve 维护(加节目、调嘉宾名单)。抓:节目名 / 主持 / 嘉宾 / 标题 / 链接 / 发布日 + 中文摘要 + 3–5 要点 + 代表原话(保真)。
+
+shows:
+  - name: "Dwarkesh Podcast"
+    host: "Dwarkesh Patel"
+    rss: "https://api.substack.com/feed/podcast/69345.rss"
+    url: "https://www.dwarkesh.com/podcast"
+  - name: "Lex Fridman Podcast"
+    host: "Lex Fridman"
+    rss: "https://lexfridman.com/feed/podcast/"
+    url: "https://lexfridman.com/podcast"
+  - name: "No Priors"
+    host: "Sarah Guo / Elad Gil"
+    url: "https://www.no-priors.com/"
+  - name: "Latent Space"
+    host: "swyx / Alessio"
+    rss: "https://api.substack.com/feed/podcast/1084089.rss"
+    url: "https://www.latent.space/podcast"
+  - name: "The Cognitive Revolution"
+    host: "Nathan Labenz"
+    url: "https://www.cognitiverevolution.ai/"
+  - name: "a16z Podcast"
+    host: "a16z"
+    url: "https://a16z.com/podcasts/"
+  - name: "Hard Fork"
+    host: "Kevin Roose / Casey Newton (NYT)"
+    url: "https://www.nytimes.com/column/hard-fork"
+
+# 命中即优先(知名 AI 人物做嘉宾的整集访谈最有价值)
+key_guests:
+  - Sam Altman
+  - Dario Amodei
+  - Demis Hassabis
+  - Ilya Sutskever
+  - Andrej Karpathy
+  - Jensen Huang
+  - Sundar Pichai
+  - Mira Murati
+  - Yann LeCun
+  - Jared Kaplan
+  - Noam Shazeer
+  - Mark Zuckerberg
+  - Elon Musk
+
+# 规则:优先整集深访(非剪辑/资讯口播);嘉宾须是一线 AI 决策者/研究者;
+#   摘要与要点用中文,代表原话保留英文原文(不臆造、不断章取义,见 dossier.method.md 房规)。

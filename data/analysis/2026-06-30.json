@@ -466,5 +466,78 @@
       ]
     }
   ],
-  "methodology_note_zh": "本期重点用了共识缺口、矛盾检测、时间线追踪、二阶效应、跨域模式匹配与沉默信号六个透镜。首次接入 X 名人原声(Altman/Karpathy/El-Erian)直采,使『主流共识 vs 圈内第一手』的对照更硬;监管与能力两条线均做了跨日期(6/04→6/30)关联。"
+  "methodology_note_zh": "本期重点用了共识缺口、矛盾检测、时间线追踪、二阶效应、跨域模式匹配与沉默信号六个透镜。首次接入 X 名人原声(Altman/Karpathy/El-Erian)直采,使『主流共识 vs 圈内第一手』的对照更硬;监管与能力两条线均做了跨日期(6/04→6/30)关联。",
+  "podcasts": [
+    {
+      "id": "pod-dwarkesh-amodei-2602",
+      "show": "Dwarkesh Podcast",
+      "host": "Dwarkesh Patel",
+      "guest": "Dario Amodei",
+      "guest_title": "Anthropic CEO",
+      "date": "2026-02",
+      "url": "https://www.dwarkesh.com/podcast",
+      "lang": "en",
+      "title_zh": "Dario Amodei 谈 RL 时代的规模化:AGI 只差几年,却「接近指数的末端」",
+      "quote": "a country of geniuses in a data center",
+      "summary_zh": "Anthropic CEO 谈当前 RL 范式下规模化假说是否还成立、为何任务专用 RL 可能催生泛化,以及 AI 如何渗透进整个经济;他认为距 AGI 只差几年——即「数据中心里的一个天才之国」,但也提示我们==已接近这条指数曲线的末端==。",
+      "key_points_zh": [
+        "规模化假说在 RL 范式下是否延续",
+        "任务专用 RL → 泛化的机制",
+        "AI 如何扩散进整个经济与就业",
+        "AGI 时点:几年内(「数据中心里的天才之国」)",
+        "警示:或已接近指数增长的末端"
+      ],
+      "topics": [
+        "AGI",
+        "规模化",
+        "RL",
+        "就业"
+      ]
+    },
+    {
+      "id": "pod-lex-hassabis-475",
+      "show": "Lex Fridman Podcast",
+      "host": "Lex Fridman",
+      "guest": "Demis Hassabis",
+      "guest_title": "Google DeepMind CEO",
+      "date": "2026",
+      "url": "https://lexfridman.com/demis-hassabis-2/",
+      "lang": "",
+      "quote": "",
+      "title_zh": "Demis Hassabis(#475,Gemini 3 之后):AI 的未来、模拟现实与科学",
+      "summary_zh": "在 Gemini 3 发布后录制。谈 AI 的未来走向、用 AI 模拟现实与物理、AI 用于科学发现,以及当前白热化的 AI 人才争夺(如 Meta 高价挖人)。",
+      "key_points_zh": [
+        "Gemini 3 之后的路线判断",
+        "用 AI 模拟现实 / 物理",
+        "AI 驱动的科学发现",
+        "AI 人才争夺战(Meta 高价挖人)"
+      ],
+      "topics": [
+        "DeepMind",
+        "AI for science",
+        "人才"
+      ]
+    },
+    {
+      "id": "pod-lex-pichai-2601",
+      "show": "Lex Fridman Podcast",
+      "host": "Lex Fridman",
+      "guest": "Sundar Pichai",
+      "guest_title": "Google / Alphabet CEO",
+      "date": "2026-01",
+      "url": "https://lexfridman.com/podcast",
+      "lang": "",
+      "quote": "",
+      "title_zh": "Sundar Pichai(2026-01):Gemini 之后 Google 的 AI 战略",
+      "summary_zh": "2026 年 1 月整集访谈,谈 Google 在 Gemini 之后的 AI 战略与组织节奏。首周 YouTube 播放约 800 万,侧面反映一线 AI 决策者长访谈的关注度。",
+      "key_points_zh": [
+        "Gemini 之后 Google 的 AI 战略",
+        "一线决策者长访谈的高关注度(首周约 800 万播放)"
+      ],
+      "topics": [
+        "Google",
+        "战略"
+      ]
+    }
+  ]
 }

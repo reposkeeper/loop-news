@@ -7,16 +7,22 @@ ai:
   - { name: "Sam Altman",       x: "sama" }
   - { name: "Andrej Karpathy",  x: "karpathy" }
   - { name: "Demis Hassabis",   x: "demishassabis" }
-  - { name: "Yann LeCun",       x: "ylecun" }
+  - { name: "Dario Amodei",     x: "" }        # 无活跃账号,走 Anthropic 博客/采访/播客
   - { name: "Andrew Ng",        x: "AndrewYNg" }
   - { name: "François Chollet",  x: "fchollet" }
-  - { name: "Jim Fan",          x: "DrJimFan" }
-  - { name: "Dario Amodei",     x: "" }   # 无活跃账号,走 Anthropic 博客/采访
+  # ↑AI 权重(反馈:AI 内容太少)—— 新增高信号声音:
+  - { name: "Mira Murati",      x: "miramurati" }
+  - { name: "Noam Shazeer",     x: "" }         # 走文章/采访/播客
+  - { name: "Jared Kaplan",     x: "" }         # Anthropic;走采访/播客
+  - { name: "Aidan Gomez",      x: "aidangomez" }    # Cohere
+  - { name: "Arvind Narayanan", x: "random_walker" } # 务实/批评视角,制造分歧信号(北极星:共识缺口)
+  - { name: "Yann LeCun",       x: "ylecun", priority: low }   # metrics 2026-06-30:多政治口水,降权
+  - { name: "Jim Fan",          x: "DrJimFan", priority: low } # metrics 2026-06-30:近期无实质
 
 economics:
-  - { name: "Paul Krugman",     x: "paulkrugman" }
   - { name: "Mohamed El-Erian", x: "elerianm" }
   - { name: "Noah Smith",       x: "Noahpinion" }
   - { name: "Jason Furman",     x: "jasonfurman" }
   - { name: "Cathie Wood",      x: "CathieDWood" }
-  - { name: "Ray Dalio",        x: "RayDalio" }
+  - { name: "Paul Krugman",     x: "paulkrugman", priority: low }  # metrics:近 7 日无实质
+  - { name: "Ray Dalio",        x: "RayDalio", priority: low }     # metrics:仅格言
