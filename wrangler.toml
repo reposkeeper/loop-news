@@ -28,3 +28,31 @@ database_id = "PLACEHOLDER_D1_ID"  # TODO: 填真实 id(provision 时 npx wrangl
 
 [vars]
 SITE_ORIGIN = "https://news.xdzq.org"
+
+# ── 灰度环境(canary)──────────────────────────────────────────────
+# gray = 与生产【同一后端】(KV/D1/R2、cookie、用户、会话全共享)之上的【另一套代码部署】,
+# 挂 gray-feedback.xdzq.org,跑候选代码。被灰度的客户用真实账号/数据体验新代码。
+# wrangler 环境【不继承】顶层绑定,故此处重声明——id 与顶层【相同】即共享同一资源。
+# 部署:npx wrangler deploy --env gray   ·   密钥:npx wrangler secret put RESEND_API_KEY --env gray
+# 注:不设 LN_DEV(发真验证码);不设 COOKIE_NS(与生产同一 lns cookie=共享登录)。
+[env.gray]
+name = "loop-news-feedback-gray"
+routes = [
+  { pattern = "gray-feedback.xdzq.org", custom_domain = true }
+]
+
+[[env.gray.r2_buckets]]
+binding = "BUCKET"
+bucket_name = "loop-news"
+
+[[env.gray.kv_namespaces]]
+binding = "SESSIONS"
+id = "PLACEHOLDER_KV_ID"  # 与顶层【相同】真实 id(共享生产会话)
+
+[[env.gray.d1_databases]]
+binding = "DB"
+database_name = "loop-news-db"
+database_id = "PLACEHOLDER_D1_ID"  # 与顶层【相同】真实 id(共享生产数据)
+
+[env.gray.vars]
+SITE_ORIGIN = "https://gray-news.xdzq.org"

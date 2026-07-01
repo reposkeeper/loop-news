@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
   role TEXT NOT NULL DEFAULT 'viewer',    -- owner|viewer
   status TEXT NOT NULL DEFAULT 'invited',  -- invited|active|disabled
   theme TEXT NOT NULL DEFAULT 'auto',       -- auto|light|dark
+  channel TEXT NOT NULL DEFAULT 'stable',    -- stable|gray:按客户灰度路由的铺垫(现未消费;未来路由层据此把客户送 gray)
   created_at TEXT NOT NULL,
   last_seen_at TEXT
 );

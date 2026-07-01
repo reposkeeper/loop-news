@@ -23,3 +23,6 @@ data/feedback.jsonl
 node_modules/
 .wrangler/
 .mf/
+
+# 灰度构建产物(deploy-gray.sh 输出到这里,不入库)
+build/

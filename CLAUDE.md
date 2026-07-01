@@ -44,3 +44,4 @@
 ## 编译/发布是确定性脚本
 `web/compile.py` 与 `scripts/publish.sh` 不含 LLM 逻辑,直接运行即可。
 托管二选一:GitHub Pages(`scripts/publish.sh`)或 **Cloudflare**(`scripts/deploy-cloudflare.sh`:Pages 站点 + Worker 反馈 API + R2 桶,见 [CLOUDFLARE.md](CLOUDFLARE.md))。
+**灰度(canary)**:`scripts/deploy-gray.sh` 部署一套挂 `gray-*.xdzq.org`、与生产**共享登录/数据**(同 KV/D1/R2/cookie)、跑候选代码的平行栈,用于上线前在真实账号上验证 + 未来按客户灰度(见 [GRAY.md](GRAY.md))。

@@ -13,3 +13,15 @@ routes = [
 [[r2_buckets]]
 binding = "BUCKET"
 bucket_name = "loop-news"
+
+# 灰度分享出图 worker:挂 gray-share.xdzq.org,复用同一 R2 桶。
+# 部署:npx wrangler deploy -c wrangler.share.toml --env gray
+[env.gray]
+name = "loop-news-share-gray"
+routes = [
+  { pattern = "gray-share.xdzq.org", custom_domain = true }
+]
+
+[[env.gray.r2_buckets]]
+binding = "BUCKET"
+bucket_name = "loop-news"
