@@ -27,12 +27,7 @@ const DEFAULT_TAGS = {
   down: ["噪音/水文", "太旧了", "来源不可靠", "与我无关", "重复了"],
   adopt: ["已发微博/X", "已写进 newsletter", "已做视频选题", "已转发社群", "已存为选题库"],
 };
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
-// 带凭证的 CORS(仅用于 OPTIONS 预检;auth 路由自身响应头见 lib/auth.js 的 J())。
+// 带凭证的 CORS(OPTIONS 预检 + 所有 JSON 响应共用;auth 路由自身响应头见 lib/auth.js 的 J())。
 function corsHeaders(env) {
   return {
     "Access-Control-Allow-Origin": (env && env.SITE_ORIGIN) || "https://news.xdzq.org",
@@ -43,15 +38,14 @@ function corsHeaders(env) {
 }
 const ALLOWED = new Set(["up", "down", "adopt"]);
 
-function json(obj, status = 200) {
-  return new Response(JSON.stringify(obj), {
-    status,
-    headers: { "Content-Type": "application/json; charset=utf-8", ...CORS },
-  });
-}
-
 export default {
   async fetch(req, env) {
+    function json(obj, status = 200) {
+      return new Response(JSON.stringify(obj), {
+        status,
+        headers: { "Content-Type": "application/json; charset=utf-8", ...corsHeaders(env) },
+      });
+    }
     const url = new URL(req.url);
     const p = url.pathname;
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(env) });
