@@ -15,6 +15,7 @@
  *   GET  /requests   全量请求(owner-only)
  *   GET  /reads      我的已读状态
  *   POST /read       标记已读
+ *   POST /activity   记一条浏览活动(view/open/share_link/share_image,D1 activity,按当前会话 user_id)
  * 部署见 CLOUDFLARE.md。
  */
 import { handleRequestCode, handleVerify, handleLogout, handleMe, identify } from "./lib/auth.js";
@@ -60,6 +61,17 @@ export default {
     if (p === "/auth/verify" && req.method === "POST") return handleVerify(req, env);
     if (p === "/auth/logout" && req.method === "POST") return handleLogout(req, env);
     if (p === "/me" && req.method === "GET") return handleMe(req, env);
+
+    if (p === "/activity" && req.method === "POST") {
+      const who = await identify(req, env);
+      if (!who) return json({ error: "unauthorized" }, 401);
+      let d;
+      try { d = await req.json(); } catch (_) { return json({ error: "bad json" }, 400); }
+      const allowedActions = new Set(["view", "open", "share_link", "share_image"]);
+      if (!allowedActions.has(d.action)) return json({ error: "bad action" }, 400);
+      await logActivity(env, who.user_id, d.action, d.target || "", d.meta || "");
+      return json({ ok: true });
+    }
 
     if (p === "/tags" && req.method === "GET") {
       let tags = DEFAULT_TAGS;

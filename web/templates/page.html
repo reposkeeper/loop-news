@@ -102,6 +102,7 @@
     var found=false;
     document.querySelectorAll(".view").forEach(function(v){var on=(v.id===targetId);v.classList.toggle("active",on);if(on)found=true;});
     if(!found){var first=document.querySelector(".view.day");if(first){first.classList.add("active");targetId=first.id;}}
+    reportView(item?(targetId+"__"+item):targetId);
     document.querySelectorAll(".nav-link").forEach(function(a){a.classList.toggle("current",a.getAttribute("data-target")===targetId);});
     if(item){var el=document.getElementById("item-"+item);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("flash");setTimeout(function(){el.classList.remove("flash");},1600);}}
     else{window.scrollTo(0,0);}
@@ -119,6 +120,12 @@
 
   /* ---- 反馈弹窗 ---- */
   var FB=window.__FB||{enabled:false}, API=(FB.api||"").replace(/\/$/,""), SHARE_API=FB.share||"";
+  /* ---- 浏览活动 beacon(view 去抖,凭 session cookie,静默失败不阻塞页面)---- */
+  var _lastView="";
+  function reportView(t){
+    if(!API||!t||t===_lastView)return; _lastView=t;
+    fetch(API+"/activity",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"view",target:t})}).catch(function(){});
+  }
   var ACT={up:"👍 赞",down:"👎 踩",adopt:"✓ 采用",ask:"✍ 反馈",request:"➕ 想看的话题"}, tags=FB.tags||{}, picked, current=null;
   function ck(n){var m=document.cookie.match(new RegExp("(?:^|;\\s*)"+n+"=([^;]+)"));return m?decodeURIComponent(m[1]):"";}
   if(ck("lnrole")==="owner") document.body.classList.add("is-owner");
@@ -225,6 +232,7 @@
   var shareModal=document.getElementById("shareModal"),sharePreview=document.getElementById("sharePreview"),
       shareMsg=document.getElementById("shareMsg"),_shareBlob=null,_shareName="loop-news";
   function shareCard(btn){
+    if(API){fetch(API+"/activity",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"share_image",target:btn.dataset.item||""})}).catch(function(){});}
     if(!SHARE_API){return;}
     var card=btn.closest(".card"),cs=card&&card.querySelector(".chart-svg"),chart="";
     if(cs){try{chart="data:image/svg+xml;base64,"+btoa(unescape(encodeURIComponent(cs.outerHTML)));}catch(_){}}
