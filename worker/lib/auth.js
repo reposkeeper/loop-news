@@ -33,9 +33,10 @@ export async function handleRequestCode(req, env) {
   const salt = env.OTP_SALT || "ln";
   await kvPutJSON(env, `otp:${email}`, { hash: await hashCode(code, email, salt), attempts: 0 }, OTP_TTL);
   const r = await sendCode(env, email, code);
-  const body = { ok: true };
-  if (r.dev) body.dev_code = code; // 仅 LN_DEV
-  return J(env, body);
+  if (r.dev) return J(env, { ok: true, dev_code: code }); // 仅 LN_DEV
+  // 发送失败:客户端只给通用提示(不泄露原因),详细已由 sendCode 记入服务端日志。
+  if (!r.ok) return J(env, { error: "验证码发送失败,请稍后重试" }, 502);
+  return J(env, { ok: true });
 }
 
 export async function handleVerify(req, env) {
