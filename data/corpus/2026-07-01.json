@@ -446,5 +446,149 @@
     "insight_zh": "",
     "id": "c59de545442b78e6",
     "collected_at": "2026-07-01T12:40:00+08:00"
+  },
+  {
+    "category": "consensus",
+    "source_type": "media",
+    "source": "Anthropic",
+    "lang": "en",
+    "url": "https://www.anthropic.com/news/disrupting-AI-espionage",
+    "title_zh": "Anthropic:已挫败首例『AI 编排』的网络间谍行动",
+    "summary_zh": "Anthropic 披露挫败了据其所述首例由 AI 智能体大规模编排的网络间谍活动,攻击者借 Claude 自动化侦察与渗透;公司据此呼吁把前沿模型的滥用防护纳入国安议程。与今日 Claude Code『中国指纹』、阿里蒸馏指控同属美中 AI 安全暗线。",
+    "original_quote": "",
+    "entities": [
+      "Anthropic"
+    ],
+    "topics": [
+      "AI 安全",
+      "网络间谍",
+      "前沿模型"
+    ],
+    "importance": 0.78,
+    "consensus_count": 1,
+    "insight_zh": "",
+    "id": "4ac906a950f5dfbc",
+    "collected_at": "2026-07-01T13:05:00+08:00"
+  },
+  {
+    "category": "consensus",
+    "source_type": "media",
+    "source": "CNBC",
+    "lang": "en",
+    "url": "https://www.cnbc.com/2026/06/01/microsoft-and-google-take-on-anthropic-and-openai-in-ai-coding-models.html",
+    "title_zh": "AI 编程模型四强混战:微软、谷歌迎战 Anthropic 与 OpenAI",
+    "summary_zh": "AI 编程成主战场:Anthropic 靠 Claude Code 领跑并升级 Claude Opus,OpenAI 以 Codex(周活破 500 万)紧追,微软在 Build、谷歌在开发者大会密集出招。编程 Agent 正成为大模型商业化最快的落点。",
+    "original_quote": "",
+    "entities": [
+      "Microsoft",
+      "Google",
+      "Anthropic",
+      "OpenAI"
+    ],
+    "topics": [
+      "AI 编程",
+      "智能体",
+      "大模型"
+    ],
+    "importance": 0.72,
+    "consensus_count": 1,
+    "insight_zh": "",
+    "id": "ac8acb987a35420a",
+    "collected_at": "2026-07-01T13:05:00+08:00"
+  },
+  {
+    "category": "consensus",
+    "source_type": "media",
+    "source": "CNBC",
+    "lang": "en",
+    "url": "https://www.cnbc.com/2026/04/08/meta-debuts-first-major-ai-model-since-14-billion-deal-to-bring-in-alexandr-wang.html",
+    "title_zh": "Meta 推 Muse 系列首个模型 Muse Spark,追赶 Google 与 OpenAI",
+    "summary_zh": "Meta 超级智能实验室(Meta Superintelligence Labs)发布 Muse 系列首个模型 Muse Spark(原代号 Avocado),这是其斥资引入 Alexandr Wang 后的首批重大成果,意在追赶 Google 与 OpenAI 的前沿。",
+    "original_quote": "",
+    "entities": [
+      "Meta",
+      "Muse"
+    ],
+    "topics": [
+      "大模型",
+      "前沿模型"
+    ],
+    "importance": 0.68,
+    "consensus_count": 1,
+    "insight_zh": "",
+    "id": "9a4e87cb64a8377c",
+    "collected_at": "2026-07-01T13:05:00+08:00"
+  },
+  {
+    "category": "consensus",
+    "source_type": "media",
+    "source": "Fortune",
+    "lang": "en",
+    "url": "https://fortune.com/2026/04/24/deepseek-v4-ai-model-price-performance-china-open-source/",
+    "title_zh": "DeepSeek V4 以极低价 + 深绑华为芯片发布,搅动开源格局",
+    "summary_zh": "DeepSeek 发布 V4,以极低定价(0.14–0.30 美元/百万 tokens)和与华为芯片的紧密整合面世,延续中国开源阵营的价格战;虽在综合基准上落后于 GLM-5、Kimi,但以性价比继续压低行业价格锚。",
+    "original_quote": "",
+    "entities": [
+      "DeepSeek",
+      "Huawei"
+    ],
+    "topics": [
+      "开源模型",
+      "中国 AI",
+      "算力"
+    ],
+    "importance": 0.7,
+    "consensus_count": 1,
+    "insight_zh": "",
+    "id": "182bccd3005c9aee",
+    "collected_at": "2026-07-01T13:05:00+08:00"
+  },
+  {
+    "category": "consensus",
+    "source_type": "media",
+    "source": "Bloomberg / CNBC",
+    "lang": "en",
+    "url": "https://www.cnbc.com/2026/06/03/humanoid-robots-trillion-dollar-ai-market.html",
+    "title_zh": "人形机器人被捧为下一个万亿级 AI 投资风口",
+    "summary_zh": "投行与产业界把人形机器人视为继大模型之后的下一个万亿级 AI 市场:亚马逊、奔驰、宝马、GXO、约翰迪尔已在部署,资本与订单同时涌入;但量产、成本与安全仍是能否兑现的关键变量。",
+    "original_quote": "",
+    "entities": [
+      "人形机器人",
+      "Amazon"
+    ],
+    "topics": [
+      "机器人",
+      "具身智能",
+      "投资"
+    ],
+    "importance": 0.7,
+    "consensus_count": 1,
+    "insight_zh": "",
+    "id": "325db0c102673aa0",
+    "collected_at": "2026-07-01T13:05:00+08:00"
+  },
+  {
+    "category": "deep",
+    "source_type": "substack",
+    "source": "Stanford HAI",
+    "lang": "en",
+    "url": "https://hai.stanford.edu/policy/beyond-deepseek-chinas-diverse-open-weight-ai-ecosystem-and-its-policy-implications",
+    "title_zh": "斯坦福 HAI:别只盯 DeepSeek——中国开源已是多玩家生态,政策含义深远",
+    "summary_zh": "斯坦福 HAI 政策分析指出,把中国开源等同于 DeepSeek 是误读:Qwen、GLM、Kimi、MiniMax 等构成多玩家、绑定国产芯片的开源生态,单点出口管制难以奏效,美对华 AI 政策需重估。",
+    "original_quote": "the export controls alone cannot hold the line in the US-China AI race",
+    "entities": [
+      "Stanford HAI",
+      "中国 AI"
+    ],
+    "topics": [
+      "开源模型",
+      "AI 政策",
+      "美中 AI"
+    ],
+    "importance": 0.72,
+    "consensus_count": 0,
+    "insight_zh": "把'中国 AI = DeepSeek'当靶子,是最常见也最误导的简化——真正的变量是整个国产开源+芯片生态。",
+    "id": "f6c9fab363aa377d",
+    "collected_at": "2026-07-01T13:05:00+08:00"
   }
 ]

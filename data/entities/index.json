@@ -24,6 +24,11 @@
       "date": "2026-07-01",
       "id": "cd4de9e9e756f73b",
       "title_zh": "OpenAI 也在筹备秘密 IPO,估值约 7300 亿;收购 Ona 强化 Codex,周活破 500 万"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "ac8acb987a35420a",
+      "title_zh": "AI 编程模型四强混战:微软、谷歌迎战 Anthropic 与 OpenAI"
     }
   ],
   "Anthropic": [
@@ -66,6 +71,16 @@
       "date": "2026-07-01",
       "id": "5d7bdeabf2cfbdec",
       "title_zh": "Anthropic 向参议院指控:中国实验室用约 1600 万次 Claude 查询蒸馏抄模型,阿里涉最大规模"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "4ac906a950f5dfbc",
+      "title_zh": "Anthropic:已挫败首例『AI 编排』的网络间谍行动"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "ac8acb987a35420a",
+      "title_zh": "AI 编程模型四强混战:微软、谷歌迎战 Anthropic 与 OpenAI"
     }
   ],
   "美联储": [
@@ -286,6 +301,11 @@
       "date": "2026-06-30",
       "id": "co-skorea-1t-chips",
       "title_zh": "韩国计划投入约 1 万亿美元扩建存储芯片产能并发展人形机器人"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "325db0c102673aa0",
+      "title_zh": "人形机器人被捧为下一个万亿级 AI 投资风口"
     }
   ],
   "美国银行": [
@@ -370,6 +390,11 @@
       "date": "2026-07-01",
       "id": "20e8634f9461793b",
       "title_zh": "Satya Nadella 首登 No Priors × Latent Space 交叉特辑(Build 2026)"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "ac8acb987a35420a",
+      "title_zh": "AI 编程模型四强混战:微软、谷歌迎战 Anthropic 与 OpenAI"
     }
   ],
   "Claude Code": [
@@ -408,6 +433,11 @@
       "date": "2026-07-01",
       "id": "42b9a85757a2eb8e",
       "title_zh": "苹果确认:Apple Intelligence 部分能力将跑在 Nvidia GPU 上、寄居谷歌云"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "ac8acb987a35420a",
+      "title_zh": "AI 编程模型四强混战:微软、谷歌迎战 Anthropic 与 OpenAI"
     }
   ],
   "Gemini": [
@@ -453,6 +483,11 @@
       "date": "2026-07-01",
       "id": "ba01da4854cdf785",
       "title_zh": "中国开源 AI 成气候:阿里 Qwen 破 3 亿月活、Hugging Face 下载超 10 亿,GLM-5 登顶、DeepSeek V4 最便宜"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "182bccd3005c9aee",
+      "title_zh": "DeepSeek V4 以极低价 + 深绑华为芯片发布,搅动开源格局"
     }
   ],
   "Zhipu": [
@@ -467,6 +502,11 @@
       "date": "2026-07-01",
       "id": "ba01da4854cdf785",
       "title_zh": "中国开源 AI 成气候:阿里 Qwen 破 3 亿月活、Hugging Face 下载超 10 亿,GLM-5 登顶、DeepSeek V4 最便宜"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "182bccd3005c9aee",
+      "title_zh": "DeepSeek V4 以极低价 + 深绑华为芯片发布,搅动开源格局"
     }
   ],
   "EU": [
@@ -502,6 +542,41 @@
       "date": "2026-07-01",
       "id": "c59de545442b78e6",
       "title_zh": "Nvidia 发债 250 亿美元、转向『算力租赁』;台积电路线图 34 年来首次分叉、Intel 18A-P 进风险试产"
+    }
+  ],
+  "Meta": [
+    {
+      "date": "2026-07-01",
+      "id": "9a4e87cb64a8377c",
+      "title_zh": "Meta 推 Muse 系列首个模型 Muse Spark,追赶 Google 与 OpenAI"
+    }
+  ],
+  "Muse": [
+    {
+      "date": "2026-07-01",
+      "id": "9a4e87cb64a8377c",
+      "title_zh": "Meta 推 Muse 系列首个模型 Muse Spark,追赶 Google 与 OpenAI"
+    }
+  ],
+  "Amazon": [
+    {
+      "date": "2026-07-01",
+      "id": "325db0c102673aa0",
+      "title_zh": "人形机器人被捧为下一个万亿级 AI 投资风口"
+    }
+  ],
+  "Stanford HAI": [
+    {
+      "date": "2026-07-01",
+      "id": "f6c9fab363aa377d",
+      "title_zh": "斯坦福 HAI:别只盯 DeepSeek——中国开源已是多玩家生态,政策含义深远"
+    }
+  ],
+  "中国 AI": [
+    {
+      "date": "2026-07-01",
+      "id": "f6c9fab363aa377d",
+      "title_zh": "斯坦福 HAI:别只盯 DeepSeek——中国开源已是多玩家生态,政策含义深远"
     }
   ]
 }

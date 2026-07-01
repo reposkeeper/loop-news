@@ -589,6 +589,61 @@ def render_feedback(ledger):
             f'{cycles_html}</section></section>')
 
 
+DASH_LABELS = [("correlation", "关联度"), ("volume", "数量"), ("analysis", "分析整合"),
+               ("breadth", "自进化广度"), ("source_quality", "信息源固化")]
+
+
+def render_dashboard(scores, srcq):
+    """📊 自进化仪表盘(owner 专属):5 个系统分数 + 趋势 + 成分 + 来源分档。"""
+    hist = (scores or {}).get("history", [])
+    if not hist:
+        return ('<section class="view" id="view-dashboard"><h1 class="day-date">📊 自进化仪表盘</h1>'
+                '<p class="empty">暂无评分数据(跑 scripts/score.py)。</p></section>')
+    cur = hist[-1]
+    s = cur.get("scores", {})
+    d = cur.get("delta_vs_prev", {})
+
+    def dtxt(k):
+        dv = d.get(k)
+        if dv is None:
+            return '<span class="dash-d">·</span>'
+        cls = "sc-up" if dv > 0 else "sc-down" if dv < 0 else ""
+        arr = "▲" if dv > 0 else "▼" if dv < 0 else "·"
+        return f'<span class="dash-d {cls}">{arr} {"+" if dv >= 0 else ""}{dv}</span>'
+
+    cards = "".join(
+        f'<div class="dash-card"><div class="dash-lab">{lab}</div>'
+        f'<div class="dash-numrow"><span class="dash-num">{s.get(k, 0)}</span>{dtxt(k)}</div>'
+        f'<div class="dash-bar"><span style="width:{min(100, s.get(k, 0))}%"></span></div></div>'
+        for k, lab in DASH_LABELS)
+    comp = s.get("composite", 0)
+    cd = d.get("composite")
+    comp_d = "" if cd is None else f' <span class="{"sc-up" if cd >= 0 else "sc-down"}">{"+" if cd >= 0 else ""}{cd}</span>'
+    trend = "".join(f'<span class="tr-dot" style="--h:{min(100, h["scores"].get("composite", 0))}%" title="{e(h["date"])}:{h["scores"].get("composite", 0)}"></span>' for h in hist[-8:])
+    comps = cur.get("components", {})
+    detail = " · ".join(f'{k} <b>{v}</b>' for k, v in comps.items())
+    # 来源分档
+    tiers = {"core": 0, "trial": 0, "watch": 0, "demoted": 0}
+    for v in (srcq or {}).get("sources", {}).values():
+        tiers[v.get("tier", "trial")] = tiers.get(v.get("tier", "trial"), 0) + 1
+    tierrow = (f'<span class="tier tier-core">固化 {tiers.get("core",0)}</span>'
+               f'<span class="tier tier-trial">试用 {tiers.get("trial",0)}</span>'
+               f'<span class="tier tier-watch">观察 {tiers.get("watch",0)}</span>'
+               f'<span class="tier tier-demoted">降级 {tiers.get("demoted",0)}</span>'
+               f'<span class="dash-lc">上次评选 {e((srcq or {}).get("last_curation",""))}</span>')
+    return (
+        '<section class="view" id="view-dashboard">'
+        '<h1 class="day-date">📊 自进化仪表盘</h1>'
+        f'<p class="intro">系统每轮自评的 5 个分数,目标是都向上涨。数据 {e(cur.get("date",""))} · 由 <code>scripts/score.py</code> 确定性计算。</p>'
+        f'<div class="dash-composite"><div class="dash-comp-num">{comp}<span class="dash-comp-d">{comp_d}</span></div>'
+        f'<div class="dash-comp-lab">综合分</div><div class="dash-trend">{trend}</div></div>'
+        f'<div class="dashboard">{cards}</div>'
+        f'<section class="section"><h2 class="section-title">信息源固化 · 分档</h2><div class="tier-row">{tierrow}</div></section>'
+        f'<section class="section"><h2 class="section-title">本轮成分</h2><p class="dash-detail">{detail}</p></section>'
+        '<section class="section"><h2 class="section-title">评分制度</h2><p class="dash-detail">数量分对欠采<b>陡峭惩罚</b>(采太少即暴跌);信息源固化分<b>强迫每轮评选来源</b>(不评选则随天数衰减)。制度见 <code>prompts/scoring.md</code>。</p></section>'
+        '</section>')
+
+
 def _render_graded(items, id_to_date):
     out = []
     for c in items or []:
@@ -746,6 +801,9 @@ def main():
     favorites_view = render_favorites()
     ledger = load_json(os.path.join(ROOT, "data", "feedback_ledger.json"), {}) or {}
     feedback_view = render_feedback(ledger)
+    scores = load_json(os.path.join(ROOT, "state", "scores.json"), {}) or {}
+    srcq = load_json(os.path.join(ROOT, "data", "source_quality.json"), {}) or {}
+    dashboard_view = render_dashboard(scores, srcq)
     dossiers = load_dossiers()
     dossier_nav = render_dossier_nav(dossiers)
     dossier_views = "\n".join(render_dossier(d, id_to_date) for d in dossiers)
@@ -766,6 +824,7 @@ def main():
         "{{EVOLUTION_VIEW}}": evolution_view,
         "{{FAVORITES_VIEW}}": favorites_view,
         "{{FEEDBACK_VIEW}}": feedback_view,
+        "{{DASHBOARD_VIEW}}": dashboard_view,
         "{{LEDGER_JSON}}": json.dumps(ledger, ensure_ascii=False),
         "{{DOSSIER_NAV}}": dossier_nav,
         "{{DOSSIER_VIEWS}}": dossier_views,

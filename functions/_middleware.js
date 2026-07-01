@@ -50,6 +50,7 @@ export async function onRequest(context) {
   const setCookies = [
     `lnt=${encodeURIComponent(tok)}; Path=/; Max-Age=31536000; SameSite=Lax`,
     `lnrole=${role}; Path=/; Max-Age=31536000; SameSite=Lax`,
+    `lnname=${encodeURIComponent(rec.name || "")}; Path=/; Max-Age=31536000; SameSite=Lax`,  // 页面按名字问候
   ];
   // 带 ?token= 进来 → 写 cookie 并重定向到干净 URL
   if (url.searchParams.get("token")) {

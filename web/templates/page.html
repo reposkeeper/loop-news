@@ -34,15 +34,18 @@
         <div class="nav-section">系统</div>
         <a class="nav-link" data-target="view-evolution" href="#evolution">⚙️ 自进化日志</a>
         <a class="nav-link" data-target="view-feedback" href="#feedback">📋 反馈台账</a>
+        <a class="nav-link nav-owner" data-target="view-dashboard" href="#dashboard">📊 自进化仪表盘</a>
         {{SYS_OWNER_NAV}}
       </div>
     </nav>
   </aside>
   <main class="content">
+    <p class="greeting" id="greeting"></p>
     {{THREADS_VIEW}}
     {{EVOLUTION_VIEW}}
     {{FAVORITES_VIEW}}
     {{FEEDBACK_VIEW}}
+    {{DASHBOARD_VIEW}}
     {{DOSSIER_VIEWS}}
     {{DAY_VIEWS}}
   </main>
@@ -104,6 +107,7 @@
     else if(date==="evolution") targetId="view-evolution";
     else if(date==="favorites") targetId="view-favorites";
     else if(date==="feedback") targetId="view-feedback";
+    else if(date==="dashboard") targetId="view-dashboard";
     else if(date.indexOf("dossier-")===0) targetId=date;
     else targetId="day-"+date;
     var found=false;
@@ -129,6 +133,10 @@
   var ACT={up:"👍 赞",down:"👎 踩",adopt:"✓ 采用",ask:"✍ 反馈",request:"➕ 想看的话题"}, tags=FB.tags||{}, picked, current=null;
   function ck(n){var m=document.cookie.match(new RegExp("(?:^|;\\s*)"+n+"=([^;]+)"));return m?decodeURIComponent(m[1]):"";}
   if(ck("lnrole")==="owner") document.body.classList.add("is-owner");
+  (function(){var el=document.getElementById("greeting");if(!el)return;var n=ck("lnname");if(!n){el.style.display="none";return;}
+    var h=new Date().getHours(),g=h<6?"夜深了":h<12?"早上好":h<18?"下午好":h<23?"晚上好":"夜深了";
+    el.textContent=g+","+n+" ·";var sp=document.createElement("span");sp.className="greeting-sub";
+    sp.textContent=" 今天也帮你把噪音滤成信号。";el.appendChild(sp);})();
   var modal=document.getElementById("fbModal"),elAct=document.getElementById("fbAct"),elItem=document.getElementById("fbItem"),
       elChips=document.getElementById("fbChips"),elText=document.getElementById("fbText"),elMsg=document.getElementById("fbMsg"),elSubmit=document.getElementById("fbSubmit");
   /* 启动时从服务器拉一次最新常用词(失败则用编译进来的) */

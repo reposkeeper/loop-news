@@ -1,0 +1,100 @@
+{
+  "targets": {
+    "volume_target": 20,
+    "volume_floor": 12,
+    "connections": 6,
+    "cross_date": 3,
+    "non_obvious": 4,
+    "conclusions": 8,
+    "edge": 3,
+    "falsifiable": 2,
+    "sources": 30,
+    "topics": 20,
+    "domains": 3,
+    "feedback_recent": 6,
+    "angles": 8,
+    "core_sources": 12
+  },
+  "history": [
+    {
+      "date": "2026-06-30",
+      "computed_at": "2026-07-01T12:49:46+08:00",
+      "scores": {
+        "correlation": 76.7,
+        "volume": 88.8,
+        "analysis": 93.3,
+        "breadth": 78.7,
+        "source_quality": 76.6,
+        "composite": 82.8
+      },
+      "components": {
+        "collected": 18,
+        "connections": 6,
+        "cross_date": 1,
+        "non_obvious": 6,
+        "conclusions": 8,
+        "edge": 2,
+        "falsifiable": 2,
+        "evidence_ratio": 1.0,
+        "graded": 1.0,
+        "sources": 36,
+        "topics": 38,
+        "domains": 1,
+        "feedback_recent": 3,
+        "angles": 14,
+        "core_sources": 14,
+        "core_quality": 0.84,
+        "from_core_share": 0.22,
+        "curation_freshness": 1.0
+      },
+      "delta_vs_prev": {
+        "correlation": -11.6,
+        "volume": -11.2,
+        "analysis": 9.8,
+        "breadth": 0.0,
+        "source_quality": 76.6,
+        "composite": -4.8
+      }
+    },
+    {
+      "date": "2026-07-01",
+      "computed_at": "2026-07-01T12:49:46+08:00",
+      "scores": {
+        "correlation": 88.3,
+        "volume": 100.0,
+        "analysis": 83.5,
+        "breadth": 78.7,
+        "source_quality": 88.5,
+        "composite": 87.8
+      },
+      "components": {
+        "collected": 20,
+        "connections": 6,
+        "cross_date": 2,
+        "non_obvious": 5,
+        "conclusions": 7,
+        "edge": 1,
+        "falsifiable": 2,
+        "evidence_ratio": 1.0,
+        "graded": 1.0,
+        "sources": 36,
+        "topics": 35,
+        "domains": 1,
+        "feedback_recent": 3,
+        "angles": 14,
+        "core_sources": 14,
+        "core_quality": 0.84,
+        "from_core_share": 0.7,
+        "curation_freshness": 1.0
+      },
+      "delta_vs_prev": {
+        "correlation": 11.6,
+        "volume": 11.2,
+        "analysis": -9.8,
+        "breadth": 0.0,
+        "source_quality": 11.9,
+        "composite": 5.0
+      }
+    }
+  ]
+}
