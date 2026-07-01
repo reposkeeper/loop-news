@@ -21,6 +21,7 @@
 import { handleRequestCode, handleVerify, handleLogout, handleMe, handleSetTheme, identify } from "./lib/auth.js";
 import { logActivity } from "./lib/activity.js";
 import { nowISO } from "./lib/store.js";
+import { handleAdmin } from "./lib/admin.js";
 
 const DEFAULT_TAGS = {
   up: ["有洞察", "信息密度高", "正是我想看的", "角度新颖", "证据扎实"],
@@ -56,6 +57,7 @@ export default {
     if (p === "/auth/logout" && req.method === "POST") return handleLogout(req, env);
     if (p === "/me" && req.method === "GET") return handleMe(req, env);
     if (p === "/me/theme" && req.method === "POST") return handleSetTheme(req, env);
+    if (p.startsWith("/admin/")) return handleAdmin(req, env, url, json);
 
     if (p === "/activity" && req.method === "POST") {
       const who = await identify(req, env);
