@@ -1,7 +1,7 @@
 /**
  * Cloudflare Pages 中间件:session 登录门(替代旧的 token 分享门)。
- * - 读 cookie `lns`(登录 token)→ 查 KV SESSIONS 里的 `session:<token>` → 命中且解析成功才放行;否则返回两步登录页(邮箱→验证码),内容不下发。
- * - 会话由 API Worker(见 worker/feedback-worker.js 的 /auth/* + /me)在验证码校验通过后写入 KV。
+ * - 读 cookie `lns`(登录 token)→ 转发给 API Worker 的 `/me` 校验(Worker 持有会话 KV;Pages 无需绑 KV)→ 200 才放行;否则返回两步登录页(邮箱→验证码),内容不下发。
+ * - 会话由 API Worker(见 worker/feedback-worker.js 的 /auth/* + /me)在验证码校验通过后签发;/me 每次都重查用户状态,禁用/删除即刻在门口挡下。
  * - 放行时追加非 httpOnly 的 cookie `lnrole=<role>`,供前端 JS 判断是否显示 owner 专属功能(如全局反馈按钮);
  *   `lnname` 由 API 的 /auth/verify 已经写过,会话失效时前端自会隐藏问候,这里不重复处理。
  */
@@ -28,17 +28,22 @@ document.getElementById('login').onclick=function(){msg.textContent='';post('/au
 
 export async function onRequest(context) {
   const { request, env, next } = context;
+  const url = new URL(request.url);
+  // API 基址:优先 env.SITE_API;否则按域名推导(host 含 gray → 灰度 API,否则生产)。
+  const api = env.SITE_API || (url.hostname.includes("gray") ? "https://gray-feedback.xdzq.org" : "https://feedback.xdzq.org");
+  // 会话校验:把 lns cookie 转发给 API Worker 的 /me(Worker 持有会话 KV)。
+  // 这样 Pages【无需绑定 KV】,且每次进站都经 /me 重查用户状态(禁用/删除即刻挡下),更安全;
+  // /me 不通(worker 故障)→ sess=null → 返回登录页(fail-closed,不会 500)。
   const tok = (request.headers.get("Cookie") || "").match(/(?:^|;\s*)lns=([^;]+)/);
   let sess = null;
   if (tok) {
-    const raw = await env.SESSIONS.get("session:" + decodeURIComponent(tok[1]));
-    if (raw) { try { sess = JSON.parse(raw); } catch {} }
+    try {
+      const r = await fetch(api + "/me", { headers: { Cookie: "lns=" + tok[1] } });
+      if (r.ok) sess = await r.json();
+    } catch {}
   }
   if (!sess) {
-    // 登录页的 API 基址:优先 env.SITE_API;否则按域名自动推导(gray-* → 灰度 API,否则生产)。
-    const host = new URL(request.url).hostname;
-    const api = JSON.stringify(env.SITE_API || (host.includes("gray") ? "https://gray-feedback.xdzq.org" : "https://feedback.xdzq.org"));
-    return new Response(LOGIN_HTML.replace("%API%", api), {
+    return new Response(LOGIN_HTML.replace("%API%", JSON.stringify(api)), {
       status: 401, headers: { "Content-Type": "text/html; charset=utf-8" },
     });
   }
