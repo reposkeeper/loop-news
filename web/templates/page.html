@@ -90,6 +90,21 @@
   </div>
 </div>
 
+<!-- owner 用户管理面板(表 + 邀请 + 启禁 + 活动抽屉) -->
+<div class="fb-modal" id="adminModal" hidden>
+  <div class="fb-card admin-box" role="dialog" aria-modal="true" aria-label="用户管理">
+    <div class="fb-head"><span class="fb-act">👥 用户管理</span><button class="fb-x" id="adminClose" aria-label="关闭">✕</button></div>
+    <div class="admin-invite">
+      <input id="invEmail" class="fb-text" placeholder="邀请邮箱…" autocomplete="off">
+      <input id="invName" class="fb-text" placeholder="名字(可选)">
+      <button class="fb-submit" id="invBtn">邀请</button>
+      <span class="fb-msg" id="invMsg"></span>
+    </div>
+    <div id="userList" class="user-list"><p class="empty">加载中…</p></div>
+    <div id="actDrawer" class="act-drawer" hidden></div>
+  </div>
+</div>
+
 <script>window.__FB={enabled:{{FEEDBACK_ENABLED}},api:"{{FEEDBACK_API}}",share:"{{SHARE_API}}",tags:{{FEEDBACK_TAGS}}};window.__LEDGER={{LEDGER_JSON}};</script>
 <script>
 (function(){
@@ -242,6 +257,36 @@
     var id=targetId.replace("dossier-",""), up=a.getAttribute("data-updated")||"";
     fetch(API+"/read",{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify({id:id,ts:up})}).catch(function(){});
   }
+
+  /* ---- owner 用户管理面板(表 + 邀请 + 启禁 + 活动抽屉,仅 owner 可见)---- */
+  var API_ADMIN = API; // 复用 API base
+  function openAdmin(){var m=document.getElementById("adminModal");if(!m)return;m.hidden=false;loadUsers();}
+  document.getElementById("adminBtn") && document.getElementById("adminBtn").addEventListener("click",openAdmin);
+  document.getElementById("adminClose") && document.getElementById("adminClose").addEventListener("click",function(){document.getElementById("adminModal").hidden=true;});
+  function loadUsers(){var el=document.getElementById("userList");
+    fetch(API_ADMIN+"/admin/users",{credentials:"include"}).then(function(r){return r.json();}).then(function(d){
+      if(!d.items){el.innerHTML='<p class="empty">无权限或无数据</p>';return;}
+      el.innerHTML=d.items.map(function(u){
+        return '<div class="user-row" data-id="'+u.id+'"><span class="u-email">'+esc(u.email)+'</span>'
+          +'<span class="u-meta">'+esc(u.role)+' · '+esc(u.status)+' · 最近 '+esc((u.last_seen_at||"—").slice(0,10))+' · 反馈'+u.feedback_count+'</span>'
+          +'<span class="u-ops"><button class="u-act" data-act="toggle" data-id="'+u.id+'" data-status="'+esc(u.status)+'">'+(u.status==="disabled"?"启用":"禁用")+'</button>'
+          +'<button class="u-act" data-act="activity" data-id="'+u.id+'">活动</button></span></div>';
+      }).join("");}).catch(function(){el.innerHTML='<p class="empty">加载失败:反馈服务未连接?</p>';});}
+  document.getElementById("userList") && document.getElementById("userList").addEventListener("click",function(e){
+    var b=e.target.closest(".u-act");if(!b)return;var id=b.getAttribute("data-id");
+    if(b.getAttribute("data-act")==="toggle"){var ns=b.getAttribute("data-status")==="disabled"?"active":"disabled";
+      fetch(API_ADMIN+"/admin/users/"+id,{method:"PATCH",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({status:ns})}).then(function(){loadUsers();});}
+    else if(b.getAttribute("data-act")==="activity"){
+      fetch(API_ADMIN+"/admin/activity?user_id="+id,{credentials:"include"}).then(function(r){return r.json();}).then(function(d){
+        var dr=document.getElementById("actDrawer");dr.hidden=false;
+        dr.innerHTML='<h4>活动(user '+id+')</h4>'+(d.items||[]).map(function(a){return '<div class="act-row"><span class="a-ts">'+esc(a.ts.slice(0,16))+'</span> <span class="a-act">'+esc(a.action)+'</span> <span class="a-t">'+esc(a.target||"")+'</span></div>';}).join("");});}
+  });
+  document.getElementById("invBtn") && document.getElementById("invBtn").addEventListener("click",function(){
+    var em=document.getElementById("invEmail").value.trim(),nm=document.getElementById("invName").value.trim(),msg=document.getElementById("invMsg");
+    fetch(API_ADMIN+"/admin/users",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:em,name:nm})})
+      .then(function(r){return r.json().then(function(j){return{s:r.status,j:j};});}).then(function(x){
+        msg.textContent=x.s===200?"已邀请":(x.j.error||"失败");if(x.s===200){document.getElementById("invEmail").value="";loadUsers();}});
+  });
 
   /* ---- 统一点击处理 ---- */
   /* ---- 分享出图:生成后预览,可下载/复制 ---- */

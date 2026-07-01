@@ -81,6 +81,24 @@ body.is-owner .nav-owner{display:block;}
 .share-btn-dl:hover{background:var(--accent);border-color:var(--accent);}
 .share-btn-cp:hover{border-color:var(--accent);color:var(--accent);}
 .share-actions .fb-msg{margin-left:auto;}
+/* owner 用户管理面板(表 + 邀请 + 启禁 + 活动抽屉) */
+.admin-box{max-width:560px;}
+.admin-invite{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.admin-invite .fb-text{width:auto;flex:1 1 160px;min-width:0;}
+.user-list{max-height:360px;overflow-y:auto;}
+.user-row{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-bottom:1px solid var(--line-soft);}
+.user-row:last-child{border-bottom:none;}
+.user-row .u-email{font-weight:600;color:var(--ink);}
+.user-row .u-meta{font-size:12px;color:var(--muted);}
+.user-row .u-ops{display:flex;gap:6px;margin-top:3px;}
+.u-act{font-size:12px;border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:2px 8px;cursor:pointer;color:var(--ink);}
+.u-act:hover{border-color:var(--accent);color:var(--accent);}
+.act-drawer{margin-top:10px;border-top:1px solid var(--line);padding-top:8px;max-height:220px;overflow:auto;}
+.act-drawer h4{margin:0 0 6px;font-size:13px;color:var(--ink);}
+.act-drawer .act-row{font-size:12px;color:var(--ink-soft);padding:2px 0;}
+.act-drawer .a-ts{color:var(--muted);margin-right:6px;}
+.act-drawer .a-act{font-weight:600;color:var(--ink);margin-right:6px;}
+.act-drawer .a-t{color:var(--ink-soft);}
 /* 反馈台账 */
 .ledger-cycle{padding:14px 0;border-bottom:1px solid var(--line-soft);}
 .ledger-cycle:last-child{border-bottom:none;}

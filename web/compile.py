@@ -836,7 +836,7 @@ def main():
         # 灰度构建:LN_FEEDBACK_API / LN_SHARE_API 环境变量可覆盖 API 基址(指向 gray-*);未设则用 config(生产)。
         "{{FEEDBACK_API}}": e(os.environ.get("LN_FEEDBACK_API") or cfg_get(cfg, "feedback.api_url", "")),
         "{{SHARE_API}}": e(os.environ.get("LN_SHARE_API") or cfg_get(cfg, "feedback.share_api_url", "")),
-        "{{SYS_OWNER_NAV}}": "",  # token 分享已退役;owner 用户管理留到 SP1-UI
+        "{{SYS_OWNER_NAV}}": '<button class="nav-link nav-owner" id="adminBtn">👥 用户管理</button>',
         "{{FEEDBACK_TAGS}}": json.dumps(fb_tags, ensure_ascii=False),
     }
     for k, v in repl.items():
