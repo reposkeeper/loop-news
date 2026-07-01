@@ -50,6 +50,9 @@ a:hover{text-decoration:none}
 .brand-mark{width:26px;height:26px;border-radius:6px;flex:none;}
 .subtitle{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
 .menu-toggle{display:none;font-size:17px;background:none;border:1px solid var(--line);border-radius:3px;padding:3px 11px;cursor:pointer;color:var(--ink);align-self:center;}
+.theme-switch{display:inline-flex;gap:2px;margin-left:auto;}
+.theme-switch .th{background:none;border:1px solid var(--line);color:var(--muted);border-radius:4px;padding:2px 7px;cursor:pointer;font-size:13px;line-height:1;}
+.theme-switch .th[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);}
 
 /* ── 布局 ── */
 .layout{max-width:var(--maxw);margin:0 auto;display:flex;gap:40px;padding:0 24px;align-items:flex-start;}

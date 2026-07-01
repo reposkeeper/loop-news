@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Loop News · 事实新闻汇总</title>
 <meta name="description" content="今天的主线是美中 AI 从『卡脖子』转向『绕道与自建』:美团开源 LongCat-2.0,首次用国产芯片(华为 5 万卡集群)跑完 1.6 万亿参数模型的全程预训练,而台湾同日在查英伟达 H100/H200 走私入华。与此同时,价值与成本双双涌向推理 / harness 层——Copilot 计量计费让智能体账单暴涨 10–50 倍,巨头数十亿美元抢购推理软件;美国则把最强模型(GPT-5.6)关进政府闸门,又在 6/30 解除对 Claude 的出口管制。管制与门控越收紧,替代与自建就越被逼出来。">
+<script>(function(){try{var t=localStorage.getItem("ln-theme")||"auto";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap">
@@ -19,6 +20,11 @@
     <button class="menu-toggle" aria-label="切换菜单">☰</button>
     <a class="brand" href="#"><img class="brand-mark" src="favicon.svg" alt="" width="26" height="26">Loop News · 事实新闻汇总</a>
     <span class="subtitle">多语种采集 · 中文呈现 · 深层关联 · 每日进化</span>
+    <div class="theme-switch" role="group" aria-label="主题">
+      <button class="th" data-theme-set="auto" title="跟随系统">🌗</button>
+      <button class="th" data-theme-set="light" title="浅色">☀</button>
+      <button class="th" data-theme-set="dark" title="深色">🌙</button>
+    </div>
   </div>
 </header>
 
@@ -732,6 +738,14 @@
 <script>window.__FB={enabled:true,api:"https://feedback.xdzq.org",share:"https://share.xdzq.org/share",tags:{"_note": "弹窗里的常用反馈词(chips)。由 ln-evolve 根据实际使用频次自动增删进化;手改也可。", "up": ["有洞察", "信息密度高", "正是我想看的", "角度新颖", "证据扎实"], "down": ["噪音/水文", "太旧了", "来源不可靠", "与我无关", "重复了"], "adopt": ["已发微博/X", "已写进 newsletter", "已做视频选题", "已转发社群", "已存为选题库"], "ask": ["多挖跨域关联", "洞察不够/太显然", "信息密度不够", "加某个来源", "换个分析角度", "某主题想深挖"], "request": ["某公司/产品动态", "某地区/市场", "某技术方向", "某行业赛道", "某人物/KOL"]}};window.__LEDGER={"note": "由 ln-evolve 维护:每轮进化把「消化了哪些反馈」记在这里;网页「📋 反馈台账」据此显示每条反馈在哪一轮被覆盖。", "cycles": [{"date": "2026-07-01", "changelog": "进化(奖励『多采集』+ 今日补采到 14 条)", "covered": [{"type": "directive", "text": "收集的新闻内容太少了。远低于正常新闻需求", "how": "loop.yaml 设 collect.volume_target=20;GOALS 加采集广度分层;提示词高召回;ln-evolve 欠采优先;今日补采 6→14 条"}, {"type": "directive", "text": "要在 loop 中,给多收集到新闻更多的奖励", "how": "把『采集量』设为显式奖励维度(loop.yaml + GOALS + ln-evolve metrics 追 collected/target)"}, {"type": "directive", "text": "Claude Code 中国指纹这条爆炸新闻没收集到", "how": "已补采并作深度头条(Anthropic 已确认将回滚);sources 加『AI 安全争议』检索角度"}]}, {"date": "2026-07-01", "changelog": "进化(消化反馈:更多 AI + 即刻 + 🎙️ 播客环节)", "covered": [{"type": "request", "text": "AI在企业中的应用。尤其是 harness engerning", "how": "sources.yaml 加「AI harness eval agent 企业落地」query,提升 AI 企业应用产出"}, {"type": "request", "text": "机器人/具身智能创业公司融资", "how": "sources.yaml 加「机器人 具身智能 embodied AI 创业公司 融资」query"}, {"type": "follow", "text": "AI 安全 / 前沿模型", "how": "sources.yaml 加「AI 安全 前沿模型 frontier model safety」query"}, {"type": "metrics", "text": "低产名人(ylecun/DrJimFan/paulkrugman/RayDalio)", "how": "people.yaml 标 priority:low 降权,配额让给高信号 AI 声音"}, {"type": "directive", "text": "AI 内容太少 + 加即刻 + 新增播客", "how": "AI 源/RSS 扩充、sources.cn_platforms 加即刻、新增 config/podcasts.yaml + 🎙️ 播客区"}]}]};</script>
 <script>
 (function(){
+  /* ---- 主题:三档切换(auto/light/dark)+ 持久化 + 账号同步 ---- */
+  function applyTheme(t){document.documentElement.setAttribute("data-theme",t);
+    document.querySelectorAll(".theme-switch .th").forEach(function(b){b.setAttribute("aria-pressed", b.getAttribute("data-theme-set")===t ? "true":"false");});}
+  function setTheme(t){try{localStorage.setItem("ln-theme",t);}catch(e){} applyTheme(t);
+    if(API) fetch(API+"/me/theme",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({theme:t})}).catch(function(){});}
+  function initTheme(){var t="auto";try{t=localStorage.getItem("ln-theme")||"auto";}catch(e){} applyTheme(t);
+    document.querySelectorAll(".theme-switch .th").forEach(function(b){b.addEventListener("click",function(){setTheme(b.getAttribute("data-theme-set"));});});}
+
   /* ---- hash 路由:同页切换日期/线索 ---- */
   function showTarget(){
     var raw=(location.hash||"").replace(/^#/, ""), date=raw, item="";
@@ -761,6 +775,7 @@
     if(!location.hash){var first=document.querySelector(".nav-link.day");if(first){location.hash=first.getAttribute("href");}}
     showTarget();
     loadReads();
+    initTheme();
   });
 
   /* ---- 反馈弹窗 ---- */
@@ -779,6 +794,7 @@
     if(u.role==="owner") document.body.classList.add("is-owner");
     var el=document.getElementById("greeting");
     if(el&&u.name){el.textContent="你好，"+u.name;el.style.display="";}
+    try{ if(!localStorage.getItem("ln-theme") && u.theme){ localStorage.setItem("ln-theme",u.theme); applyTheme(u.theme);} }catch(e){}
   }).catch(function(){});}
   var modal=document.getElementById("fbModal"),elAct=document.getElementById("fbAct"),elItem=document.getElementById("fbItem"),
       elChips=document.getElementById("fbChips"),elText=document.getElementById("fbText"),elMsg=document.getElementById("fbMsg"),elSubmit=document.getElementById("fbSubmit");

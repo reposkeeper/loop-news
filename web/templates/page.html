@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{SITE_TITLE}}</title>
 <meta name="description" content="{{PAGE_DESC}}">
+<script>(function(){try{var t=localStorage.getItem("ln-theme")||"auto";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap">
@@ -19,6 +20,11 @@
     <button class="menu-toggle" aria-label="切换菜单">☰</button>
     <a class="brand" href="#"><img class="brand-mark" src="favicon.svg" alt="" width="26" height="26">{{SITE_TITLE}}</a>
     <span class="subtitle">{{SITE_SUBTITLE}}</span>
+    <div class="theme-switch" role="group" aria-label="主题">
+      <button class="th" data-theme-set="auto" title="跟随系统">🌗</button>
+      <button class="th" data-theme-set="light" title="浅色">☀</button>
+      <button class="th" data-theme-set="dark" title="深色">🌙</button>
+    </div>
   </div>
 </header>
 
@@ -87,6 +93,14 @@
 <script>window.__FB={enabled:{{FEEDBACK_ENABLED}},api:"{{FEEDBACK_API}}",share:"{{SHARE_API}}",tags:{{FEEDBACK_TAGS}}};window.__LEDGER={{LEDGER_JSON}};</script>
 <script>
 (function(){
+  /* ---- 主题:三档切换(auto/light/dark)+ 持久化 + 账号同步 ---- */
+  function applyTheme(t){document.documentElement.setAttribute("data-theme",t);
+    document.querySelectorAll(".theme-switch .th").forEach(function(b){b.setAttribute("aria-pressed", b.getAttribute("data-theme-set")===t ? "true":"false");});}
+  function setTheme(t){try{localStorage.setItem("ln-theme",t);}catch(e){} applyTheme(t);
+    if(API) fetch(API+"/me/theme",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({theme:t})}).catch(function(){});}
+  function initTheme(){var t="auto";try{t=localStorage.getItem("ln-theme")||"auto";}catch(e){} applyTheme(t);
+    document.querySelectorAll(".theme-switch .th").forEach(function(b){b.addEventListener("click",function(){setTheme(b.getAttribute("data-theme-set"));});});}
+
   /* ---- hash 路由:同页切换日期/线索 ---- */
   function showTarget(){
     var raw=(location.hash||"").replace(/^#/, ""), date=raw, item="";
@@ -116,6 +130,7 @@
     if(!location.hash){var first=document.querySelector(".nav-link.day");if(first){location.hash=first.getAttribute("href");}}
     showTarget();
     loadReads();
+    initTheme();
   });
 
   /* ---- 反馈弹窗 ---- */
@@ -134,6 +149,7 @@
     if(u.role==="owner") document.body.classList.add("is-owner");
     var el=document.getElementById("greeting");
     if(el&&u.name){el.textContent="你好，"+u.name;el.style.display="";}
+    try{ if(!localStorage.getItem("ln-theme") && u.theme){ localStorage.setItem("ln-theme",u.theme); applyTheme(u.theme);} }catch(e){}
   }).catch(function(){});}
   var modal=document.getElementById("fbModal"),elAct=document.getElementById("fbAct"),elItem=document.getElementById("fbItem"),
       elChips=document.getElementById("fbChips"),elText=document.getElementById("fbText"),elMsg=document.getElementById("fbMsg"),elSubmit=document.getElementById("fbSubmit");
