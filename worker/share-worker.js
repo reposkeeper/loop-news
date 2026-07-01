@@ -21,7 +21,7 @@ const C = { ink: "#1A1A1F", soft: "#3A3A42", muted: "#86868C", line: "#E5E4DF", 
 const BRAND = "Playfair Display", MONO = "JetBrains Mono";
 // 分辨率:卡片按 1200 逻辑设计,输出放大到 OUT_W(更清晰)。scalePx 把 HTML 里所有 px 统一乘 K
 // (line-height/flex 等无单位值不受影响;图表 base64 用 __CHART_URI__ 占位、缩放后再填,避免被误改)。
-const OUT_W = 2000, K = OUT_W / 1200;
+const OUT_W = 1600, K = OUT_W / 1200;   // 输出宽度;2000 时图表卡偶发超 Worker CPU 限额(503),1600 稳定且清晰
 function scalePx(html) {
   return html.replace(/(-?\d*\.?\d+)px/g, (_, n) => +(parseFloat(n) * K).toFixed(2) + "px");
 }
@@ -33,6 +33,20 @@ function esc(s) {
 function clip(s, n) {
   s = String(s == null ? "" : s);
   return s.length > n ? s.slice(0, n - 1) + "…" : s;
+}
+
+// 设计感边框:内嵌四条线,但四角各自向外伸出、交叉不闭合(overshoot / 裁切标记风)。
+// 用绝对定位的 4 条线(border 会自动闭合,故不用);F=内收、OV=角部伸出量、T=线宽。
+function frameWrap(inner) {
+  const F = 26, OV = 15, T = 1.5, cl = C.frame, o = F - OV;
+  const ln = (s) => `<div style="display:flex;position:absolute;background:${cl};${s}"></div>`;
+  const frame =
+    ln(`top:${F}px;left:${o}px;right:${o}px;height:${T}px;`) +
+    ln(`bottom:${F}px;left:${o}px;right:${o}px;height:${T}px;`) +
+    ln(`left:${F}px;top:${o}px;bottom:${o}px;width:${T}px;`) +
+    ln(`right:${F}px;top:${o}px;bottom:${o}px;width:${T}px;`);
+  return `<div style="position:relative;display:flex;width:1200px;background:${C.paper};">${frame}`
+    + `<div style="display:flex;flex:1;flex-direction:column;font-family:'${SERIF}';padding:62px 66px 64px;">${inner}</div></div>`;
 }
 
 // 卡片(2× 物理像素;所有数值即最终 px)
@@ -57,9 +71,7 @@ function cardHtml(d) {
     ? `<div style="display:flex;margin-top:38px;padding:30px;background:#FFFFFF;border:2px solid ${C.line};border-radius:20px;"><img src="__CHART_URI__" width="${iw}" height="${ih}" style="width:${iw}px;height:${ih}px;"/></div>`
     : "";
 
-  return `
-  <div style="display:flex;width:1200px;background:${C.paper};padding:22px;">
-   <div style="display:flex;flex:1;flex-direction:column;font-family:'${SERIF}';border:1.5px solid ${C.frame};padding:44px 48px 46px;">
+  return frameWrap(`
     <div style="display:flex;align-items:flex-end;padding-bottom:30px;border-bottom:3px solid ${C.ink};">
       <div style="display:flex;font-family:'${BRAND}';font-weight:700;font-size:66px;color:${C.ink};">Loop News</div>
       <div style="display:flex;margin-left:auto;font-family:'${SERIF}';font-weight:400;font-size:33px;color:${C.date};">${esc(d.date || "")}</div>
@@ -70,9 +82,7 @@ function cardHtml(d) {
       <div style="display:flex;font-family:'${SERIF}';font-size:${titleSize}px;line-height:1.42;font-weight:700;color:${C.ink};margin-bottom:30px;letter-spacing:-0.5px;">${esc(title)}</div>
       <div style="display:flex;font-size:37px;line-height:1.78;color:${C.soft};">${esc(summary)}</div>
       ${chartBlock}
-    </div>
-   </div>
-  </div>`;
+    </div>`);
 }
 
 // 自进化日志 → 现代产品发布卡(版本徽章 + 标题 + 要点,刻意区别于新闻卡)
@@ -84,9 +94,7 @@ function releaseHtml(d) {
     + `<div style="display:flex;width:14px;height:14px;border-radius:4px;background:${C.accent};margin:14px 22px 0 0;flex:0 0 14px;"></div>`  // 绘制标记,不依赖字体字形
     + `<div style="display:flex;flex:1;font-size:35px;line-height:1.46;color:${C.soft};">${esc(clip(t, 60))}</div>`
     + `</div>`).join("");
-  return `
-  <div style="display:flex;width:1200px;background:${C.paper};padding:22px;">
-   <div style="display:flex;flex:1;flex-direction:column;font-family:'${SERIF}';border:1.5px solid ${C.frame};padding:44px 48px 46px;">
+  return frameWrap(`
     <div style="display:flex;align-items:flex-end;padding-bottom:30px;border-bottom:3px solid ${C.ink};">
       <div style="display:flex;font-family:'${BRAND}';font-weight:700;font-size:66px;color:${C.ink};">Loop News</div>
       <div style="display:flex;margin-left:auto;font-size:32px;color:${C.date};">更新日志</div>
@@ -98,9 +106,7 @@ function releaseHtml(d) {
       </div>
       <div style="display:flex;font-size:54px;line-height:1.4;font-weight:700;color:${C.ink};margin-bottom:42px;letter-spacing:-0.5px;">${esc(clip(d.title, 42))}</div>
       ${bullets}
-    </div>
-   </div>
-  </div>`;
+    </div>`);
 }
 
 // 老版 Safari UA → Google Fonts 对子集请求返回 TTF(satori 不吃 woff2)
