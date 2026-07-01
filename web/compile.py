@@ -431,7 +431,7 @@ def render_day(a, cfg, id_to_date):
     pod_section = f'<section class="section"><h2 class="section-title">🎙️ 播客 · AI 人物访谈</h2>{pods}</section>' if pods else ""
     inner = f"""<div class="day-meta">
   <h1 class="day-date">{e(date)}</h1>
-  <p class="day-summary">{e(a.get('summary_zh'))}</p>
+  <p class="day-summary">{hl(a.get('summary_zh'))}</p>
 </div>
 <section class="section"><h2 class="section-title">今日要闻 · 共识</h2>
 {render_consensus(a.get('consensus', []), cfg, date)}
