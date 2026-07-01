@@ -289,7 +289,7 @@ def act_row(cfg, date, it):
     deep = bool(it.get("original_quote"))
     kind = "deep" if deep else "consensus"
     src = it.get("source") or " · ".join(it.get("sources", []))
-    cc = it.get("consensus_count", len(it.get("sources", [])))
+    cc = it.get("consensus_count") or len(it.get("sources") or [])
     badge = f"{cc} 家在报" if (cc and not deep) else ""
     share = (f'<button class="act share" data-item="{iid}" data-date="{d}" data-title="{t}" '
              f'data-summary="{e(it.get("summary_zh",""))}" data-source="{e(src)}" data-kind="{kind}" '
@@ -316,7 +316,7 @@ def render_consensus(items, cfg, date):
     out = []
     for it in items:
         topics = "".join(f'<span class="topic">#{e(t)}</span> ' for t in it.get("topics", []))
-        cc = it.get("consensus_count", len(it.get("sources", [])))
+        cc = it.get("consensus_count") or len(it.get("sources") or [])
         src_badge = f'<span class="badge badge-consensus">{e(cc)} 家在报</span>' if cc else ""
         # 来源:有 source_links(每家带 url)→ 每家各自可点原文;否则退化为名字 + 单一原文
         links = [x for x in (it.get("source_links") or []) if x.get("url")]
