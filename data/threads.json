@@ -1,43 +1,132 @@
 {
-  "generated_at": "2026-06-30T09:35:00+08:00",
+  "generated_at": "2026-07-01T12:22:00+08:00",
   "threads": [
     {
       "id": "thread-ai-regulation",
       "title_zh": "AI 监管:从联邦讨论到州级落地,厂商开始定调",
-      "key_entities": ["AI 监管", "Great American AI Act", "科罗拉多", "行政令", "Sam Altman"],
+      "key_entities": [
+        "AI 监管",
+        "Great American AI Act",
+        "科罗拉多",
+        "行政令",
+        "Sam Altman"
+      ],
       "summary_zh": "美国 AI 监管在 6 月走完『行政令 → 联邦立法讨论 → 州级成文法生效』一条完整链路:月初是行政手段与联邦框架草案,月底科罗拉多成为首个综合性州级 AI 法生效。与此同时,头部厂商(Altman)开始公开框定可接受边界——接受强制红队测试,但反对政府挑客户。",
       "status_zh": "进行中 · 州级法已落地,厂商定调",
       "timeline": [
-        { "date": "2026-06-04", "item_id": "co0604-trump-ai-eo", "title_zh": "特朗普签署修订版 AI/网络安全行政令", "note_zh": "行政手段:在监管与发展间重新权衡" },
-        { "date": "2026-06-04", "item_id": "co0604-great-american-ai-act", "title_zh": "《Great American AI Act》269 页讨论稿公布", "note_zh": "联邦立法:迄今最全面的框架草案" },
-        { "date": "2026-06-30", "item_id": "co-colorado-ai-law", "title_zh": "科罗拉多《AI 消费者保护法》生效", "note_zh": "落地:全美首部综合性州级 AI 法" },
-        { "date": "2026-06-30", "item_id": "dp-sama-redteaming", "title_zh": "Altman:接受强制红队测试,反对政府挑客户", "note_zh": "厂商定调:框定监管的可接受边界" }
+        {
+          "date": "2026-06-04",
+          "item_id": "co0604-trump-ai-eo",
+          "title_zh": "特朗普签署修订版 AI/网络安全行政令",
+          "note_zh": "行政手段:在监管与发展间重新权衡"
+        },
+        {
+          "date": "2026-06-04",
+          "item_id": "co0604-great-american-ai-act",
+          "title_zh": "《Great American AI Act》269 页讨论稿公布",
+          "note_zh": "联邦立法:迄今最全面的框架草案"
+        },
+        {
+          "date": "2026-06-30",
+          "item_id": "co-colorado-ai-law",
+          "title_zh": "科罗拉多《AI 消费者保护法》生效",
+          "note_zh": "落地:全美首部综合性州级 AI 法"
+        },
+        {
+          "date": "2026-06-30",
+          "item_id": "dp-sama-redteaming",
+          "title_zh": "Altman:接受强制红队测试,反对政府挑客户",
+          "note_zh": "厂商定调:框定监管的可接受边界"
+        }
       ]
     },
     {
       "id": "thread-ai-capability",
       "title_zh": "AI 能力硬进步:从记忆升级到自改进与攻防",
-      "key_entities": ["前沿模型", "AI 智能体", "Anthropic", "OpenAI", "Claude Mythos"],
+      "key_entities": [
+        "前沿模型",
+        "AI 智能体",
+        "Anthropic",
+        "OpenAI",
+        "Claude Mythos"
+      ],
       "summary_zh": "月初还是产品级记忆升级(Dreaming V3),月底圈内第一手信号显示能力在硬性加速:自改进机器人达 99% 操作成功率、智能体被描述为『组织常驻异步实体』、前沿模型数小时攻破机密系统。这条技术加速线与同期资本降温形成鲜明背离。",
-      "status_zh": "进行中 · 能力加速、外溢到安全",
+      "status_zh": "进行中 · 能力涨、红队称未越国安线",
       "timeline": [
-        { "date": "2026-06-04", "item_id": "co0604-openai-dreaming-v3", "title_zh": "OpenAI 推出最重要记忆升级 Dreaming V3", "note_zh": "产品:消费级能力迭代" },
-        { "date": "2026-06-30", "item_id": "dp-clark-import-ai-463", "title_zh": "Jack Clark:自改进机器人 99%、万卡中国集群", "note_zh": "圈内:能力硬性、快速进步" },
-        { "date": "2026-06-30", "item_id": "dp-karpathy-llm-uiux", "title_zh": "Karpathy:AI 成为组织常驻异步实体", "note_zh": "范式:第三次 LLM 交互改版" },
-        { "date": "2026-06-30", "item_id": "co-anthropic-mythos", "title_zh": "Mythos 数小时攻破机密系统", "note_zh": "外溢:能力转化为国家安全风险" }
+        {
+          "date": "2026-06-04",
+          "item_id": "co0604-openai-dreaming-v3",
+          "title_zh": "OpenAI 推出最重要记忆升级 Dreaming V3",
+          "note_zh": "产品:消费级能力迭代"
+        },
+        {
+          "date": "2026-06-30",
+          "item_id": "dp-clark-import-ai-463",
+          "title_zh": "Jack Clark:自改进机器人 99%、万卡中国集群",
+          "note_zh": "圈内:能力硬性、快速进步"
+        },
+        {
+          "date": "2026-06-30",
+          "item_id": "dp-karpathy-llm-uiux",
+          "title_zh": "Karpathy:AI 成为组织常驻异步实体",
+          "note_zh": "范式:第三次 LLM 交互改版"
+        },
+        {
+          "date": "2026-06-30",
+          "item_id": "co-anthropic-mythos",
+          "title_zh": "Mythos 数小时攻破机密系统",
+          "note_zh": "外溢:能力转化为国家安全风险"
+        },
+        {
+          "date": "2026-07-01",
+          "item_id": "f9d89c4e9ddbd28c",
+          "title_zh": "Anthropic 前沿红队:『早期预警』但未越国安红线",
+          "note_zh": "能力逼近专家水平,厂商用克制表述争取监管/自身的时间窗"
+        }
       ]
     },
     {
       "id": "thread-openai-trajectory",
       "title_zh": "OpenAI 轨迹:产品高歌 vs 资本承压",
-      "key_entities": ["OpenAI", "ChatGPT", "纳斯达克", "Sam Altman"],
-      "summary_zh": "上半月 OpenAI 在产品与用户上高歌猛进(月活破 10 亿、Dreaming V3 记忆升级),到月底却在资本市场承压(传或推迟上市、拖累纳指连跌),同时 Altman 在政策场周旋。能力/需求的节奏与估值/融资的节奏开始分叉。",
-      "status_zh": "进行中 · 资本侧转冷",
+      "key_entities": [
+        "OpenAI",
+        "ChatGPT",
+        "纳斯达克",
+        "Sam Altman"
+      ],
+      "summary_zh": "OpenAI 产品强、资本端却承压;一周内 Anthropic 以 9650 亿反超并抢先递交 IPO,AI 资本座次生变。",
+      "status_zh": "进行中 · Anthropic 反超递交 IPO",
       "timeline": [
-        { "date": "2026-06-04", "item_id": "co0604-chatgpt-1b-mau", "title_zh": "ChatGPT 月活破 10 亿", "note_zh": "需求侧:采用仍在加速" },
-        { "date": "2026-06-04", "item_id": "co0604-openai-dreaming-v3", "title_zh": "Dreaming V3 记忆升级推送", "note_zh": "产品侧:能力继续迭代" },
-        { "date": "2026-06-30", "item_id": "dp-altman-ai-policy", "title_zh": "Altman 谈美国 AI 政策与行政令平衡", "note_zh": "政策侧:把安全与国家竞争力绑定" },
-        { "date": "2026-06-30", "item_id": "co-nasdaq-openai-ipo", "title_zh": "传 OpenAI 或推迟上市,纳指连跌", "note_zh": "资本侧:融资前景受质疑" }
+        {
+          "date": "2026-06-04",
+          "item_id": "co0604-chatgpt-1b-mau",
+          "title_zh": "ChatGPT 月活破 10 亿",
+          "note_zh": "需求侧:采用仍在加速"
+        },
+        {
+          "date": "2026-06-04",
+          "item_id": "co0604-openai-dreaming-v3",
+          "title_zh": "Dreaming V3 记忆升级推送",
+          "note_zh": "产品侧:能力继续迭代"
+        },
+        {
+          "date": "2026-06-30",
+          "item_id": "dp-altman-ai-policy",
+          "title_zh": "Altman 谈美国 AI 政策与行政令平衡",
+          "note_zh": "政策侧:把安全与国家竞争力绑定"
+        },
+        {
+          "date": "2026-06-30",
+          "item_id": "co-nasdaq-openai-ipo",
+          "title_zh": "传 OpenAI 或推迟上市,纳指连跌",
+          "note_zh": "资本侧:融资前景受质疑"
+        },
+        {
+          "date": "2026-07-01",
+          "item_id": "65c0db7305e657e9",
+          "title_zh": "Anthropic 9650 亿估值首超 OpenAI、秘密递交 IPO",
+          "note_zh": "资本主角交接:OpenAI 承压之际 Anthropic 反超并抢先递交上市"
+        }
       ]
     }
   ]

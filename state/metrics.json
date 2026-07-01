@@ -125,5 +125,29 @@
       "substack_rss": "晚班以 WebSearch 深度替代"
     },
     "notes": "晚班采集:AI 权重上调后 6 条中 5 条 AI;两条用户请求首次响应并记账(避免下轮重复全量);关注命中;播客环节首次实采。"
+  },
+  {
+    "run": "2026-07-01-synthesize",
+    "date": "2026-07-01",
+    "type": "synthesize",
+    "conclusions": 4,
+    "connections": 4,
+    "lenses_hit": [
+      "跟着钱走",
+      "跨域模式",
+      "共识缺口",
+      "矛盾检测",
+      "二阶效应",
+      "时间线追踪"
+    ],
+    "threads": 3,
+    "north_star": {
+      "non_obvious": 3,
+      "edge": 2,
+      "cross_date": 2,
+      "falsifiable": 2,
+      "note": "核心洞察『叙事领先兑现』为非显然共识缺口;跨日期接 OpenAI 资本线;预测(抢窗口/能否兑现)可证伪。"
+    },
+    "notes": "晚采晚汇(用户要求当日发布);AI 权重高;两条请求(企业AI/机器人融资)已成稿进页面。"
   }
 ]
