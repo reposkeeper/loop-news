@@ -76,6 +76,9 @@ OWNER_EMAIL=you@example.com bash scripts/setup-auth.sh
 
 **旧的"访问令牌门"(`scripts/share-token.sh` + `SHARE_TOKENS` + `?token=`)已废弃**,`functions/_middleware.js` 不再校验它;不必再生成分享 token。
 
+- **owner 用户管理**(SP1-UI):owner 登录后页面内有「👥 用户管理」面板——列出全部账号、邀请新邮箱、启用/禁用/改角色、删除账号,并可查看每人的活动记录;禁用即吊销该用户全部会话,删除级联清空其反馈/收藏/关注/已读/请求/活动数据,且都禁止对自己操作(防锁死)。owner-only(`role=owner` 之外一律 403)。
+- **夜间模式**:任何用户可在页头切换 自动/浅色/深色 三档主题,选择会同步进账号(跨设备一致),无闪屏。
+
 ## ln-evolve 读反馈
 反馈存 D1(按 `user_id` 隔离,见 `worker/schema.sql` 的 `feedback` 表),**只有 `role=owner` 的反馈驱动全局 prompts/config 进化**(普通用户反馈是个人数据,属 SP2 千人千面,尚未消费)。
 - **本地/owner 拉取**:`bash scripts/feedback.sh`(owner 本机已 `wrangler login`,直接 `wrangler d1 execute` 查询,无需带 session cookie)。

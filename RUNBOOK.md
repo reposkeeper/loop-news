@@ -44,6 +44,7 @@
 `bash scripts/publish.sh "<msg>"` → commit + push,GitHub Pages 上线。**默认早班把这步留人工确认**(发布是公开操作)。
 > 若托管在 **Cloudflare**:改用 `bash scripts/deploy-cloudflare.sh`(Pages 发站 + Worker API + R2 + D1 schema),详见 [CLOUDFLARE.md](CLOUDFLARE.md)。
 > **访问门 = 邮箱账号登录**(非整站私有,也不再是 token 分享):`functions/_middleware.js` 校验会话(cookie `lns` → KV `SESSIONS` 查 session),未登录返回两步登录页(邮箱 → 6 位验证码,Resend 发信),内容不下发。白名单 = D1 `users` 表;owner 引导见 `scripts/setup-auth.sh`。每个账号的反馈/收藏/关注/已读/请求按 `user_id` 隔离存 D1;全站行为记 `activity`。
+> **owner 用户管理**(SP1-UI):owner 登录后页面内「👥 用户管理」面板可邀请/启用/禁用/改角色/删除账号 + 查看每人活动,owner-only、防自锁、禁用即吊销会话、删除级联清数据。**夜间模式**:任何用户可在头部切换 自动/浅/深 三档主题,跟随账号同步、无闪屏。
 
 ### 5. 进化 evolve(= ln-evolve)
 先读**人类反馈**(`bash scripts/feedback.sh`:从 D1 `feedback` 表拉取〔`up 赞 / down 踩 / adopt 采用` + 常用词 + 文字〕+ `feedback.md`)——**只消化 `role=owner` 的反馈用于全局进化**(普通账号的反馈是个人数据,驱动各自视图,不改全局 `prompts/*.md`/`config/*.yaml`,属 SP2 千人千面尚未构建的部分);若存在站长全局提问 `ask`,最高优先(本轮必须落实),采用次之。再读 `state/metrics.json`(含北极星指标 non_obvious/edge/cross_date/falsifiable)+ 抽样产物;小步改 `prompts/*.md` / `config/*.yaml` / `config/feedback_tags.json`;记 `prompts/CHANGELOG.md`。**早班顺序:本步在 synthesize 之前跑,进化修复完成后才生成当天总结。**

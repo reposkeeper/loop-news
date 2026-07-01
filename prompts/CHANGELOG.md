@@ -5,6 +5,16 @@
 
 ---
 
+## 2026-07-01 · SP1-UI(owner 面板 + 夜间模式)
+- **改了什么**:
+  1. **夜间模式**:`POST /me/theme` 把主题偏好持久化到 `users.theme`(跟随账号跨设备);`web/assets/style.css` 新增 `[data-theme="dark"]` 暗色板 + `@media (prefers-color-scheme:dark)` 处理 `auto` 档,分级色相(事实/推断/预测)不变、明度压暗;页头三档切换(自动/浅/深),内联脚本在渲染前读 `localStorage` 应用主题,无闪屏。
+  2. **owner 用户管理**:`worker/lib/admin.js` 新增 owner-only 端点——`GET/POST /admin/users`(列全部账号 + 反馈/活动计数、邀请新邮箱)、`PATCH/DELETE /admin/users/:id`(改角色/状态、删除)、`GET /admin/activity?user_id=`(查单人或全站活动);禁用即调用 `revokeAllForUser` 吊销该用户全部会话,删除级联清空其 `feedback/favorites/follows/reads/requests/activity`;PATCH/DELETE 均禁止对自己操作(防锁死)。页面内新增「👥 用户管理」面板(仅 owner 可见):账号表 + 邀请表单 + 每人活动抽屉。
+  3. **死 token CSS 清理**:随暗色板变量化(`--surface`/`--danger`/`--ok`/`--sel` 等)顺手删掉旧"访问令牌门"遗留的 `.token-list`/`.token-row`/`.token-copy`/`.token-new`/`.token-url` 规则(该门已在账号体系〔SP1-Core〕废弃,CSS 一直没清)。
+- **为什么**:SP1 账号地基落地后补齐两块可用性缺口——owner 需要能自主管理白名单账号(邀请/启禁/查活动)而不必手改 D1;用户需要能按自己偏好切换深浅色且跨设备记住选择。二者都是"用户可自配"范畴,不改全局进化逻辑。
+- **如何回滚**:`git revert` 对应提交;`users.theme` 字段与新增的 admin 端点均为增量,回滚代码不影响既有数据。
+
+---
+
 ## 2026-07-01 · 账号体系(SP1-Core)
 - **改了什么**:
   1. **访问门从 token 分享升级为邮箱验证码会话**:`POST /auth/request-code` 给白名单邮箱(D1 `users` 表)发 6 位码(Resend,10 分钟有效,KV 哈希存储,≤5 次尝试);`POST /auth/verify` 校验通过后签发 30 天会话(KV `session:<token>`),写 httpOnly cookie `lns`;`functions/_middleware.js` 改查会话放行,未登录返回两步登录页,内容不下发(旧的 `scripts/share-token.sh` + `SHARE_TOKENS` + `?token=` 已废弃)。
