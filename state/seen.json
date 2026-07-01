@@ -1,23 +1,8 @@
-{
-  "seen_ids": [
-    "co-anthropic-fraud-accounts",
-    "co-anthropic-mythos",
-    "co-central-bank-divergence",
-    "co-colorado-ai-law",
-    "co-crude-oil",
-    "co-nasdaq-openai-ipo",
-    "co-pce-fed-hikes",
-    "co-qualcomm-tenstorrent",
-    "co-skorea-1t-chips",
-    "co-warsh-fed-chair",
-    "co-worldbank-growth",
-    "dp-altman-ai-policy",
-    "dp-clark-import-ai-463",
-    "dp-elerian-fed-dovish",
-    "dp-karpathy-llm-uiux",
-    "dp-noah-transaction-costs",
-    "dp-qwen-local-hn",
-    "dp-sama-redteaming"
-  ],
-  "updated_at": "2026-06-30T09:10:00+08:00"
-}
+[
+  "187b5d8a65b65600",
+  "20e8634f9461793b",
+  "26b3e31bac3726e6",
+  "65c0db7305e657e9",
+  "dc9436282621ed97",
+  "f9d89c4e9ddbd28c"
+]

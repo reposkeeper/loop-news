@@ -98,5 +98,32 @@
     },
     "threads": 3,
     "notes": "首次纳入 X 名人原声(Altman/Karpathy/El-Erian);新增线索 thread-ai-capability;监管线索接上 Altman 真推文。"
+  },
+  {
+    "run": "2026-07-01-pm",
+    "date": "2026-07-01",
+    "batch": "pm",
+    "type": "collect",
+    "mode": "pm(RSS/WebSearch;X MCP 仅 am 批,本轮跳过)",
+    "collected": 6,
+    "consensus": 4,
+    "deep": 1,
+    "podcast": 1,
+    "deduped": 0,
+    "source_yield": {
+      "websearch": 6,
+      "ai_weighted": "6 条中 5 条 AI(反馈'AI 内容太少'已上调权重)",
+      "requests_responded": [
+        "AI在企业中的应用/harness → 企业 AI 智能体价值鸿沟(Gartner)",
+        "机器人/具身智能创业融资 → 2026 YTD 558 亿(Crunchbase/CNBC)"
+      ],
+      "follows_covered": [
+        "AI 安全/前沿模型 → Anthropic 前沿红队 + METR"
+      ],
+      "podcast": "Satya Nadella × No Priors×Latent Space(命中 key_guest)",
+      "x_mcp": "skipped(pm)",
+      "substack_rss": "晚班以 WebSearch 深度替代"
+    },
+    "notes": "晚班采集:AI 权重上调后 6 条中 5 条 AI;两条用户请求首次响应并记账(避免下轮重复全量);关注命中;播客环节首次实采。"
   }
 ]

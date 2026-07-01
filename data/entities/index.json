@@ -14,6 +14,11 @@
       "date": "2026-06-30",
       "id": "dp-sama-redteaming",
       "title_zh": "Sam Altman 谈 AI 监管:可接受发布前强制红队测试期,但反对政府来挑客户"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "65c0db7305e657e9",
+      "title_zh": "Anthropic 秘密递交 IPO:65 亿融资、9650 亿估值,首次反超 OpenAI"
     }
   ],
   "Anthropic": [
@@ -36,6 +41,16 @@
       "date": "2026-06-30",
       "id": "co-anthropic-mythos",
       "title_zh": "Anthropic 未发布前沿模型 Mythos 数小时内攻破美国机密系统,Glasswing 扩至 150 家机构"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "65c0db7305e657e9",
+      "title_zh": "Anthropic 秘密递交 IPO:65 亿融资、9650 亿估值,首次反超 OpenAI"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "f9d89c4e9ddbd28c",
+      "title_zh": "Anthropic 前沿红队:前沿模型出现'早期预警'信号,但尚未越过国安风险线"
     }
   ],
   "美联储": [
@@ -58,6 +73,11 @@
       "date": "2026-06-30",
       "id": "co-pce-fed-hikes",
       "title_zh": "通胀粘性推升加息预期:PCE 升至 4.1%,美银预计年内三度加息,科技股拖累美股"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "187b5d8a65b65600",
+      "title_zh": "美联储按兵不动转鹰:新主席 Warsh 首会删降息倾向,暗示可能加息"
     }
   ],
   "中国": [
@@ -134,6 +154,11 @@
       "date": "2026-06-30",
       "id": "dp-karpathy-llm-uiux",
       "title_zh": "Karpathy:这是 LLM 交互范式的第三次大改版——AI 成为『与人类团队并肩工作的常驻异步实体』"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "65c0db7305e657e9",
+      "title_zh": "Anthropic 秘密递交 IPO:65 亿融资、9650 亿估值,首次反超 OpenAI"
     }
   ],
   "AI 智能体": [
@@ -274,6 +299,62 @@
       "date": "2026-06-30",
       "id": "co-pce-fed-hikes",
       "title_zh": "通胀粘性推升加息预期:PCE 升至 4.1%,美银预计年内三度加息,科技股拖累美股"
+    }
+  ],
+  "Kevin Warsh": [
+    {
+      "date": "2026-07-01",
+      "id": "187b5d8a65b65600",
+      "title_zh": "美联储按兵不动转鹰:新主席 Warsh 首会删降息倾向,暗示可能加息"
+    }
+  ],
+  "Gartner": [
+    {
+      "date": "2026-07-01",
+      "id": "dc9436282621ed97",
+      "title_zh": "企业 AI 智能体:采纳狂飙,价值却接不上——只有约两成见到回报"
+    }
+  ],
+  "Neura Robotics": [
+    {
+      "date": "2026-07-01",
+      "id": "26b3e31bac3726e6",
+      "title_zh": "机器人 / 具身智能融资井喷:2026 年内已超 558 亿美元,中国占超四成"
+    }
+  ],
+  "Figure AI": [
+    {
+      "date": "2026-07-01",
+      "id": "26b3e31bac3726e6",
+      "title_zh": "机器人 / 具身智能融资井喷:2026 年内已超 558 亿美元,中国占超四成"
+    }
+  ],
+  "Skild AI": [
+    {
+      "date": "2026-07-01",
+      "id": "26b3e31bac3726e6",
+      "title_zh": "机器人 / 具身智能融资井喷:2026 年内已超 558 亿美元,中国占超四成"
+    }
+  ],
+  "METR": [
+    {
+      "date": "2026-07-01",
+      "id": "f9d89c4e9ddbd28c",
+      "title_zh": "Anthropic 前沿红队:前沿模型出现'早期预警'信号,但尚未越过国安风险线"
+    }
+  ],
+  "Satya Nadella": [
+    {
+      "date": "2026-07-01",
+      "id": "20e8634f9461793b",
+      "title_zh": "Satya Nadella 首登 No Priors × Latent Space 交叉特辑(Build 2026)"
+    }
+  ],
+  "Microsoft": [
+    {
+      "date": "2026-07-01",
+      "id": "20e8634f9461793b",
+      "title_zh": "Satya Nadella 首登 No Priors × Latent Space 交叉特辑(Build 2026)"
     }
   ]
 }
