@@ -1,7 +1,10 @@
-# 设计:真实用户隔离(邮箱验证码账号体系)
+# 设计:真实用户隔离(邮箱验证码账号体系)· SP1 账号地基
 
 > 日期:2026-07-01 · 状态:待评审 · 作者:reposkeeper + Claude
 > 上游需求(用户四点)见文末「附:原始需求」。本文是实现级设计,评审通过后进入 writing-plans。
+>
+> **本 spec = SP1(账号地基)。** 「千人千面 + 个人进化 + 6→8 系统分」是明确目标,建在本地基之上,单独设计见
+> **[SP2 · 个性化与进化引擎](2026-07-01-personalization-evolution-design.md)**。SP1 只做前置,数据模型对 SP2 向前兼容。
 
 ## 1. 背景与目标
 
@@ -14,12 +17,14 @@
 3. **owner 管理用户 + 全动作日志**:owner 可增删/启禁用户;记录每个用户的查看时间、分享情况等所有操作。
 4. **夜间模式**:用户自配主题(自动/浅色/深色),跟随账号。
 
-## 2. 非目标(YAGNI)
+## 2. 范围与非目标
 
+**SP1 目标** = 账号地基:邮箱验证码登录/会话、owner 用户管理 + 全动作日志、per-user 数据隔离、夜间模式。个性化「千人千面 + 个人进化」是**明确目标但属 SP2**(见上方链接),SP1 为其打地基,不实现其逻辑,但数据模型**向前兼容**(一切 per-user 数据带 `user_id` 维度)。
+
+SP1 非目标(YAGNI):
 - ❌ 自助注册(采用 **owner 白名单/邀请**)、密码登录、2FA、第三方 OAuth。
-- ❌ **per-user 新闻生成**——新闻底座对所有人是**同一份**(守住「共享底座」,避免爆炸式 scope)。
 - ❌ 精确停留时长(先记 view 时间点 + `last_seen`;停留时长以后可选加)。
-- ❌ per-user 的新闻**排序个性化**(反馈只做「单独沉淀 + owner 侧可见」;个性化排序留待后续)。
+- ❌ 个性化重排 / 话题为键采集 / 个人进化循环 / 个人进化分数 / 6→8 系统分 —— **全部属 SP2**,SP1 不做。
 
 ## 3. 身份模型
 
@@ -175,12 +180,12 @@ CREATE TABLE IF NOT EXISTS requests (
 - `favorite/follow/read/request` 从「按 `<token>` 存 R2」改为「按 `user_id` 存 D1」,读同理。
 - 所有 per-user 端点**去掉请求体里的 token 参数**,一律从 session 推导用户(凭证 cookie)。
 
-### 8.2 ln-evolve:只吃 owner 反馈驱动全局进化(**核心语义**)
-- 「以目前的基础作为所有人的新闻基础」⇒ 共享底座由 **owner 一人策展**。
-- `ln-evolve` 拉反馈时**只取 role=owner 的反馈**(`GET /feedback` 或 D1 查询加 `WHERE role='owner'`)来改全局 `prompts/*.md`、`config/*.yaml`。
-- 其他用户的反馈**只沉淀在各自账户**,驱动他们自己的收藏/关注视图,**绝不改动别人所见**。
-- 旧全局 `fb/*.json` 作为 legacy 归入 owner,ln-evolve 仍可读,平滑过渡。
-- **落地**:改 `.claude/skills/ln-evolve/SKILL.md`(或其引用的 prompt)+ `RUNBOOK.md`/`AGENTS.md`/`CLAUDE.md` 说明此语义 + `prompts/CHANGELOG.md` 留痕。
+### 8.2 反馈的两条去向(**核心语义**;个人进化引擎细节见 SP2)
+- **owner 反馈 → 全局底座进化(= 系统迭代能力)**:`ln-evolve` **只取 role=owner 的反馈**改全局 `prompts/*.md`、`config/*.yaml`(及 SP2 的 6→8 系统分)。这是**新用户的默认起点**(fork owner 底座)。
+- **普通用户反馈 → 个人进化(SP2)**:在各自账户内沉淀,驱动其个人画像/重排/个人进化分数,**绝不改动别人所见**。**隔离不变量:谁的反馈都不影响他人视图**(你第 1 条);区别只是每人页面从「都等于 owner」变成「各自进化」。
+- **SP1 的职责**:把反馈按 `user_id` + `role` 存好(D1 `feedback`),`GET /feedback` 支持 `role=owner` / `user_id=` 过滤;`ln-evolve` 读取加 `role=owner` 过滤。真正消费个人反馈的**个人进化循环在 SP2**。
+- 旧全局 `fb/*.json` 作为 legacy 归入 owner,平滑过渡。
+- **落地**:改 `.claude/skills/ln-evolve/SKILL.md`(或其引用 prompt)加 owner 过滤 + `RUNBOOK.md`/`AGENTS.md`/`CLAUDE.md` 说明 + `prompts/CHANGELOG.md` 留痕。
 
 ## 9. Owner 管理 + 活动日志
 
@@ -289,8 +294,8 @@ CREATE TABLE IF NOT EXISTS requests (
 - 存储:**D1 主库 + KV 热路径 + R2 不动**。
 - 注册:**owner 白名单/邀请**;登录**必需**(替代 token 墙)。
 - 发信:**Resend**。
-- ln-evolve:**只吃 owner 反馈**驱动全局进化;他人反馈仅个人沉淀。
-- 新闻底座:**全员同一份**。
+- ln-evolve:**owner 反馈 → 全局底座(系统迭代)**;他人反馈 → **个人进化(SP2)**;隔离不变量:谁的反馈都不影响他人视图。
+- 新闻底座:**owner 底座 = 新用户默认起点**;个性化「千人千面」在 **SP2**。
 
 ---
 

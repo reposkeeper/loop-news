@@ -1,0 +1,215 @@
+# 设计:个性化与进化引擎(千人千面 + 个人进化 + 6→8 系统分)· SP2
+
+> 日期:2026-07-01 · 状态:待评审 · 作者:reposkeeper + Claude
+> **建在 [SP1 · 账号地基](2026-07-01-user-isolation-auth-design.md) 之上**(需先有账号/隔离/活动日志)。
+> 本文实现「每人从 owner 底座 fork,自己的反馈进化出自己的形态 → 千人千面 + 可见的个人进化分数」,
+> 并把系统评分从 6 分扩到 8 分(克制/创新),用**分数间相互关系**约束采集/聚合/生长/进化。
+
+## 1. 目标
+
+1. **千人千面**:每个用户一个个性化新闻页。新用户默认 = owner 底座(现状 AI 向);一旦开始反馈,页面按其「形态」分叉。
+2. **话题为键的共享**:采集/汇总按**话题**跑并去重共享(同话题多人共用);成本 = O(不同话题数),**不是** O(用户数)。用户有全新话题(如股市)→ 为其扩采(接受额外采集 LLM 成本),之后任何同话题订阅者共享。
+3. **纯个人视图(隔离不变量)**:用户的反馈/关注只塑造**他自己**对共享语料的视图;**谁的偏好都不回流影响他人所见、不改 owner 全局底座**。
+4. **个人进化循环 + 可见分数**:每用户一条轻量 evolve 循环,吃自己的反馈 → 更新画像/重排 → 产出**个人进化分数 / 进化能力**(排除系统迭代)。
+5. **6→8 系统分**:新增「克制」「创新」两分,补正交盲区,用张力约束 agent 在采集/聚合/生长/进化里既克制又创新。
+
+## 2. 核心模型:话题为键的共享 + 纯个人视图
+
+把 Q1/Q2 两条对齐成一句话:**采集按话题去重共享(后端效率);看见只由本人订阅 + 画像决定(前端隔离)。**
+
+- 张三订了「股市」→ 系统采股市、只有张三看到;李四不会因张三而多看到股市。
+- 若李四**也**独立订了股市 → 复用已采语料(效率),但这是李四自己的选择,**非张三影响李四**。
+- owner 的全局 evolve 只改**底座/默认/共享话题方法论**,**不覆盖任何用户已分叉的画像**。
+
+⇒ 隔离不变量成立:**谁的反馈都不改变他人视图,也不改 owner 底座。** 变的只是「每人页面从都等于 owner → 各自进化」。
+
+## 3. 三层架构
+
+```
+┌ L1 全局底座(owner)= 系统迭代能力 ────────────────────────────┐
+│  现状管线:owner 策展话题/来源,owner 反馈驱动全局 evolve         │
+│  (prompts/方法论 + 系统 8 分)。owner 仪表盘可见,不计入个人分。 │
+└──────────────────────────────┬───────────────────────────────┘
+                               │ 新用户 fork 默认起点
+┌ L2 话题为键的共享语料 ────────▼───────────────────────────────┐
+│  采集/汇总按【规范话题】跑(所有订阅并集 ∪ 底座),去重共享。     │
+│  data/corpus 与 analysis 带 topic 维度;新话题→扩采一次,人人共享 │
+└──────────────────────────────┬───────────────────────────────┘
+                               │ 取「我订阅的话题」的条目
+┌ L3 每用户个性化 + 个人进化 ───▼───────────────────────────────┐
+│  画像(形态)→ 个人重排/过滤/强调 → 千人千面页                   │
+│  个人 evolve:吃自己反馈→更新画像→个人 8 分(个人进化分数/能力)  │
+└──────────────────────────────────────────────────────────────┘
+```
+
+## 4. 话题注册表 + 成本护栏
+
+无节制的话题会让采集成本爆炸。引入**规范话题注册表**(共享,单一真源):
+
+- `config/topics.yaml`(owner 可编) + `data/topics/registry.json`(运行态:每话题的规范名、别名、活跃订阅数、来源/检索角度、上次采集)。
+- **归一/合并**:用户新话题先做规范化(「A股」「股市」「炒股」→ 规范话题 `finance.equities`)。归一用轻量映射 + 必要时一次 LLM 归类;避免近义词各自成话题。
+- **护栏**:① 全新话题需 owner 审核**或**自动纳入但受**软上限**(每周期新增 ≤N,超出排队);② 长期零订阅的话题休眠(停采);③ owner 在注册表可并/删/降权。
+- ⇒ 采集成本 = O(**规范话题数**),`即便付出多余采集成本` 成立但**不失控**。
+
+## 5. 话题为键的采集/汇总改造(L2)
+
+- **ln-collect**:从「按固定 sources 采」升级为「**对每个活跃规范话题**,用其来源/检索角度采」。owner 底座话题 = 现状(AI 等)。语料条目**打 `topic` 标签**(条目已含 `topics[]`,这里强化为可回链规范话题)。`data/corpus/<date>.json` 增 `topic` 归属;`state/seen.json` 去重跨话题共享。
+- **ln-synthesize**:分析在**话题内**做关联(同话题的跨日期/跨域),必要时跨话题(仅当有人同时订阅)。`data/analysis/<date>.json` 的 connections/conclusions 带 `topic`。
+- **新话题扩采**:用户订阅注册表里**已采**话题 → 即时可见;订阅**新**话题 → 排入下一采集轮(或即时触发一次轻采),回填后其页面出现该话题。
+- owner 底座话题不受个人订阅影响(L1/L2 分离);个人只是**选择看哪些已采话题** + 触发新话题扩采。
+
+## 6. 用户画像(形态)与初始化(L3)
+
+**画像 = 可解释的偏好模型**(非黑盒),D1 存 + JSON 快照:
+
+```
+profile(user_id) = {
+  topics:   { <规范话题>: weight },        // 订阅 + 权重(踩→降,赞/关注→升/新增)
+  entities: { <实体>: weight },            // 细粒度偏好(人/公司/产品)
+  sources:  { <来源>: weight },            // 偏好/厌恶的来源
+  tones:    { 深度|共识|数据|原声: weight },// 内容类型偏好
+  muted:    [ <话题/实体/来源/pattern> ],   // 明确屏蔽
+  updated_at, version
+}
+```
+
+- **初始化**:新用户画像 = **owner 底座画像快照**(fork)。零反馈时 `weight` 均为基线 → 重排结果 ≈ owner 页(所以新用户看到的就是现状)。
+- **演化**:每个反馈信号(赞/踩/采用/关注/屏蔽/停留)按规则增量更新对应维度权重(EWMA 平滑,防抖);ln-evolve-lite 周期性巩固 + 可选一次 LLM 精修(总结「你的透镜」、发现细微偏好),**不做 per-user 页面级 LLM 重写**(守不臆造 + 成本)。
+
+## 7. 个人重排(L3 呈现)
+
+**共享内容池(我的话题条目)按画像打分排序/过滤/强调**,确定性可解释:
+
+```
+rank(item, profile) = Σ w_dim · match(item, profile_dim)     // 话题/实体/来源/语气命中
+                      − muted_penalty(item, profile)
+                      + freshness_bonus(item)                 // 复用现有及时性
+score→ 排序;低于阈值或命中 muted → 折叠/隐藏;高命中 → 置顶/高亮「为你」。
+```
+
+- **计算位置**:**客户端**为主 —— 页面仍是**共享单页**(SP1 登录后下发,含我订阅话题的条目),前端 `GET /me/profile` 取画像 JSON → JS 重排/过滤/标注 DOM。**零 per-user 静态文件、无限扩展、即时**。
+- 可解释:每条可显示「为什么排给你」(命中了哪些偏好)。
+- 服务端仅在需要(如跨设备一致的「今日为你精选」摘要)时算一次轻量,不做 LLM 重写。
+
+## 8. 个人进化循环(L3,per-user ln-evolve-lite)
+
+- **触发**:每日一次(或用户活跃时增量)对该用户跑轻量 evolve:读其反馈(D1)→ 更新画像权重 + muted → 写画像新版本 + **个人 changelog**(`activity` 里 `personal_evolve` 事件,可回看)。
+- **成本**:规则为主 + 可选周期性一次小 LLM 精修;**远低于**全量管线,随人数线性但单价极低。
+- **与全局 evolve 分离**:owner 的 `ln-evolve`(全局)不动个人画像;个人 evolve 不动全局 prompts/config。互不干扰(隔离不变量)。
+
+## 9. 评分系统:6→8 系统分 + 统一框架 + 个人 8 分
+
+### 9.1 现有 6 分(`scripts/score.py`,确定性)
+关联度 / 数量 / 分析整合 / 自进化广度 / 信息源固化 / 新闻及时性,`composite=均值`,agent 每轮提最低分。**几乎全在奖励「更多/更高」**。
+
+### 9.2 新增 2 分(补正交盲区,形成克制↔创新张力)
+
+**7 · 克制 / 证据纪律(restraint)** — 盲区:GOALS 称 over-reach 为「北极星最大风险」却无分惩罚;关联/分析分反而奖励大胆。组件(从 `analysis`+`corpus` 确定性算):
+- `overreach_rate`:大胆结论(grade∈推断/预测)中 `len(evidence)<2` 或「预测无置信度标注」的占比;`grounded = 1 − overreach_rate`(权重最高)。
+- `grade_discipline`:预测占比落在健康带(如 ≤0.4);推断不冒充事实。
+- `evidence_depth`:大胆结论平均证据数 → `clamp(avg/2)`。
+- `snr`:呈现条目中**被 conclusions/connections 证据真正引用**的占比(去重紧、无水文尾巴)。
+- `restraint = 100·(0.40·grounded + 0.20·grade_discipline + 0.20·evidence_depth + 0.20·snr)`
+- **反作弊**:靠堆 non_obvious 刷关联 → overreach↑ → restraint↓,`composite` 不赚。
+
+**8 · 创新 / 探索(innovation)** — 盲区:6 分奖励「同类做更多」,`source_quality` 还奖励采自 core(吃老本)→ 可能高分停滞。组件(对比**历史窗口** `state/scores.json`/`data/entities`/前 K 日 corpus):
+- `new_productive`:今日**产出内容**的、近窗口未见的话题/实体数(前沿扩张)。
+- `exploration`:是否**首次产出**来自新来源/新检索角度(`1 − from_core_share`,取健康带;**与第 5 分反向**,逼着别只吃 core)。
+- `lens_diversity`:用到的透镜种类,冷门透镜(二阶效应/跨域/跟着钱走/共识缺口)加成,而非只有「时间线」。
+- `cross_domain_novel`:近窗口未配过的跨域配对数。
+- `learning_velocity`:上轮最低分本轮是否被 evolve 提上来(读 `delta_vs_prev`)。
+- `innovation = 100·(0.25·new_productive + 0.20·exploration + 0.20·lens_diversity + 0.20·cross_domain_novel + 0.15·learning_velocity)`
+- **反停滞**:只吃 core、重复昨天 → exploration/new_productive↓ → innovation↓。
+
+### 9.3 张力矩阵(分数间相互关系 = 约束)
+| 抄近路 | 涨 | 跌(净不赚) |
+|---|---|---|
+| 臆造/过度引申堆关联 | 关联↑ 分析↑ | 克制↓ |
+| 只吃 core、重复昨天 | 源固化↑ | 创新↓ |
+| 灌水凑量 | 数量↑ 广度↑ | 克制↓(信噪比) |
+| 乱试制造噪音 | 创新↑ | 克制↓ |
+| 只求稳不试新 | 克制↑ | 创新↓ |
+
+`composite = 8 者均值`,提最低分 → 自动收敛到「既克制又创新」中间带。**scores.py 输出 8 分 + composite;`state/scores.json` schema 加两字段(向后兼容:旧 entry 缺则视 None)。**
+
+### 9.4 统一框架:全局 vs 个人(同一套 8 维)
+- **全局尺度**(score.py over `data/analysis/<date>`,owner)= **系统迭代能力**,owner 仪表盘。
+- **个人尺度**(同 8 维,over 用户那片:其订阅话题的条目 + 其反馈 + 其画像变更)= **个人进化分数**;`composite=分数`,**进化能力 = 成熟度等级**(随参与 + 画像维度增长的 Lv./%)。
+- **个人克制 = 反过拟合/反回音室**(muted 过猛、偏好过窄即扣);**个人创新 = 反过滤气泡**(始终保留一定 serendipity/新话题);→ 天然的**过滤气泡护栏**。
+- **明确不含系统分**(满足「进化能力不包括系统迭代」):个人仪表盘只显示本人 8 维 + composite + 能力等级,不显示全局 score.py 结果。
+
+## 10. 数据模型(D1 新增,建在 SP1 之上)
+
+```sql
+-- 用户画像(形态);current 快照 + 版本历史
+CREATE TABLE user_profile (
+  user_id INTEGER PRIMARY KEY, profile TEXT NOT NULL, version INTEGER, updated_at TEXT
+);
+CREATE TABLE user_profile_history (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, version INTEGER, profile TEXT, ts TEXT, note TEXT
+);
+-- 话题订阅(便于按话题聚合/扩采触发)
+CREATE TABLE user_topics (
+  user_id INTEGER, topic TEXT, weight REAL, subscribed_at TEXT, PRIMARY KEY(user_id, topic)
+);
+-- 个人 8 分时间序列(个人进化分数/能力,趋势)
+CREATE TABLE user_scores (
+  user_id INTEGER, date TEXT, scores TEXT, composite REAL, capability REAL, computed_at TEXT,
+  PRIMARY KEY(user_id, date)
+);
+```
+- 话题注册表:`config/topics.yaml`(人工种子)+ `data/topics/registry.json`(运行态);全局系统 8 分仍走 `state/scores.json`(加两字段)。
+
+## 11. API(新增端点,建在 SP1 认证之上)
+
+| 端点 | 作用 |
+|---|---|
+| `GET /me/profile` | 取本人画像(前端重排用) |
+| `GET /me/feed?date=` | (可选)服务端算好的个人排序/精选,给不便客户端算的场景 |
+| `GET /me/evolution` | 本人 8 分 + composite + 能力等级 + 趋势(个人仪表盘) |
+| `POST /me/topics {topic, on}` | 订阅/退订话题(触发注册表归一 + 可能扩采) |
+| `POST /me/mute {kind, value, on}` | 屏蔽话题/实体/来源 |
+| `GET /topics` | 规范话题注册表(可订阅列表 + 是否已采) |
+| `POST /admin/topics ...` | owner 管注册表(并/删/降权/审核新话题) |
+| `GET /admin/scores` | 全局系统 8 分(owner 仪表盘;= 现有 + 2) |
+
+反馈/关注等 SP1 已有端点**增量喂画像**(在其 handler 里顺带更新 profile 权重)。
+
+## 12. 前端
+
+- **个人页重排**:登录后单页 JS `GET /me/profile` → 重排/过滤/标注「为你」;订阅/屏蔽/话题管理入口(复用 SP1 设置菜单)。
+- **个人进化仪表盘**:`GET /me/evolution` → 本人 8 维雷达 + composite + 能力等级 + 趋势线(参照现有 owner 仪表盘样式,但**只本人数据**)。
+- **owner 仪表盘**:现有「📊 自进化仪表盘」升级显示 8 维(+克制/创新),仍是**全局系统**尺度。
+- 主题/深色沿用 SP1。
+
+## 13. 成本与扩展性
+- 采集/汇总:O(规范话题数),护栏封顶;个人重排:客户端 O(条目数)、零后端;个人 evolve:规则为主、单价极低,随人数线性但便宜。⇒ **共享贵的(采集/汇总),便宜的才 per-user**。
+- 明确接受:全新话题的**一次性扩采成本**(用户已认可)。
+
+## 14. 与现有 skill/prompts/GOALS 的落地(变更落地契约)
+- 代码:`scripts/score.py`(+2 分)、`web/compile.py`(个人重排 hook + 个人仪表盘)、`worker/lib/*`(profile/evolution/topics/scores 端点)、`config/topics.yaml`、`data/topics/`。
+- skill/提示词:`ln-collect`/`ln-synthesize`(话题为键)、`ln-evolve`(全局仍 owner;个人 evolve-lite 新增说明)、`ln-dossier`(话题=领域的天然接口)、`prompts/scoring.md`(6→8 + 张力)、`GOALS.md`(北极星不变,新增「克制/创新」为运行化护栏 + 个性化为 L3 目标)、`prompts/CHANGELOG.md` 留痕。
+- `bash scripts/check.sh` 必过(注意:改 GOALS/skill 引用的文件名要同步,新增 `scripts/score.py` 字段不破 JSON 自洽)。
+
+## 15. 实施相位(每相位独立 plan;细化交给 writing-plans)
+- **2c(可独立先行,无账号依赖)**:score.py 6→8(克制/创新)+ GOALS/scoring.md/owner 仪表盘。**最小、最快见效,可先落。**
+- **2a(需 SP1)**:个人画像 + 客户端重排 + 个人 evolve-lite + 个人 8 分/仪表盘,**跑在现有共享语料上**(用户兴趣在现有话题覆盖内即千人千面)。
+- **2b(需 SP1)**:话题注册表 + 话题为键采集/汇总改造 + 新话题扩采(拉入股市这类全新话题)。最重,最后做。
+
+建议顺序:**SP1 → 2c → 2a → 2b**(2c 也可与 SP1 并行)。
+
+## 16. 测试
+- 单测(确定性):score.py 7/8 反作弊(堆 non_obvious→克制↓;只吃 core→创新↓)、个人 rank 函数、画像更新规则、话题归一、护栏软上限。
+- 隔离不变量测试:A 反馈后 B 的页面/画像/分数不变;个人 evolve 不改全局 prompts;owner evolve 不改已分叉画像。
+- 端到端:新用户≈owner 底座 → 反馈后分叉;订新话题→扩采回填可见;个人仪表盘随反馈上行;过滤气泡护栏(创新分兜底 serendipity)。
+
+## 17. 已决 / 遗留
+- 已决:话题为键共享 + 纯个人视图;客户端重排;个人 evolve-lite 规则为主;8 维统一框架(全局+个人);6→8 张力约束。
+- 遗留(评审待定):话题归一是否需 LLM(默认映射+必要时轻 LLM);新话题是 owner 审核 or 软上限自动纳入(默认软上限);个人 evolve 频率(默认每日);能力等级(capability)的具体公式(默认参与×画像维度成熟度,评审细化)。
+
+---
+
+### 附:上游需求(用户增补)
+- 全局底座以现状为基准;新用户默认以 owner 底座为准;用户开始反馈进化后,其整体反馈结果按自己的形态走 → 千人千面、一人一个个性化新闻页。
+- 每人可见自己的进化分数 / 进化能力(**不含系统迭代能力**)。
+- 基于现有 6 系统分再加 2 分,用分数间相互关系约束 agent 在采集/聚合/生长/进化中保持**克制与创新**;新增分补现有分的**正交盲区**。
