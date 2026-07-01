@@ -1,476 +1,486 @@
 {
   "date": "2026-07-01",
-  "generated_at": "2026-07-01T12:50:00+08:00",
-  "summary_zh": "两条主线。一是==叙事跑在兑现前面==:Anthropic 9650 亿反超 OpenAI、机器人年内融资破 558 亿、40% 企业要上 AI 智能体,但企业只约两成见 ROI、红队称能力未越国安线、美联储还转了鹰。二是==美中 AI 角力下沉到代码与合规==:Claude Code 被曝暗藏『中国用户指纹』(Anthropic 已认将回滚),叠加其向参院指控阿里 1600 万次查询蒸馏、中国开源 Qwen/GLM-5 反超、欧盟 AI 法 8 月全面适用——竞争从模型层打到了工具链与法律层。",
+  "generated_at": "2026-07-01T07:05:00+08:00",
+  "summary_zh": "今天的主线是**美中 AI 从『卡脖子』转向『绕道与自建』**:美团开源 LongCat-2.0,首次用国产芯片(华为 5 万卡集群)跑完 1.6 万亿参数模型的==全程预训练==,而台湾同日在查英伟达 H100/H200 走私入华。与此同时,价值与成本双双涌向**推理 / harness 层**——Copilot 计量计费让智能体账单暴涨 10–50 倍,巨头数十亿美元抢购推理软件;美国则把最强模型(GPT-5.6)关进政府闸门,又在 6/30 解除对 Claude 的出口管制。==管制与门控越收紧,替代与自建就越被逼出来。==",
   "consensus": [
     {
-      "title_zh": "Anthropic 秘密递交 IPO:65 亿融资、9650 亿估值,首次反超 OpenAI",
-      "summary_zh": "Anthropic 于 6 月 1 日向 SEC 秘密递交 S-1,并以一轮 650 亿美元融资把估值抬到 9650 亿美元,首次超过 OpenAI(约 8520 亿);彭博测算已高出逾千亿。其一季度营收 48 亿、二季度预计 109 亿(单季翻倍),最快 10 月上市。",
+      "title_zh": "美团开源 LongCat-2.0:1.6 万亿参数、全程国产芯片训练的智能体编程模型",
+      "summary_zh": "美团 6/30 开源 LongCat-2.0——1.6 万亿参数 MoE(每 token 约激活 480 亿),100 万 token 上下文,训练超 30 万亿 token。它称**全流程预训练与大规模推理均在国产芯片**(华为 Atlas-950 SuperPod、5 万卡集群)完成,是首个确认在国产 ASIC 集群跑完前沿级预训练的中国模型;专为 Claude Code、OpenClaw、Hermes 等编程 harness 当\"大脑\",已在 OpenRouter 榜单领跑。",
       "sources": [
-        "Fortune",
-        "TechCrunch",
-        "France24"
+        "VentureBeat",
+        "SiliconANGLE"
       ],
       "source_links": [
         {
-          "name": "Fortune",
-          "url": "https://fortune.com/2026/06/01/anthropic-confidentially-files-ipo-965-billion-valuation/"
+          "name": "VentureBeat",
+          "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips"
         },
         {
-          "name": "TechCrunch",
-          "url": "https://techcrunch.com/2026/05/28/anthropic-raises-65-billion-nears-1t-valuation-ahead-of-ipo/"
-        },
-        {
-          "name": "France24",
-          "url": "https://www.france24.com/en/tv-shows/business/20260602-ai-startup-anthropic-files-for-ipo-after-reaching-965-billion-valuation"
+          "name": "SiliconANGLE",
+          "url": "https://siliconangle.com/2026/06/30/chinas-meituan-open-sources-massive-longcat-2-0-ai-model-saying-trained-domestic-chips/"
         }
       ],
-      "consensus_count": 3,
-      "url": "https://fortune.com/2026/06/01/anthropic-confidentially-files-ipo-965-billion-valuation/",
+      "consensus_count": 8,
+      "url": "https://venturebeat.com/technology/meituan-open-sources-longcat-2-0-the-1-6t-near-frontier-agentic-coding-model-thats-been-leading-openrouter-trained-entirely-on-chinese-chips",
       "topics": [
-        "AI 融资",
-        "IPO",
-        "大模型"
+        "中国AI",
+        "芯片",
+        "开源模型",
+        "智能体编程"
       ],
-      "id": "65c0db7305e657e9"
+      "id": "509a55cca57dbb32"
     },
     {
-      "title_zh": "OpenAI 也在筹备秘密 IPO,估值约 7300 亿;收购 Ona 强化 Codex,周活破 500 万",
-      "summary_zh": "据报道 OpenAI 正与高盛、摩根士丹利筹备秘密递交 IPO,最快 9 月上市,私募估值约 7300 亿美元;同时收购德国初创 Ona 以增强 Codex 的云端常驻智能体能力,Codex 周活用户已超 500 万。与今日 Anthropic 以 9650 亿反超形成对照。",
-      "sources": [],
-      "source_links": null,
-      "consensus_count": 2,
-      "url": "https://openai.com/news/",
-      "topics": [
-        "AI 融资",
-        "IPO",
-        "智能体"
-      ],
-      "id": "cd4de9e9e756f73b"
-    },
-    {
-      "title_zh": "企业 AI 智能体:采纳狂飙,价值却接不上——只有约两成见到回报",
-      "summary_zh": "Gartner 预计到 2026 年底 40% 的企业应用将内嵌任务型 AI 智能体(2025 年不足 5%);97% 高管称已部署。但价值鸿沟明显:仅约 23% 从 AI 智能体、29% 从生成式 AI 看到显著 ROI,79% 组织称落地更难了,不到 10% 真正规模化,预计到 2027 年逾四成 agent 项目会被砍;72% 已上生产但 60% 缺正式治理。",
-      "sources": [
-        "Gartner",
-        "Writer"
-      ],
-      "source_links": [
-        {
-          "name": "Gartner",
-          "url": "https://www.gartner.com/en/newsroom/press-releases/2025-08-26-gartner-predicts-40-percent-of-enterprise-apps-will-feature-task-specific-ai-agents-by-2026-up-from-less-than-5-percent-in-2025"
-        },
-        {
-          "name": "Writer",
-          "url": "https://writer.com/blog/enterprise-ai-adoption-2026/"
-        }
-      ],
-      "consensus_count": 3,
-      "url": "https://www.gartner.com/en/newsroom/press-releases/2025-08-26-gartner-predicts-40-percent-of-enterprise-apps-will-feature-task-specific-ai-agents-by-2026-up-from-less-than-5-percent-in-2025",
-      "topics": [
-        "企业 AI",
-        "AI agent",
-        "ROI"
-      ],
-      "id": "dc9436282621ed97"
-    },
-    {
-      "title_zh": "机器人 / 具身智能融资井喷:2026 年内已超 558 亿美元,中国占超四成",
-      "summary_zh": "具身智能带动机器人融资创纪录:2026 年至今行业已募资约 558 亿美元、逾 172 起融资事件。头部案例密集——Neura 6 月 10 日 C 轮约 12 亿(Tether/高通/亚马逊/英伟达/博世等),Skild AI 1 月 14 亿,Figure AI 累计约 19 亿、估值 390 亿;仅 5 月中国就有 46 起具身/人形融资、逾 85 亿元。中国已占全球机器人风投超 43%,并从融资转向量产。",
-      "sources": [
-        "Crunchbase",
-        "CNBC(Neura)",
-        "CMRA"
-      ],
-      "source_links": [
-        {
-          "name": "Crunchbase",
-          "url": "https://news.crunchbase.com/robotics/embodied-ai-fuels-record-funding-china-ipo-momentum-builds/"
-        },
-        {
-          "name": "CNBC(Neura)",
-          "url": "https://www.cnbc.com/2026/06/10/neura-robotics-funding-ai-humanoid-robots.html"
-        },
-        {
-          "name": "CMRA",
-          "url": "https://cnmra.com/over-46-embodied-ai-and-humanoid-robot-funding-deals-raised-more-than-rmb-8-5-billion-globally-in-may-2026/"
-        }
-      ],
-      "consensus_count": 3,
-      "url": "https://news.crunchbase.com/robotics/embodied-ai-fuels-record-funding-china-ipo-momentum-builds/",
-      "topics": [
-        "机器人",
-        "具身智能",
-        "融资"
-      ],
-      "id": "26b3e31bac3726e6"
-    },
-    {
-      "title_zh": "美联储按兵不动转鹰:新主席 Warsh 首会删降息倾向,暗示可能加息",
-      "summary_zh": "6 月 17 日美联储维持利率 3.50%–3.75% 不变(新主席 Kevin Warsh 首次主持),删去此前的降息倾向语言、暗示年内可能加息,2026 年底利率中值上修至 3.8%;PCE 通胀预期由 2.7% 大幅上调至 3.6%。当日标普 500 收于 7420、逼近历史新高,市场开始押注最早 10 月加息。",
-      "sources": [
-        "CNBC",
-        "美联储 FOMC",
-        "Advisor Perspectives"
-      ],
-      "source_links": [
-        {
-          "name": "CNBC",
-          "url": "https://www.cnbc.com/2026/06/17/fed-interest-rate-decision-june-2026.html"
-        },
-        {
-          "name": "美联储 FOMC",
-          "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm"
-        },
-        {
-          "name": "Advisor Perspectives",
-          "url": "https://www.advisorperspectives.com/dshort/updates/2026/06/18/feds-interest-rate-decision-june-17-2026"
-        }
-      ],
-      "consensus_count": 3,
-      "url": "https://www.cnbc.com/2026/06/17/fed-interest-rate-decision-june-2026.html",
-      "topics": [
-        "利率",
-        "通胀",
-        "美联储"
-      ],
-      "id": "187b5d8a65b65600"
-    },
-    {
-      "title_zh": "Anthropic 向参议院指控:中国实验室用约 1600 万次 Claude 查询蒸馏抄模型,阿里涉最大规模",
-      "summary_zh": "Anthropic 称中国 AI 公司通过约 1600 万次 Claude 查询做蒸馏、试图复制其能力,并向参议院指认阿里巴巴主导了已知最大规模的一次『AI 窃取』行动;并借此论证仅靠出口管制守不住美中 AI 竞赛的防线。这条与今日 Claude Code『中国指纹』风波互为背景。",
+      "title_zh": "GitHub Copilot 计量计费满月:智能体账单暴涨 10–50 倍,开发者出走",
+      "summary_zh": "Copilot 用量制 AI Credits(1 credit=$0.01,按输入/输出/缓存 token 计)首个 30 天周期 6/30 结束。做智能体式自动编程的开发者账单较旧订阅飙升 10–50 倍——有人月费从 $29 涨到 $750、$50 涨到 $3000;大批用户转向直连 Anthropic/OpenAI 或走 OpenRouter、LM Studio。同日 WSJ 亦点名企业\"为智能体 token 成本承压\"。",
       "sources": [
         "TechTimes",
-        "The Hacker News",
-        "CyberScoop"
+        "The Register"
       ],
       "source_links": [
         {
           "name": "TechTimes",
-          "url": "https://www.techtimes.com/articles/319105/20260625/alibaba-ran-largest-known-ai-theft-campaign-against-claude-anthropic-tells-senate.htm"
+          "url": "https://www.techtimes.com/articles/319340/20260629/github-copilot-billing-shock-confirmed-agentic-users-face-10x-cost-surge.htm"
         },
         {
-          "name": "The Hacker News",
-          "url": "https://thehackernews.com/2026/02/anthropic-says-chinese-ai-firms-used-16.html"
-        },
-        {
-          "name": "CyberScoop",
-          "url": "https://cyberscoop.com/anthropic-accuses-chinese-labs-ai-distillation-cyber-risk/"
+          "name": "The Register",
+          "url": "https://www.theregister.com/ai-and-ml/2026/06/02/github-copilot-users-threaten-exit-as-metered-billing-kicks-in/"
         }
       ],
-      "consensus_count": 3,
-      "url": "https://www.techtimes.com/articles/319105/20260625/alibaba-ran-largest-known-ai-theft-campaign-against-claude-anthropic-tells-senate.htm",
+      "consensus_count": 6,
+      "url": "https://www.techtimes.com/articles/319340/20260629/github-copilot-billing-shock-confirmed-agentic-users-face-10x-cost-surge.htm",
       "topics": [
-        "美中 AI",
-        "蒸馏",
-        "AI 安全"
+        "harness engineering",
+        "商业模式",
+        "AI编程",
+        "企业AI"
       ],
-      "id": "5d7bdeabf2cfbdec"
+      "id": "a6726754cde6e66b"
     },
     {
-      "title_zh": "苹果确认:Apple Intelligence 部分能力将跑在 Nvidia GPU 上、寄居谷歌云",
-      "summary_zh": "苹果官方确认,Apple Intelligence 的部分功能将在云端跑在 Nvidia GPU 上,作为其『私有云计算』基础设施的一部分、并部署在谷歌云中;苹果同时与谷歌、Nvidia 合作打造更先进的 AI 模型。一向自研的苹果在 AI 算力上转向外部,信号明显。",
-      "sources": [],
-      "source_links": null,
-      "consensus_count": 1,
-      "url": "https://www.cnbc.com/2026/06/08/apple-google-nvidia-ai-chips.html",
-      "topics": [
-        "AI 芯片",
-        "算力",
-        "云"
-      ],
-      "id": "42b9a85757a2eb8e"
-    },
-    {
-      "title_zh": "谷歌 Android 17 内置 Gemini Omni,Gemini 3.5 Flash 原生『电脑操作』,铺路年内 Agent",
-      "summary_zh": "谷歌发布 Android 17,内置 Gemini Omni、Lyria 3 音乐生成与 AudioLM 翻译;并把『电脑操作(computer use)』原生集成进 Gemini 3.5 Flash 的 API 与企业 Agent 平台,为下半年的『Gemini Intelligence』智能体打底。",
-      "sources": [],
-      "source_links": null,
-      "consensus_count": 1,
-      "url": "https://aiweekly.co/ai-news-today/google-ai-news",
-      "topics": [
-        "大模型",
-        "智能体",
-        "Android"
-      ],
-      "id": "88208f58dfc8188f"
-    },
-    {
-      "title_zh": "欧盟 AI 法 8 月 2 日全面适用,理事会 6/29 终批『简化包』;美国转向联邦预占州法",
-      "summary_zh": "欧盟《AI 法》将于 8 月 2 日全面适用,理事会 6 月 29 日为『数字简化包(Digital Omnibus)』开绿灯——把部分高风险义务再延后;美国这边则是 2025 年 12 月行政令 + 2026 年 3 月白宫框架,推动『轻触式』联邦标准并预占各州 AI 法(接 6-30 那条参院 99–1 否决禁令的后续)。",
+      "title_zh": "美国前沿模型进入\"政府门控\":OpenAI GPT-5.6 三档受审查预览",
+      "summary_zh": "OpenAI 预览 GPT-5.6 的 Sol(旗舰)/Terra(均衡)/Luna(高速廉价)三档,但均未公开发布、须先过华盛顿\"前沿 AI 审查\"。这落在特朗普 6/2 行政令框架下——要求开发者在广泛发布前\"自愿\"给政府最长 30 天早期访问,并建 AI 网络安全清算所、评估模型网络能力。国家安全与\"别扼杀创新\"的拉锯,正把最强模型关进政府闸门。",
       "sources": [
-        "Collibra",
-        "Crowell & Moring",
-        "Holland & Knight"
+        "白宫行政令",
+        "NPR"
       ],
       "source_links": [
         {
-          "name": "Collibra",
-          "url": "https://www.collibra.com/blog/ai-regulatory-compliance-in-2026-eu-ai-act-us-orders-and-state-laws-and-how-to-operationalize"
+          "name": "白宫行政令",
+          "url": "https://www.whitehouse.gov/presidential-actions/2026/06/promoting-advanced-artificial-intelligence-innovation-and-security/"
         },
         {
-          "name": "Crowell & Moring",
-          "url": "https://www.crowell.com/en/insights/client-alerts/executive-order-tries-to-thwart-onerous-ai-state-regulation-calls-for-national-framework"
-        },
-        {
-          "name": "Holland & Knight",
-          "url": "https://www.hklaw.com/en/insights/publications/2026/04/us-companies-face-eu-ai-acts-possible-august-2026-compliance-deadline"
+          "name": "NPR",
+          "url": "https://www.npr.org/2026/06/02/nx-s1-5844347/ai-safety-trump-executive-order"
         }
       ],
-      "consensus_count": 3,
-      "url": "https://www.collibra.com/blog/ai-regulatory-compliance-in-2026-eu-ai-act-us-orders-and-state-laws-and-how-to-operationalize",
+      "consensus_count": 5,
+      "url": "https://www.whitehouse.gov/presidential-actions/2026/06/promoting-advanced-artificial-intelligence-innovation-and-security/",
       "topics": [
-        "AI 监管",
-        "合规",
-        "美中欧"
+        "AI监管",
+        "前沿模型",
+        "出口管制"
       ],
-      "id": "26d6de038a22be35"
+      "id": "7ca7f9d9e26f8f4d"
     },
     {
-      "title_zh": "Nvidia 发债 250 亿美元、转向『算力租赁』;台积电路线图 34 年来首次分叉、Intel 18A-P 进风险试产",
-      "summary_zh": "AI 芯片版图继续重排:Nvidia 创纪录业绩之外,以 250 亿美元发债扩表并转向算力租赁模式;台积电 4 月的先进制程路线图出现 1992 年以来首次『分叉』,按移动与 AI-HPC 两条线走(苹果、Nvidia 为其两大客户);Intel 18A-P 进入风险试产、传获苹果与谷歌兴趣。",
-      "sources": [],
-      "source_links": null,
-      "consensus_count": 2,
-      "url": "https://www.distillintelligence.com/briefings/semiconductors-ai-chips-2026-06-19",
+      "title_zh": "Meta\"戛纳\"项目:承包商假扮未成年人,测竞品 AI 聊天机器人的安全底线",
+      "summary_zh": "据报道,Meta 通过承包商(项目内部代号 Cannes、肯尼亚团队)建了数百个\"未成年\"虚拟账号,向 OpenAI、谷歌 Gemini、Character.AI 等竞品发涉自杀/性/毒品的提示与图片,把回复记进表格找安全漏洞;单轮曾跑 4.5 万条提示。对外称\"竞争性安全基准\",但以儿童身份伪装的手法引发伦理争议。",
+      "sources": [
+        "The Next Web",
+        "Crypto Briefing"
+      ],
+      "source_links": [
+        {
+          "name": "The Next Web",
+          "url": "https://thenextweb.com/news/meta-contractors-posed-teens-rival-chatbot-testing"
+        },
+        {
+          "name": "Crypto Briefing",
+          "url": "https://cryptobriefing.com/meta-contractors-teens-test-rival-chatbots/"
+        }
+      ],
+      "consensus_count": 6,
+      "url": "https://thenextweb.com/news/meta-contractors-posed-teens-rival-chatbot-testing",
       "topics": [
-        "AI 芯片",
-        "半导体",
+        "AI安全",
+        "竞争",
+        "伦理"
+      ],
+      "id": "42679fe1db7eec75"
+    },
+    {
+      "title_zh": "台湾突袭 Super Micro:英伟达 H100/H200 服务器涉走私中国,调查扩大",
+      "summary_zh": "6/29 台湾基隆检方搜查 Super Micro 台湾分公司等 12 处,深挖借其服务器把英伟达 H100/H200 走私入华案——设备原售香港空壳公司、用途谎报\"学术研究/气象模拟\";此前已扣 50 台。美司法部 3 月已就\"用热风枪换序列号、假服务器骗审计\"起诉其联合创始人。管制越紧,绕道越隐蔽。",
+      "sources": [
+        "Bloomberg",
+        "The Next Web"
+      ],
+      "source_links": [
+        {
+          "name": "Bloomberg",
+          "url": "https://www.bloomberg.com/news/articles/2026-06-29/super-micro-office-raided-as-taiwan-expands-chip-smuggling-probe"
+        },
+        {
+          "name": "The Next Web",
+          "url": "https://thenextweb.com/news/super-micro-taiwan-raid-nvidia-chip-smuggling-probe"
+        }
+      ],
+      "consensus_count": 5,
+      "url": "https://www.bloomberg.com/news/articles/2026-06-29/super-micro-office-raided-as-taiwan-expands-chip-smuggling-probe",
+      "topics": [
+        "芯片",
+        "出口管制",
+        "美中"
+      ],
+      "id": "9597182490206cca"
+    },
+    {
+      "title_zh": "中国 6 月制造业重回扩张:AI 相关出口拉动,高技术 PMI 达 53.5",
+      "summary_zh": "官方制造业 PMI 从 5 月 50.0 升至 6 月 50.3(超预期),高技术制造 PMI 53.5 明显更热;芯片、电脑等 AI 相关产品的强劲出口订单(含赶在关税前对美前置)是主动力。分析称全球 AI 投资为中国 20 万亿美元经济提供缓冲,但复苏\"高度依赖出口与 AI 相关科技\"。",
+      "sources": [
+        "CNBC",
+        "Reuters(via Investing)"
+      ],
+      "source_links": [
+        {
+          "name": "CNBC",
+          "url": "https://www.cnbc.com/2026/06/30/china-factory-activity-june-tech-export-demand-pmi-nbs.html"
+        },
+        {
+          "name": "Reuters(via Investing)",
+          "url": "https://www.investing.com/news/economy-news/chinas-factory-activity-expands-in-june-on-hightech-exports-4766820"
+        }
+      ],
+      "consensus_count": 5,
+      "url": "https://www.cnbc.com/2026/06/30/china-factory-activity-june-tech-export-demand-pmi-nbs.html",
+      "topics": [
+        "中国经济",
+        "AI硬件",
         "算力"
       ],
-      "id": "c59de545442b78e6"
+      "id": "d2b9a61df1e7034e"
     },
     {
-      "title_zh": "Anthropic:已挫败首例『AI 编排』的网络间谍行动",
-      "summary_zh": "Anthropic 披露挫败了据其所述首例由 AI 智能体大规模编排的网络间谍活动,攻击者借 Claude 自动化侦察与渗透;公司据此呼吁把前沿模型的滥用防护纳入国安议程。与今日 Claude Code『中国指纹』、阿里蒸馏指控同属美中 AI 安全暗线。",
-      "sources": [],
-      "source_links": null,
-      "consensus_count": 1,
-      "url": "https://www.anthropic.com/news/disrupting-AI-espionage",
+      "title_zh": "美最高法(6-3):调取手机位置历史属\"搜查\",地理围栏令受第四修正案约束",
+      "summary_zh": "在 Chatrie 案中,最高法 6-3 裁定:警方向谷歌等公司调取某人存储的位置历史即构成第四修正案下的\"搜查\",个人对位置记录有\"合理隐私期待\"(卡根大法官执笔)。未直接判本案令状是否合宪,发回下级法院审查是否有\"相当理由\"且范围足够窄。为科技公司海量位置数据的执法调取划下宪法红线。",
+      "sources": [
+        "NPR",
+        "SCOTUSblog"
+      ],
+      "source_links": [
+        {
+          "name": "NPR",
+          "url": "https://www.npr.org/2026/06/29/nx-s1-5844697/supreme-court-restricts-use-of-geofence-warrants"
+        },
+        {
+          "name": "SCOTUSblog",
+          "url": "https://www.scotusblog.com/2026/06/court-rules-that-law-enforcements-use-of-geofence-warrant-was-a-search/"
+        }
+      ],
+      "consensus_count": 6,
+      "url": "https://www.npr.org/2026/06/29/nx-s1-5844697/supreme-court-restricts-use-of-geofence-warrants",
       "topics": [
-        "AI 安全",
-        "网络间谍",
+        "隐私",
+        "监管",
+        "数据"
+      ],
+      "id": "89452808c5147e0f"
+    },
+    {
+      "title_zh": "谷歌把 Gemini\"纳米香蕉\"个性化生图对全美免费——代价是你的数据",
+      "summary_zh": "6/29 起谷歌向全美 13 岁以上用户免费开放 Gemini 的 Nano Banana 个性化生图(原限 Plus/Pro/Ultra)。它调用你 Gmail/Google 相册/YouTube/搜索的账号数据,\"无需明说\"即按喜好出图;免费额度用尽回落基础模型,编辑限 18 岁以上。用免费换更深的个人数据接入。",
+      "sources": [
+        "TechCrunch",
+        "The Next Web"
+      ],
+      "source_links": [
+        {
+          "name": "TechCrunch",
+          "url": "https://techcrunch.com/2026/06/29/geminis-personalized-ai-image-generation-is-now-free-for-u-s-users/"
+        },
+        {
+          "name": "The Next Web",
+          "url": "https://thenextweb.com/news/gemini-personalized-image-generation-free-us-users"
+        }
+      ],
+      "consensus_count": 5,
+      "url": "https://techcrunch.com/2026/06/29/geminis-personalized-ai-image-generation-is-now-free-for-u-s-users/",
+      "topics": [
+        "产品",
+        "隐私",
+        "谷歌"
+      ],
+      "id": "5b59cc183adb6081"
+    },
+    {
+      "title_zh": "AP 调查:美国 AI(ChatGPT/Gemini)成全球诈骗产业的工具",
+      "summary_zh": "AP 调查:主要基于 ChatGPT、Gemini 的美国 AI 被用来造出可跨数十种语言、监视工人、锁定受害者的诈骗软件;缅甸诈骗园区依赖 Cogent、AT&T、DigitalOcean、Oracle 等美国基础设施(园区四处设备信号五分之一经美国注册公司)。FTC 估 2024 年美国人诈骗损失近 2000 亿美元;AP 称未发现这些公司自身违法。",
+      "sources": [
+        "AP(via LiveNOW FOX)"
+      ],
+      "source_links": [
+        {
+          "name": "AP(via LiveNOW FOX)",
+          "url": "https://www.livenowfox.com/news/us-tech-global-scam-americans-billions"
+        }
+      ],
+      "consensus_count": 4,
+      "url": "https://www.livenowfox.com/news/us-tech-global-scam-americans-billions",
+      "topics": [
+        "AI安全",
+        "滥用",
+        "诈骗"
+      ],
+      "id": "cc273a7355efc9bf"
+    },
+    {
+      "title_zh": "推理层军备:高通 39 亿美元收 Modular,Groq 融资 6.5 亿扩推理云",
+      "summary_zh": "6/24 高通宣布约 39.2 亿美元收购 AI 软件公司 Modular(让模型跨芯片部署免改代码),补齐数据中心软件栈;6/22 推理芯片公司 Groq 融资 6.5 亿美元扩推理云(已运营 13 个数据中心、服务 500 万开发者、每周处理数万亿 token)。\"夹在芯片与模型之间\"的推理软件层,正成为最具战略价值的地盘。",
+      "sources": [
+        "CNBC",
+        "SiliconANGLE(Groq)"
+      ],
+      "source_links": [
+        {
+          "name": "CNBC",
+          "url": "https://www.cnbc.com/2026/06/24/qualcomm-ai-chip-modular-software.html"
+        },
+        {
+          "name": "SiliconANGLE(Groq)",
+          "url": "https://siliconangle.com/2026/06/22/inference-chip-startup-groq-raises-650m-grow-cloud-platform/"
+        }
+      ],
+      "consensus_count": 6,
+      "url": "https://www.cnbc.com/2026/06/24/qualcomm-ai-chip-modular-software.html",
+      "topics": [
+        "推理",
+        "芯片",
+        "并购整合"
+      ],
+      "id": "cdd91dff6ba56ae8"
+    },
+    {
+      "title_zh": "拉锯落幕:美商务部 6/30 解除对 Claude Fable 5 / Mythos 5 的出口管制",
+      "summary_zh": "Anthropic 6/30 称美商务部已解除对其 Fable 5、Mythos 5 两款模型的出口管制,结束与特朗普政府最近一轮激烈对峙(此前一度对关键基础设施防御者部分恢复 Mythos 5)。与 OpenAI GPT-5.6 仍受门控预览对照,凸显前沿模型的\"可用与否\"已高度取决于政府开关。",
+      "sources": [
+        "CNBC"
+      ],
+      "source_links": [
+        {
+          "name": "CNBC",
+          "url": "https://www.cnbc.com/2026/06/30/anthropic-says-trump-admin-has-lifted-export-controls-on-claude-fable-5-and-mythos-5.html"
+        }
+      ],
+      "consensus_count": 5,
+      "url": "https://www.cnbc.com/2026/06/30/anthropic-says-trump-admin-has-lifted-export-controls-on-claude-fable-5-and-mythos-5.html",
+      "topics": [
+        "AI监管",
+        "出口管制",
         "前沿模型"
       ],
-      "id": "4ac906a950f5dfbc"
+      "id": "d29ba678c28f41f1"
     },
     {
-      "title_zh": "AI 编程模型四强混战:微软、谷歌迎战 Anthropic 与 OpenAI",
-      "summary_zh": "AI 编程成主战场:Anthropic 靠 Claude Code 领跑并升级 Claude Opus,OpenAI 以 Codex(周活破 500 万)紧追,微软在 Build、谷歌在开发者大会密集出招。编程 Agent 正成为大模型商业化最快的落点。",
-      "sources": [],
-      "source_links": null,
-      "consensus_count": 1,
-      "url": "https://www.cnbc.com/2026/06/01/microsoft-and-google-take-on-anthropic-and-openai-in-ai-coding-models.html",
+      "title_zh": "Anthropic 上线 Claude Science + 内部药物发现,并推自托管 Claude Code 网关",
+      "summary_zh": "Anthropic 6/30 推出 Claude Science(科研工作台,连 60+ 科学数据库、可查询/分析/产出可复现结果,Pro/Max/Team/企业 beta 可用),并启动内部药物发现项目,主攻传统药企不愿碰的\"被忽视\"疾病。同期上线面向 Amazon Bedrock、谷歌云的 Claude apps 网关——给 Claude Code 加企业 SSO、集中策略、按人成本核算与支出上限的自托管控制面。",
+      "sources": [
+        "CNBC",
+        "Cryptopolitan"
+      ],
+      "source_links": [
+        {
+          "name": "CNBC",
+          "url": "https://www.cnbc.com/2026/06/30/anthropic-launches-ai-drug-discovery-program-claude-science.html"
+        },
+        {
+          "name": "Cryptopolitan",
+          "url": "https://www.cryptopolitan.com/anthropic-claude-science-ai-workbench/"
+        }
+      ],
+      "consensus_count": 4,
+      "url": "https://www.cnbc.com/2026/06/30/anthropic-launches-ai-drug-discovery-program-claude-science.html",
       "topics": [
-        "AI 编程",
+        "AI应用",
+        "科研",
+        "医药"
+      ],
+      "id": "ee2ed601ca4291d4"
+    },
+    {
+      "title_zh": "企业智能体:采纳狂飙,但治理与回报双双掉队",
+      "summary_zh": "多份 2026 报告勾出同一张脸:Gartner 预计到 2026 年底 40% 企业应用将嵌入任务型 AI 智能体(2025 年不足 5%),已有约 72% 进入生产级;但只有五分之一企业对自治智能体有成熟治理,Gartner 预计到 2027 年逾 40% 的智能体项目会被砍;PwC CEO 调查中仅 12% 同时拿到增收与降本。采纳曲线陡,兑现曲线平。",
+      "sources": [
+        "Publicis Sapient 2026 报告",
+        "Agentic AI Institute"
+      ],
+      "source_links": [
+        {
+          "name": "Publicis Sapient 2026 报告",
+          "url": "https://www.publicissapient.com/company/news/ai-adoption-enterprise-readiness-report-2026"
+        },
+        {
+          "name": "Agentic AI Institute",
+          "url": "https://agenticaiinstitute.org/agentic-ai-enterprise-adoption-2026-governance-gap/"
+        }
+      ],
+      "consensus_count": 5,
+      "url": "https://www.publicissapient.com/company/news/ai-adoption-enterprise-readiness-report-2026",
+      "topics": [
+        "企业AI",
         "智能体",
-        "大模型"
+        "落地"
       ],
-      "id": "ac8acb987a35420a"
-    },
-    {
-      "title_zh": "人形机器人被捧为下一个万亿级 AI 投资风口",
-      "summary_zh": "投行与产业界把人形机器人视为继大模型之后的下一个万亿级 AI 市场:亚马逊、奔驰、宝马、GXO、约翰迪尔已在部署,资本与订单同时涌入;但量产、成本与安全仍是能否兑现的关键变量。",
-      "sources": [],
-      "source_links": null,
-      "consensus_count": 1,
-      "url": "https://www.cnbc.com/2026/06/03/humanoid-robots-trillion-dollar-ai-market.html",
-      "topics": [
-        "机器人",
-        "具身智能",
-        "投资"
-      ],
-      "id": "325db0c102673aa0"
+      "id": "6f495aa3bc51e046"
     }
   ],
   "deep": [
     {
-      "title_zh": "Claude Code 被曝暗藏『中国用户指纹』:检测结果编码进系统提示词,Anthropic 已确认将回滚",
-      "summary_zh": "Reddit 用户与 GitHub 分析发现:Anthropic 的 Claude Code(自 4/2 的 v2.1.91 起、XOR 混淆、更新日志只字未提)会检测中国相关环境——查 ANTHROPIC_BASE_URL、Asia/Shanghai/Urumqi 时区、并对照一份 147 条域名清单(百度/阿里/字节及代理),再把结果偷偷编码进系统提示词的『Today's date』行(中国时区把日期分隔符 - 改成 /、并替换 Unicode 撇号)。Anthropic 一名技术员工已确认属实、称相关代码明天回滚;多方推测意图是反盗版/防蒸馏水印。",
-      "source": "International Cyber Digest / GitHub 分析",
+      "title_zh": "Import AI 463:自我改进的机器人、万卡中国集群,与一封写给人类纪元的挽歌",
+      "summary_zh": "Jack Clark 6/29 一期披露:腾讯详解其用于万卡级训练的软件 ARGUS——一套低开销、细粒度、常开的追踪与实时分析系统,用来在大规模训练中采数据、debug 疑难。本期还谈自我改进机器人与一封写给\"人类纪元\"的挽歌。",
+      "source": "Import AI(Jack Clark)",
       "lang": "en",
-      "original_quote": "the code is being rolled back in tomorrow's release",
-      "url": "https://www.internationalcyberdigest.com/claude-code-accused-of-hiding-china-proxy-fingerprints-inside-system-prompts/",
-      "insight_zh": "合规意图(反蒸馏水印)与知情同意的边界之争:引爆点不是『要不要防盗』,而是『偷偷编码进用户提示词』。",
-      "id": "48691b565d63534c"
+      "original_quote": "a low-overhead, fine-grained, always-on tracing and real-time analysis system for large-scale training workloads",
+      "url": "https://importai.substack.com/p/import-ai-463-self-improving-robots",
+      "insight_zh": "中国在\"训练框架 + 低精度格式(如华为 HiFloat4)+ 自研芯片\"上系统补齐软硬协同,正削弱\"卡住最先进 GPU 就能卡住中国前沿训练\"这一出口管制的核心假设。",
+      "id": "4697ae55d3b6733c"
     },
     {
-      "title_zh": "Anthropic 前沿红队:前沿模型出现'早期预警'信号,但尚未越过国安风险线",
-      "summary_zh": "Anthropic 前沿红队最新研判:模型在网络安全、生物等双用途能力上进步很快,部分已接近或超过本科水平/局部专家知识,但当前模型仍未达到会显著抬升国家安全风险的阈值;已由美、英 AI 安全研究院做部署前测试。另 METR 自 2 月起联合 Anthropic/谷歌/Meta/OpenAI 试点评估内部 AI 智能体的失准风险。",
-      "source": "Anthropic Frontier Red Team",
+      "title_zh": "LongCat-2.0:中国最出人意料的 AI 模型(地缘技术评)",
+      "summary_zh": "深评 LongCat-2.0 对美国出口管制核心假设的冲击:1.6 万亿参数、约 480 亿激活、30 万亿 token,全程预训练与大规模部署跑在 5 万卡华为 Atlas-950 SuperPod 国产 ASIC 上。",
+      "source": "GeopolitechS",
       "lang": "en",
-      "original_quote": "AI models are displaying 'early warning' signs of rapid progress in key dual-use capabilities.",
-      "url": "https://www.anthropic.com/news/strategic-warning-for-ai-risk-progress-and-insights-from-our-frontier-red-team",
-      "insight_zh": "'能力在涨、但还没到国安红线' 的克制表述,本身是行业给监管与自身争取时间窗的信号。",
-      "id": "f9d89c4e9ddbd28c"
-    },
-    {
-      "title_zh": "斯坦福 HAI:别只盯 DeepSeek——中国开源已是多玩家生态,政策含义深远",
-      "summary_zh": "斯坦福 HAI 政策分析指出,把中国开源等同于 DeepSeek 是误读:Qwen、GLM、Kimi、MiniMax 等构成多玩家、绑定国产芯片的开源生态,单点出口管制难以奏效,美对华 AI 政策需重估。",
-      "source": "Stanford HAI",
-      "lang": "en",
-      "original_quote": "the export controls alone cannot hold the line in the US-China AI race",
-      "url": "https://hai.stanford.edu/policy/beyond-deepseek-chinas-diverse-open-weight-ai-ecosystem-and-its-policy-implications",
-      "insight_zh": "把'中国 AI = DeepSeek'当靶子,是最常见也最误导的简化——真正的变量是整个国产开源+芯片生态。",
-      "id": "f6c9fab363aa377d"
+      "original_quote": "Meituan's LongCat-2.0 is the first confirmed case of a Chinese lab completing frontier-scale pre-training on a domestic ASIC cluster rather than Nvidia hardware.",
+      "url": "https://www.geopolitechs.org/p/longcat-20-chinas-most-unexpected",
+      "insight_zh": "若属实,\"断供最新英伟达栈即可阻止中国大规模训练前沿系统\"的前提被直接证伪——管制更像倒逼中国走通自主替代。",
+      "id": "0f6b2d27be01e1b0"
     }
   ],
-  "podcasts": [
-    {
-      "id": "20e8634f9461793b",
-      "show": "No Priors × Latent Space(交叉特辑)",
-      "host": "Sarah Guo / Elad Gil / swyx",
-      "guest": "Satya Nadella",
-      "guest_title": "微软 CEO",
-      "title_zh": "Satya Nadella 首登 No Priors × Latent Space 交叉特辑(Build 2026)",
-      "date": "2026-06",
-      "url": "https://commandline.microsoft.com/satya-nadella-no-priors-latent-space-engineering-podcast-build-2026/",
-      "summary_zh": "在 Microsoft Build 2026 现场录制:微软 CEO Satya Nadella 与 Sarah Guo、Elad Gil、swyx 对谈,这是他首次上 Latent Space。围绕 AI 智能体、软件工程范式变化与微软的 AI 平台策略展开。",
-      "key_points_zh": [
-        "首次登 Latent Space(与 No Priors 交叉)",
-        "AI 智能体如何改写软件工程",
-        "微软的 AI 平台与开发者策略",
-        "Build 2026 现场录制"
-      ],
-      "quote": "",
-      "lang": "en",
-      "topics": [
-        "微软",
-        "AI 工程",
-        "智能体"
-      ]
-    }
-  ],
+  "podcasts": [],
   "connections": [
     {
       "lens": "跟着钱走 / 跨域模式",
-      "title_zh": "资本与采纳齐涨:估值、融资、内嵌率三线同高",
-      "narrative_zh": "Anthropic 9650 亿反超、OpenAI 亦筹 IPO、机器人年内 558 亿、Gartner 称 40% 企业应用要内嵌智能体——一级估值、产业融资、企业采纳同时冲高。",
+      "title_zh": "价值和成本一起涌向『推理 / harness 层』",
+      "narrative_zh": "Copilot 把推理成本以计量计费直接摊给开发者(账单 10–50 倍),高通 39 亿美元收 Modular、Groq 融 6.5 亿抢推理软件层,LongCat 干脆把自己定位成编程 harness 的『大脑』。训练见顶后,真正被争夺、也真正产生成本的,是模型之下、芯片之上的这一层。",
       "evidence": [
-        "65c0db7305e657e9",
-        "cd4de9e9e756f73b",
-        "26b3e31bac3726e6",
-        "dc9436282621ed97"
+        "a6726754cde6e66b",
+        "cdd91dff6ba56ae8",
+        "509a55cca57dbb32",
+        "ee2ed601ca4291d4"
+      ]
+    },
+    {
+      "lens": "时间线追踪 / 沉默信号",
+      "title_zh": "出口管制的地基正在松动",
+      "narrative_zh": "LongCat 全程国产芯片训练 + 腾讯万卡 ARGUS 训练框架 + 中国高技术 PMI 53.5(AI 出口拉动),一边是自建能力补齐;台湾突袭 Super Micro 查 H100/H200 走私,一边是旧通道被围堵。两股力量指向同一结果:管制把中国推向自主替代。",
+      "evidence": [
+        "509a55cca57dbb32",
+        "4697ae55d3b6733c",
+        "d2b9a61df1e7034e",
+        "9597182490206cca",
+        "0f6b2d27be01e1b0"
       ]
     },
     {
       "lens": "共识缺口 / 矛盾检测",
-      "title_zh": "主流报『狂飙』,一手信号在『踩刹车』",
-      "narrative_zh": "与热闹相对:企业里只约 23% 从 AI 智能体见 ROI,Anthropic 红队也说能力涨但『未越国安红线』。分歧不在火不火,而在兑现没有。",
+      "title_zh": "美国把最强模型关进闸门,中国把大模型开源外推",
+      "narrative_zh": "同一周:OpenAI GPT-5.6 只能政府门控预览、须过前沿审查;Anthropic 与政府就 Fable5/Mythos5 出口管制拉锯到 6/30 才解禁。而中国这边,LongCat-2.0 直接把 1.6 万亿参数开源。两种路线在分岔——一个国家资产化,一个开源心智份额扩张。",
       "evidence": [
-        "dc9436282621ed97",
-        "f9d89c4e9ddbd28c"
+        "7ca7f9d9e26f8f4d",
+        "d29ba678c28f41f1",
+        "509a55cca57dbb32"
       ]
     },
     {
       "lens": "二阶效应",
-      "title_zh": "美联储转鹰抬资金成本,倒逼『抢窗口』",
-      "narrative_zh": "Warsh 首会删降息倾向、暗示加息;叠加 AI 与机器人的重资本消耗,Anthropic 最快 10 月上市、中国机器人转量产,都像在窗口收窄前抢兑现。",
+      "title_zh": "智能体化的红利,正长出成本与滥用的『尾巴』",
+      "narrative_zh": "智能体让编程/办公效率跃升,但 Copilot 账单暴涨把真实推理成本第一次摊到明面,企业采纳虽狂飙却只有 12% CEO 拿到增收+降本;另一头,AP 记录美国 AI 被规模化用于跨国诈骗。能力外溢的同时,成本与滥用的外部性开始显性化。",
       "evidence": [
-        "187b5d8a65b65600",
-        "65c0db7305e657e9",
-        "26b3e31bac3726e6"
-      ]
-    },
-    {
-      "lens": "跨域模式 / 跟着钱走",
-      "title_zh": "美中 AI 角力下沉:从模型层打到工具链、芯片与合规",
-      "narrative_zh": "Claude Code 被曝藏『中国指纹』水印(反蒸馏)、Anthropic 向参院指控阿里 1600 万次查询盗用、中国开源 Qwen 破 3 亿月活且 GLM-5 用华为昇腾登顶——竞争已从『谁模型强』下沉到工具链暗战、国产芯片与蒸馏/出口管制的法律层。",
-      "evidence": [
-        "48691b565d63534c",
-        "5d7bdeabf2cfbdec",
-        "f6c9fab363aa377d"
+        "a6726754cde6e66b",
+        "6f495aa3bc51e046",
+        "cc273a7355efc9bf"
       ]
     },
     {
       "lens": "时间线追踪(跨日期)",
-      "title_zh": "AI 资本座次:OpenAI 承压 → Anthropic 反超",
-      "narrative_zh": "6-30 还是『纳指连跌、OpenAI 或推迟上市』;7-01 就变成 Anthropic 9650 亿首超并抢先递交 IPO。",
+      "title_zh": "美中 AI 角力线:从『蒸馏指控/合规下沉』延伸到『国产芯片训练』",
+      "narrative_zh": "接昨日线索——6/30 Anthropic 称遭近 2.5 万欺诈账号大规模探测 Claude(蒸馏疑云)、模型层竞争白热化;今天(7/1)LongCat-2.0 用国产芯片跑完全程预训练、台湾查英伟达走私,角力从模型/合规层进一步下沉到芯片与训练基础设施层。",
       "evidence": [
-        "65c0db7305e657e9",
-        "co-nasdaq-openai-ipo"
+        "509a55cca57dbb32",
+        "9597182490206cca",
+        "co-anthropic-fraud-accounts"
       ]
     },
     {
-      "lens": "时间线追踪(监管,跨日期)",
-      "title_zh": "监管两端收口:美联邦预占 + 欧盟 8 月全面适用",
-      "narrative_zh": "接 6-30『州法 vs 联邦 99–1 否决禁令』:7-01 欧盟 AI 法定 8 月 2 日全面适用、理事会 6/29 批简化包,美国则推联邦框架预占州法——年内合规成本实打实上升。",
+      "lens": "主体网络(跨日期)",
+      "title_zh": "芯片整合线:高通连环出手补齐 AI 栈",
+      "narrative_zh": "6/30 高通被曝洽购 Jim Keller 的 RISC-V AI 芯片公司 Tenstorrent;6/24 高通已 39 亿美元收推理软件公司 Modular。连起来看,高通正沿『指令集—芯片—推理软件』一条线纵向补齐,直取数据中心 AI 栈。",
       "evidence": [
-        "26d6de038a22be35",
-        "co-colorado-ai-law"
+        "cdd91dff6ba56ae8",
+        "co-qualcomm-tenstorrent"
       ]
     }
   ],
   "conclusions": [
     {
-      "text_zh": "Anthropic 9650 亿反超 OpenAI 并递交 IPO(OpenAI 亦在筹);机器人 2026 年内融资超 558 亿;企业 AI 仅约 23% 见显著 ROI;美联储转鹰。",
+      "text_zh": "美团 LongCat-2.0 是首个确认在国产 ASIC 集群(华为 Atlas-950 SuperPod、5 万卡)完成==全程预训练==的万亿级中国模型,而非仅推理用国产芯片。",
       "grade": "事实",
-      "confidence": 0.95,
+      "confidence": 0.9,
       "evidence": [
-        "65c0db7305e657e9",
-        "cd4de9e9e756f73b",
-        "26b3e31bac3726e6",
-        "dc9436282621ed97",
-        "187b5d8a65b65600"
+        "509a55cca57dbb32",
+        "0f6b2d27be01e1b0"
       ]
     },
     {
-      "text_zh": "一二级市场对 AI 的定价,跑在了实际价值兑现前面:资本与采纳双双狂飙,但 ROI 鸿沟 + 红队『未越国安线』的克制,共同指向『叙事领先兑现』。",
-      "grade": "推断",
-      "confidence": 0.7,
-      "evidence": [
-        "dc9436282621ed97",
-        "f9d89c4e9ddbd28c",
-        "65c0db7305e657e9",
-        "26b3e31bac3726e6"
-      ]
-    },
-    {
-      "text_zh": "美中 AI 竞争正从模型层『下沉』到工具链(Claude Code 反蒸馏指纹)、芯片(华为昇腾训 GLM-5)与法律(蒸馏指控/出口管制/预占)——脱钩在技术与合规细节层加速。",
+      "text_zh": "推理 / harness 层已成 AI 价值链最具战略价值的环节——巨头宁可数十亿美元收购(高通→Modular)、初创靠它融到巨资(Groq),平台靠它计费(Copilot)。",
       "grade": "推断",
       "confidence": 0.72,
       "evidence": [
-        "48691b565d63534c",
-        "5d7bdeabf2cfbdec",
-        "f6c9fab363aa377d"
+        "cdd91dff6ba56ae8",
+        "a6726754cde6e66b",
+        "ee2ed601ca4291d4"
       ]
     },
     {
-      "text_zh": "Claude Code 暗藏『中国用户指纹』且经 Anthropic 员工确认将回滚,是一起真实的合规-隐私边界事件:引爆点不是要不要防盗版,而是『偷偷编码进用户提示词』。",
+      "text_zh": "美国出口管制『卡住最先进 GPU 就能卡住中国前沿训练』的假设正被削弱:中国以自研芯片 + 训练框架(腾讯 ARGUS)+ 低精度格式系统补齐软硬协同。",
+      "grade": "推断",
+      "confidence": 0.68,
+      "evidence": [
+        "509a55cca57dbb32",
+        "4697ae55d3b6733c",
+        "9597182490206cca",
+        "d2b9a61df1e7034e",
+        "co-skorea-1t-chips"
+      ]
+    },
+    {
+      "text_zh": "随最强模型(GPT-5.6 门控、Claude 出口管制拉锯)日益『国家资产化』,全球开发者的默认开源心智份额会加速向中国模型(LongCat/Qwen/DeepSeek)迁移。",
+      "grade": "预测",
+      "confidence": 0.6,
+      "evidence": [
+        "7ca7f9d9e26f8f4d",
+        "d29ba678c28f41f1",
+        "509a55cca57dbb32"
+      ]
+    },
+    {
+      "text_zh": "计量计费把智能体的真实推理成本第一次摊到开发者面前,将重塑『能力越强越该多用 AI』的叙事,催化向直连 / 开源 / 自托管的分流。",
+      "grade": "预测",
+      "confidence": 0.58,
+      "evidence": [
+        "a6726754cde6e66b",
+        "6f495aa3bc51e046"
+      ]
+    },
+    {
+      "text_zh": "隐私与安全的司法/监管在同步收紧:最高法裁定地理围栏搜查令受第四修正案约束(6-3);AP 记录美国 AI 被用于全球规模化诈骗。",
       "grade": "事实",
       "confidence": 0.85,
       "evidence": [
-        "48691b565d63534c"
-      ]
-    },
-    {
-      "text_zh": "资金成本上行(Warsh 转鹰)叠加重资本消耗,未来数季『能烧多久、能否兑现』将取代『能力多强』成为更关键的问题;抢窗口上市/量产是主旋律。",
-      "grade": "预测",
-      "confidence": 0.5,
-      "evidence": [
-        "187b5d8a65b65600",
-        "65c0db7305e657e9",
-        "26b3e31bac3726e6"
-      ]
-    },
-    {
-      "text_zh": "欧盟 AI 法 8 月 2 日全面适用 + 美国推联邦预占,叠加中国开源低价(DeepSeek/Qwen)——合规成本上升与开源压价同时挤压,厂商年内利润与定价将两头受压。",
-      "grade": "预测",
-      "confidence": 0.45,
-      "evidence": [
-        "26d6de038a22be35",
-        "f6c9fab363aa377d"
-      ]
-    },
-    {
-      "text_zh": "最有信息优势的不是『AI 狂飙』这个共识,而是被热闹盖过的两件事:企业端接不上价值,以及美中在代码/芯片/合规层的暗战。",
-      "grade": "推断",
-      "confidence": 0.65,
-      "evidence": [
-        "dc9436282621ed97",
-        "48691b565d63534c"
+        "89452808c5147e0f",
+        "cc273a7355efc9bf"
       ]
     }
   ],
-  "methodology_note_zh": "本期用『跟着钱走 / 共识缺口 / 二阶效应 / 跨域模式 / 时间线追踪』五透镜,合成『叙事 vs 兑现』与『美中 AI 角力下沉』两条主线,并接上 6-30 的 OpenAI 资本线与 AI 监管线。采集层本轮补采到 14 条(响应『新闻太少』反馈)。"
+  "methodology_note_zh": "本期重用『跟着钱走 / 跨域模式』(推理层价值迁移)、『时间线追踪 / 沉默信号』(管制 vs 自建)、『共识缺口 / 矛盾检测』(门控 vs 开源)与『二阶效应』(智能体成本与滥用外部性)四个透镜;结论均回链当日一手语料并分级。"
 }

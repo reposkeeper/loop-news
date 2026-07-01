@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T12:52:00+08:00",
+  "generated_at": "2026-07-01T07:30:00+08:00",
   "threads": [
     {
       "id": "thread-ai-regulation",
@@ -79,9 +79,9 @@
         },
         {
           "date": "2026-07-01",
-          "item_id": "f9d89c4e9ddbd28c",
-          "title_zh": "Anthropic 前沿红队:『早期预警』但未越国安红线",
-          "note_zh": "能力逼近专家水平,厂商用克制表述争取监管/自身的时间窗"
+          "item_id": "509a55cca57dbb32",
+          "title_zh": "LongCat-2.0(1.6 万亿参数智能体编程模型)",
+          "note_zh": "能力竞赛新高点:近前沿智能体编程模型开源,且国产芯片自足"
         }
       ]
     },
@@ -123,15 +123,15 @@
         },
         {
           "date": "2026-07-01",
-          "item_id": "65c0db7305e657e9",
-          "title_zh": "Anthropic 9650 亿估值首超 OpenAI、秘密递交 IPO",
-          "note_zh": "资本主角交接:OpenAI 承压之际 Anthropic 反超并抢先递交上市"
+          "item_id": "7ca7f9d9e26f8f4d",
+          "title_zh": "GPT-5.6(Sol/Terra/Luna)政府门控预览",
+          "note_zh": "产品继续迭代,但发布须过政府前沿审查——能力与合规同时抬升"
         },
         {
           "date": "2026-07-01",
-          "item_id": "cd4de9e9e756f73b",
-          "title_zh": "OpenAI 也筹秘密 IPO(约 7300 亿),Codex 周活破 500 万",
-          "note_zh": "两强同赴 IPO,Anthropic 暂领先"
+          "item_id": "7ca7f9d9e26f8f4d",
+          "title_zh": "GPT-5.6(Sol/Terra/Luna)政府门控预览",
+          "note_zh": "产品继续迭代,但发布须过政府前沿审查——能力与合规同时抬升"
         }
       ]
     },
@@ -143,8 +143,8 @@
         "Alibaba",
         "美中 AI"
       ],
-      "summary_zh": "美中 AI 竞争从『谁模型强』下沉到工具链暗战(Claude Code 指纹)、国产芯片(昇腾)与法律层(蒸馏指控/出口管制/预占)。",
-      "status_zh": "升级中 · 下沉到代码与合规",
+      "summary_zh": "美中 AI 角力从模型/合规层持续下沉:蒸馏指控→工具链→芯片与训练基础设施。中国以国产芯片跑通万亿模型全程预训练(LongCat-2.0),美国收紧走私围堵(台湾查 Super Micro)并门控最强模型。",
+      "status_zh": "进行中 · 下沉到芯片/训练层",
       "timeline": [
         {
           "date": "2026-06-30",
@@ -154,21 +154,21 @@
         },
         {
           "date": "2026-07-01",
-          "item_id": "5d7bdeabf2cfbdec",
-          "title_zh": "Anthropic 向参院指控阿里 1600 万次查询蒸馏",
-          "note_zh": "把蒸馏/盗用摆上国会"
+          "item_id": "509a55cca57dbb32",
+          "title_zh": "美团 LongCat-2.0:国产芯片全程预训练",
+          "note_zh": "角力下沉到芯片/训练层:中国首次用国产 ASIC 集群跑完万亿模型全程预训练"
         },
         {
           "date": "2026-07-01",
-          "item_id": "48691b565d63534c",
-          "title_zh": "Claude Code 暗藏『中国用户指纹』(已认回滚)",
-          "note_zh": "防蒸馏水印下沉到工具链,引隐私争议"
+          "item_id": "509a55cca57dbb32",
+          "title_zh": "美团 LongCat-2.0:国产芯片全程预训练",
+          "note_zh": "角力下沉到芯片/训练层:中国首次用国产 ASIC 集群跑完万亿模型全程预训练"
         },
         {
           "date": "2026-07-01",
-          "item_id": "ba01da4854cdf785",
-          "title_zh": "中国开源反超:Qwen 3 亿月活、GLM-5 用昇腾登顶",
-          "note_zh": "国产芯片 + 开源低价,竞争另一端"
+          "item_id": "509a55cca57dbb32",
+          "title_zh": "美团 LongCat-2.0:国产芯片全程预训练",
+          "note_zh": "角力下沉到芯片/训练层:中国首次用国产 ASIC 集群跑完万亿模型全程预训练"
         }
       ]
     }

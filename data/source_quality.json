@@ -150,6 +150,36 @@
       "quality": 0.3,
       "note": "仅格言",
       "recency": "slow"
+    },
+    "Bloomberg": {
+      "tier": "core",
+      "quality": 0.88,
+      "note": "一手快讯/独家(台湾突袭案)",
+      "recency": "realtime"
+    },
+    "VentureBeat": {
+      "tier": "core",
+      "quality": 0.8,
+      "note": "AI 一手报道(LongCat 首发)",
+      "recency": "fast"
+    },
+    "The Next Web": {
+      "tier": "trial",
+      "quality": 0.6,
+      "note": "科技快讯,试用",
+      "recency": "fast"
+    },
+    "SiliconANGLE": {
+      "tier": "trial",
+      "quality": 0.6,
+      "note": "企业科技,试用",
+      "recency": "fast"
+    },
+    "GeopolitechS": {
+      "tier": "trial",
+      "quality": 0.62,
+      "note": "地缘技术深评 Substack,试用",
+      "recency": "slow"
     }
   }
 }
