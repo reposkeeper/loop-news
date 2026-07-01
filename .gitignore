@@ -9,6 +9,7 @@ config/secrets.yaml
 config/secrets.yml
 config/share_tokens.json
 .env
+.dev.vars
 *.key
 *.token
 

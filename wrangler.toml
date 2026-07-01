@@ -14,3 +14,17 @@ routes = [
 [[r2_buckets]]
 binding = "BUCKET"
 bucket_name = "loop-news"
+
+# 账号体系(SP1-Core):会话 KV + 用户/行为 D1。
+# id / database_id 为占位符,provision 时替换为真实值(见下方 TODO)。
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "PLACEHOLDER_KV_ID"  # TODO: 填真实 id(provision 时 npx wrangler kv namespace create SESSIONS 返回)
+
+[[d1_databases]]
+binding = "DB"
+database_name = "loop-news-db"
+database_id = "PLACEHOLDER_D1_ID"  # TODO: 填真实 id(provision 时 npx wrangler d1 create loop-news-db 返回)
+
+[vars]
+SITE_ORIGIN = "https://news.xdzq.org"
