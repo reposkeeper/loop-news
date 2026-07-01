@@ -17,7 +17,7 @@ const CORS = {
   "Access-Control-Allow-Headers": "Content-Type",
 };
 const SERIF = "Noto Serif SC", SANS = "Noto Sans SC";
-const C = { ink: "#1A1A1F", soft: "#3A3A42", muted: "#86868C", line: "#E5E4DF", paper: "#FBFAF7", accent: "#1F5C57", predict: "#5B3FB0", date: "#33333A" };
+const C = { ink: "#1A1A1F", soft: "#3A3A42", muted: "#86868C", line: "#E5E4DF", paper: "#FBFAF7", accent: "#1F5C57", predict: "#5B3FB0", date: "#33333A", frame: "#232228" };
 const BRAND = "Playfair Display", MONO = "JetBrains Mono";
 // 分辨率:卡片按 1200 逻辑设计,输出放大到 OUT_W(更清晰)。scalePx 把 HTML 里所有 px 统一乘 K
 // (line-height/flex 等无单位值不受影响;图表 base64 用 __CHART_URI__ 占位、缩放后再填,避免被误改)。
@@ -58,7 +58,8 @@ function cardHtml(d) {
     : "";
 
   return `
-  <div style="display:flex;flex-direction:column;width:1200px;background:${C.paper};font-family:'${SERIF}';padding:64px 70px 66px;">
+  <div style="display:flex;width:1200px;background:${C.paper};padding:22px;">
+   <div style="display:flex;flex:1;flex-direction:column;font-family:'${SERIF}';border:1.5px solid ${C.frame};padding:44px 48px 46px;">
     <div style="display:flex;align-items:flex-end;padding-bottom:30px;border-bottom:3px solid ${C.ink};">
       <div style="display:flex;font-family:'${BRAND}';font-weight:700;font-size:66px;color:${C.ink};">Loop News</div>
       <div style="display:flex;margin-left:auto;font-family:'${SERIF}';font-weight:400;font-size:33px;color:${C.date};">${esc(d.date || "")}</div>
@@ -70,6 +71,7 @@ function cardHtml(d) {
       <div style="display:flex;font-size:37px;line-height:1.78;color:${C.soft};">${esc(summary)}</div>
       ${chartBlock}
     </div>
+   </div>
   </div>`;
 }
 
@@ -83,7 +85,8 @@ function releaseHtml(d) {
     + `<div style="display:flex;flex:1;font-size:35px;line-height:1.46;color:${C.soft};">${esc(clip(t, 60))}</div>`
     + `</div>`).join("");
   return `
-  <div style="display:flex;flex-direction:column;width:1200px;background:${C.paper};font-family:'${SERIF}';padding:64px 70px 66px;">
+  <div style="display:flex;width:1200px;background:${C.paper};padding:22px;">
+   <div style="display:flex;flex:1;flex-direction:column;font-family:'${SERIF}';border:1.5px solid ${C.frame};padding:44px 48px 46px;">
     <div style="display:flex;align-items:flex-end;padding-bottom:30px;border-bottom:3px solid ${C.ink};">
       <div style="display:flex;font-family:'${BRAND}';font-weight:700;font-size:66px;color:${C.ink};">Loop News</div>
       <div style="display:flex;margin-left:auto;font-size:32px;color:${C.date};">更新日志</div>
@@ -96,6 +99,7 @@ function releaseHtml(d) {
       <div style="display:flex;font-size:54px;line-height:1.4;font-weight:700;color:${C.ink};margin-bottom:42px;letter-spacing:-0.5px;">${esc(clip(d.title, 42))}</div>
       ${bullets}
     </div>
+   </div>
   </div>`;
 }
 
