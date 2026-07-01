@@ -8,6 +8,9 @@
 
 > **写法对标严肃媒体**:原声要归属清楚、优先在录/一手、正反都要听(不只捧场方);翻译呈现中文但**保留 `original_quote` 原文**,不夸张不断章取义。房规见 [dossier.method.md 第三节](dossier.method.md)。
 
+## 采集量(高召回)
+深度类也要**够量**:除名人原声外,主动搜"圈内在吵什么"——AI 争议 / 安全事件 / 一手技术分析(如今日 Claude Code『中国指纹』这类会引爆圈层的),纳入 `collect.volume_target` 的总盘。宁多勿漏,呈现层再萃取(见 [GOALS](../GOALS.md)「采集广度」)。
+
 ## 抓取来源(按优先级 + 本环境实测可行性,2026-06)
 1. **深度长文 / 独立观点** `deep.substack_rss`:✅ WebFetch 抓 RSS + 全文可用,**深度类主力**。提炼核心论点,保留代表性原句。
 2. **名人原声** `config/people.yaml`:**优先用 X MCP**(已装,见 [RUNBOOK](../RUNBOOK.md) / `scripts/setup-mcp.sh`)。

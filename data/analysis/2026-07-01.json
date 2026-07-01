@@ -1,7 +1,7 @@
 {
   "date": "2026-07-01",
-  "generated_at": "2026-07-01T12:20:00+08:00",
-  "summary_zh": "今天的主线是==叙事跑在兑现前面==:Anthropic 以 9650 亿估值首超 OpenAI 并秘密递交 IPO、机器人年内融资破 558 亿、Gartner 称 40% 企业应用将上 AI 智能体——资本与采纳双双狂飙。但同一天的一手信号在踩刹车:企业端只有约两成真见到 ROI,Anthropic 前沿红队说能力在涨、还没越过国安红线。叠加美联储新主席 Warsh 首会转鹰(暗示加息),==抢在窗口收窄前上市/量产==成了这轮 AI 资本的潜台词。",
+  "generated_at": "2026-07-01T12:50:00+08:00",
+  "summary_zh": "两条主线。一是==叙事跑在兑现前面==:Anthropic 9650 亿反超 OpenAI、机器人年内融资破 558 亿、40% 企业要上 AI 智能体,但企业只约两成见 ROI、红队称能力未越国安线、美联储还转了鹰。二是==美中 AI 角力下沉到代码与合规==:Claude Code 被曝暗藏『中国用户指纹』(Anthropic 已认将回滚),叠加其向参院指控阿里 1600 万次查询蒸馏、中国开源 Qwen/GLM-5 反超、欧盟 AI 法 8 月全面适用——竞争从模型层打到了工具链与法律层。",
   "consensus": [
     {
       "title_zh": "Anthropic 秘密递交 IPO:65 亿融资、9650 亿估值,首次反超 OpenAI",
@@ -33,6 +33,20 @@
         "大模型"
       ],
       "id": "65c0db7305e657e9"
+    },
+    {
+      "title_zh": "OpenAI 也在筹备秘密 IPO,估值约 7300 亿;收购 Ona 强化 Codex,周活破 500 万",
+      "summary_zh": "据报道 OpenAI 正与高盛、摩根士丹利筹备秘密递交 IPO,最快 9 月上市,私募估值约 7300 亿美元;同时收购德国初创 Ona 以增强 Codex 的云端常驻智能体能力,Codex 周活用户已超 500 万。与今日 Anthropic 以 9650 亿反超形成对照。",
+      "sources": [],
+      "source_links": null,
+      "consensus_count": 2,
+      "url": "https://openai.com/news/",
+      "topics": [
+        "AI 融资",
+        "IPO",
+        "智能体"
+      ],
+      "id": "cd4de9e9e756f73b"
     },
     {
       "title_zh": "企业 AI 智能体:采纳狂飙,价值却接不上——只有约两成见到回报",
@@ -121,9 +135,154 @@
         "美联储"
       ],
       "id": "187b5d8a65b65600"
+    },
+    {
+      "title_zh": "Anthropic 向参议院指控:中国实验室用约 1600 万次 Claude 查询蒸馏抄模型,阿里涉最大规模",
+      "summary_zh": "Anthropic 称中国 AI 公司通过约 1600 万次 Claude 查询做蒸馏、试图复制其能力,并向参议院指认阿里巴巴主导了已知最大规模的一次『AI 窃取』行动;并借此论证仅靠出口管制守不住美中 AI 竞赛的防线。这条与今日 Claude Code『中国指纹』风波互为背景。",
+      "sources": [
+        "TechTimes",
+        "The Hacker News",
+        "CyberScoop"
+      ],
+      "source_links": [
+        {
+          "name": "TechTimes",
+          "url": "https://www.techtimes.com/articles/319105/20260625/alibaba-ran-largest-known-ai-theft-campaign-against-claude-anthropic-tells-senate.htm"
+        },
+        {
+          "name": "The Hacker News",
+          "url": "https://thehackernews.com/2026/02/anthropic-says-chinese-ai-firms-used-16.html"
+        },
+        {
+          "name": "CyberScoop",
+          "url": "https://cyberscoop.com/anthropic-accuses-chinese-labs-ai-distillation-cyber-risk/"
+        }
+      ],
+      "consensus_count": 3,
+      "url": "https://www.techtimes.com/articles/319105/20260625/alibaba-ran-largest-known-ai-theft-campaign-against-claude-anthropic-tells-senate.htm",
+      "topics": [
+        "美中 AI",
+        "蒸馏",
+        "AI 安全"
+      ],
+      "id": "5d7bdeabf2cfbdec"
+    },
+    {
+      "title_zh": "中国开源 AI 成气候:阿里 Qwen 破 3 亿月活、Hugging Face 下载超 10 亿,GLM-5 登顶、DeepSeek V4 最便宜",
+      "summary_zh": "中国开源阵营快速扩张:阿里 Qwen 消费端月活破 3 亿、Hugging Face 累计下载超 10 亿、已开源逾百个 Apache-2.0 模型(含 2350 亿参数 MoE);智谱 GLM-5 以 BenchLM 85 分登顶、且完全用华为昇腾训练;DeepSeek V4 以 0.14–0.30 美元/百万 tokens 保持最便宜。一个多玩家、绑定国产芯片的开源生态正在成形。",
+      "sources": [
+        "Forbes",
+        "Fortune",
+        "Stanford HAI"
+      ],
+      "source_links": [
+        {
+          "name": "Forbes",
+          "url": "https://www.forbes.com/sites/jonmarkman/2026/04/28/chinas-deepseek-v4-and-qwen-reshape-the-open-source-ai-race/"
+        },
+        {
+          "name": "Fortune",
+          "url": "https://fortune.com/2026/04/24/deepseek-v4-ai-model-price-performance-china-open-source/"
+        },
+        {
+          "name": "Stanford HAI",
+          "url": "https://hai.stanford.edu/policy/beyond-deepseek-chinas-diverse-open-weight-ai-ecosystem-and-its-policy-implications"
+        }
+      ],
+      "consensus_count": 3,
+      "url": "https://www.forbes.com/sites/jonmarkman/2026/04/28/chinas-deepseek-v4-and-qwen-reshape-the-open-source-ai-race/",
+      "topics": [
+        "开源模型",
+        "中国 AI",
+        "算力"
+      ],
+      "id": "ba01da4854cdf785"
+    },
+    {
+      "title_zh": "苹果确认:Apple Intelligence 部分能力将跑在 Nvidia GPU 上、寄居谷歌云",
+      "summary_zh": "苹果官方确认,Apple Intelligence 的部分功能将在云端跑在 Nvidia GPU 上,作为其『私有云计算』基础设施的一部分、并部署在谷歌云中;苹果同时与谷歌、Nvidia 合作打造更先进的 AI 模型。一向自研的苹果在 AI 算力上转向外部,信号明显。",
+      "sources": [],
+      "source_links": null,
+      "consensus_count": 1,
+      "url": "https://www.cnbc.com/2026/06/08/apple-google-nvidia-ai-chips.html",
+      "topics": [
+        "AI 芯片",
+        "算力",
+        "云"
+      ],
+      "id": "42b9a85757a2eb8e"
+    },
+    {
+      "title_zh": "谷歌 Android 17 内置 Gemini Omni,Gemini 3.5 Flash 原生『电脑操作』,铺路年内 Agent",
+      "summary_zh": "谷歌发布 Android 17,内置 Gemini Omni、Lyria 3 音乐生成与 AudioLM 翻译;并把『电脑操作(computer use)』原生集成进 Gemini 3.5 Flash 的 API 与企业 Agent 平台,为下半年的『Gemini Intelligence』智能体打底。",
+      "sources": [],
+      "source_links": null,
+      "consensus_count": 1,
+      "url": "https://aiweekly.co/ai-news-today/google-ai-news",
+      "topics": [
+        "大模型",
+        "智能体",
+        "Android"
+      ],
+      "id": "88208f58dfc8188f"
+    },
+    {
+      "title_zh": "欧盟 AI 法 8 月 2 日全面适用,理事会 6/29 终批『简化包』;美国转向联邦预占州法",
+      "summary_zh": "欧盟《AI 法》将于 8 月 2 日全面适用,理事会 6 月 29 日为『数字简化包(Digital Omnibus)』开绿灯——把部分高风险义务再延后;美国这边则是 2025 年 12 月行政令 + 2026 年 3 月白宫框架,推动『轻触式』联邦标准并预占各州 AI 法(接 6-30 那条参院 99–1 否决禁令的后续)。",
+      "sources": [
+        "Collibra",
+        "Crowell & Moring",
+        "Holland & Knight"
+      ],
+      "source_links": [
+        {
+          "name": "Collibra",
+          "url": "https://www.collibra.com/blog/ai-regulatory-compliance-in-2026-eu-ai-act-us-orders-and-state-laws-and-how-to-operationalize"
+        },
+        {
+          "name": "Crowell & Moring",
+          "url": "https://www.crowell.com/en/insights/client-alerts/executive-order-tries-to-thwart-onerous-ai-state-regulation-calls-for-national-framework"
+        },
+        {
+          "name": "Holland & Knight",
+          "url": "https://www.hklaw.com/en/insights/publications/2026/04/us-companies-face-eu-ai-acts-possible-august-2026-compliance-deadline"
+        }
+      ],
+      "consensus_count": 3,
+      "url": "https://www.collibra.com/blog/ai-regulatory-compliance-in-2026-eu-ai-act-us-orders-and-state-laws-and-how-to-operationalize",
+      "topics": [
+        "AI 监管",
+        "合规",
+        "美中欧"
+      ],
+      "id": "26d6de038a22be35"
+    },
+    {
+      "title_zh": "Nvidia 发债 250 亿美元、转向『算力租赁』;台积电路线图 34 年来首次分叉、Intel 18A-P 进风险试产",
+      "summary_zh": "AI 芯片版图继续重排:Nvidia 创纪录业绩之外,以 250 亿美元发债扩表并转向算力租赁模式;台积电 4 月的先进制程路线图出现 1992 年以来首次『分叉』,按移动与 AI-HPC 两条线走(苹果、Nvidia 为其两大客户);Intel 18A-P 进入风险试产、传获苹果与谷歌兴趣。",
+      "sources": [],
+      "source_links": null,
+      "consensus_count": 2,
+      "url": "https://www.distillintelligence.com/briefings/semiconductors-ai-chips-2026-06-19",
+      "topics": [
+        "AI 芯片",
+        "半导体",
+        "算力"
+      ],
+      "id": "c59de545442b78e6"
     }
   ],
   "deep": [
+    {
+      "title_zh": "Claude Code 被曝暗藏『中国用户指纹』:检测结果编码进系统提示词,Anthropic 已确认将回滚",
+      "summary_zh": "Reddit 用户与 GitHub 分析发现:Anthropic 的 Claude Code(自 4/2 的 v2.1.91 起、XOR 混淆、更新日志只字未提)会检测中国相关环境——查 ANTHROPIC_BASE_URL、Asia/Shanghai/Urumqi 时区、并对照一份 147 条域名清单(百度/阿里/字节及代理),再把结果偷偷编码进系统提示词的『Today's date』行(中国时区把日期分隔符 - 改成 /、并替换 Unicode 撇号)。Anthropic 一名技术员工已确认属实、称相关代码明天回滚;多方推测意图是反盗版/防蒸馏水印。",
+      "source": "International Cyber Digest / GitHub 分析",
+      "lang": "en",
+      "original_quote": "the code is being rolled back in tomorrow's release",
+      "url": "https://www.internationalcyberdigest.com/claude-code-accused-of-hiding-china-proxy-fingerprints-inside-system-prompts/",
+      "insight_zh": "合规意图(反蒸馏水印)与知情同意的边界之争:引爆点不是『要不要防盗』,而是『偷偷编码进用户提示词』。",
+      "id": "48691b565d63534c"
+    },
     {
       "title_zh": "Anthropic 前沿红队:前沿模型出现'早期预警'信号,但尚未越过国安风险线",
       "summary_zh": "Anthropic 前沿红队最新研判:模型在网络安全、生物等双用途能力上进步很快,部分已接近或超过本科水平/局部专家知识,但当前模型仍未达到会显著抬升国家安全风险的阈值;已由美、英 AI 安全研究院做部署前测试。另 METR 自 2 月起联合 Anthropic/谷歌/Meta/OpenAI 试点评估内部 AI 智能体的失准风险。",
@@ -164,18 +323,19 @@
   "connections": [
     {
       "lens": "跟着钱走 / 跨域模式",
-      "title_zh": "资本与采纳齐涨:估值、融资、内嵌率三条线同时冲高",
-      "narrative_zh": "Anthropic 9650 亿估值 + 机器人年内 558 亿融资 + Gartner 预测 40% 企业应用内嵌智能体——一级估值、产业融资、企业采纳三条线同时冲高,钱和注意力都在往 AI 里灌。",
+      "title_zh": "资本与采纳齐涨:估值、融资、内嵌率三线同高",
+      "narrative_zh": "Anthropic 9650 亿反超、OpenAI 亦筹 IPO、机器人年内 558 亿、Gartner 称 40% 企业应用要内嵌智能体——一级估值、产业融资、企业采纳同时冲高。",
       "evidence": [
         "65c0db7305e657e9",
+        "cd4de9e9e756f73b",
         "26b3e31bac3726e6",
         "dc9436282621ed97"
       ]
     },
     {
       "lens": "共识缺口 / 矛盾检测",
-      "title_zh": "主流报『狂飙』,一手信号却在『踩刹车』",
-      "narrative_zh": "与热闹相对,最一手的信号是克制:企业里只有约 23% 从 AI 智能体见到 ROI,Anthropic 前沿红队也说能力在涨但『尚未越过国安红线』。分歧点不在『AI 火不火』,而在『兑现了没有』——这正是信息优势所在。",
+      "title_zh": "主流报『狂飙』,一手信号在『踩刹车』",
+      "narrative_zh": "与热闹相对:企业里只约 23% 从 AI 智能体见 ROI,Anthropic 红队也说能力涨但『未越国安红线』。分歧不在火不火,而在兑现没有。",
       "evidence": [
         "dc9436282621ed97",
         "f9d89c4e9ddbd28c"
@@ -183,8 +343,8 @@
     },
     {
       "lens": "二阶效应",
-      "title_zh": "美联储转鹰抬高资金成本,倒逼『抢窗口』",
-      "narrative_zh": "Warsh 首会删降息倾向、暗示加息,资金成本上行;叠加 AI 与机器人的重资本消耗,Anthropic 最快 10 月上市、中国机器人从融资转量产,都像是在窗口收窄前抢先兑现。",
+      "title_zh": "美联储转鹰抬资金成本,倒逼『抢窗口』",
+      "narrative_zh": "Warsh 首会删降息倾向、暗示加息;叠加 AI 与机器人的重资本消耗,Anthropic 最快 10 月上市、中国机器人转量产,都像在窗口收窄前抢兑现。",
       "evidence": [
         "187b5d8a65b65600",
         "65c0db7305e657e9",
@@ -192,29 +352,49 @@
       ]
     },
     {
+      "lens": "跨域模式 / 跟着钱走",
+      "title_zh": "美中 AI 角力下沉:从模型层打到工具链、芯片与合规",
+      "narrative_zh": "Claude Code 被曝藏『中国指纹』水印(反蒸馏)、Anthropic 向参院指控阿里 1600 万次查询盗用、中国开源 Qwen 破 3 亿月活且 GLM-5 用华为昇腾登顶——竞争已从『谁模型强』下沉到工具链暗战、国产芯片与蒸馏/出口管制的法律层。",
+      "evidence": [
+        "48691b565d63534c",
+        "5d7bdeabf2cfbdec",
+        "ba01da4854cdf785"
+      ]
+    },
+    {
       "lens": "时间线追踪(跨日期)",
-      "title_zh": "AI 资本座次生变:OpenAI 承压 → Anthropic 反超",
-      "narrative_zh": "6-30 还是『纳指连跌、OpenAI 或推迟上市、AI 融资前景受质疑』;7-01 就变成 Anthropic 以 9650 亿首超 OpenAI 并抢先递交 IPO。一周内资本叙事的主角完成交接。",
+      "title_zh": "AI 资本座次:OpenAI 承压 → Anthropic 反超",
+      "narrative_zh": "6-30 还是『纳指连跌、OpenAI 或推迟上市』;7-01 就变成 Anthropic 9650 亿首超并抢先递交 IPO。",
       "evidence": [
         "65c0db7305e657e9",
         "co-nasdaq-openai-ipo"
+      ]
+    },
+    {
+      "lens": "时间线追踪(监管,跨日期)",
+      "title_zh": "监管两端收口:美联邦预占 + 欧盟 8 月全面适用",
+      "narrative_zh": "接 6-30『州法 vs 联邦 99–1 否决禁令』:7-01 欧盟 AI 法定 8 月 2 日全面适用、理事会 6/29 批简化包,美国则推联邦框架预占州法——年内合规成本实打实上升。",
+      "evidence": [
+        "26d6de038a22be35",
+        "co-colorado-ai-law"
       ]
     }
   ],
   "conclusions": [
     {
-      "text_zh": "Anthropic 以 9650 亿估值首超 OpenAI(约 8520 亿)并于 6/1 秘密递交 S-1;美联储 6/17 维持利率、转向鹰派;机器人 2026 年内融资超 558 亿美元;企业 AI 智能体仅约 23% 见到显著 ROI。",
+      "text_zh": "Anthropic 9650 亿反超 OpenAI 并递交 IPO(OpenAI 亦在筹);机器人 2026 年内融资超 558 亿;企业 AI 仅约 23% 见显著 ROI;美联储转鹰。",
       "grade": "事实",
       "confidence": 0.95,
       "evidence": [
         "65c0db7305e657e9",
-        "187b5d8a65b65600",
+        "cd4de9e9e756f73b",
         "26b3e31bac3726e6",
-        "dc9436282621ed97"
+        "dc9436282621ed97",
+        "187b5d8a65b65600"
       ]
     },
     {
-      "text_zh": "一二级市场对 AI 的定价,跑在了实际价值兑现前面:资本(估值/融资)与采纳(40%)双双狂飙,但企业 ROI 鸿沟 + 红队『未越国安线』的克制,共同指向『叙事领先兑现』。",
+      "text_zh": "一二级市场对 AI 的定价,跑在了实际价值兑现前面:资本与采纳双双狂飙,但 ROI 鸿沟 + 红队『未越国安线』的克制,共同指向『叙事领先兑现』。",
       "grade": "推断",
       "confidence": 0.7,
       "evidence": [
@@ -225,7 +405,25 @@
       ]
     },
     {
-      "text_zh": "资金成本上行(Warsh 转鹰)叠加 AI/机器人的重资本消耗,未来数季『能烧多久、能否兑现』会取代『能力多强』成为更关键的问题;抢窗口上市/量产将是主旋律。",
+      "text_zh": "美中 AI 竞争正从模型层『下沉』到工具链(Claude Code 反蒸馏指纹)、芯片(华为昇腾训 GLM-5)与法律(蒸馏指控/出口管制/预占)——脱钩在技术与合规细节层加速。",
+      "grade": "推断",
+      "confidence": 0.72,
+      "evidence": [
+        "48691b565d63534c",
+        "5d7bdeabf2cfbdec",
+        "ba01da4854cdf785"
+      ]
+    },
+    {
+      "text_zh": "Claude Code 暗藏『中国用户指纹』且经 Anthropic 员工确认将回滚,是一起真实的合规-隐私边界事件:引爆点不是要不要防盗版,而是『偷偷编码进用户提示词』。",
+      "grade": "事实",
+      "confidence": 0.85,
+      "evidence": [
+        "48691b565d63534c"
+      ]
+    },
+    {
+      "text_zh": "资金成本上行(Warsh 转鹰)叠加重资本消耗,未来数季『能烧多久、能否兑现』将取代『能力多强』成为更关键的问题;抢窗口上市/量产是主旋律。",
       "grade": "预测",
       "confidence": 0.5,
       "evidence": [
@@ -235,14 +433,23 @@
       ]
     },
     {
-      "text_zh": "最有信息优势的不是『AI 狂飙』这个共识,而是同期被热闹盖过的克制信号(企业接不上价值、红队没到国安红线)——真正的分歧点是『兑现』。",
+      "text_zh": "欧盟 AI 法 8 月 2 日全面适用 + 美国推联邦预占,叠加中国开源低价(DeepSeek/Qwen)——合规成本上升与开源压价同时挤压,厂商年内利润与定价将两头受压。",
+      "grade": "预测",
+      "confidence": 0.45,
+      "evidence": [
+        "26d6de038a22be35",
+        "ba01da4854cdf785"
+      ]
+    },
+    {
+      "text_zh": "最有信息优势的不是『AI 狂飙』这个共识,而是被热闹盖过的两件事:企业端接不上价值,以及美中在代码/芯片/合规层的暗战。",
       "grade": "推断",
       "confidence": 0.65,
       "evidence": [
         "dc9436282621ed97",
-        "f9d89c4e9ddbd28c"
+        "48691b565d63534c"
       ]
     }
   ],
-  "methodology_note_zh": "本期主用『跟着钱走 / 共识缺口 / 二阶效应 / 时间线追踪』四透镜,把 Anthropic 反超、机器人融资、企业采纳与美联储转鹰连成『叙事 vs 兑现』的张力,并接上 6-30 的 OpenAI 资本承压线。"
+  "methodology_note_zh": "本期用『跟着钱走 / 共识缺口 / 二阶效应 / 跨域模式 / 时间线追踪』五透镜,合成『叙事 vs 兑现』与『美中 AI 角力下沉』两条主线,并接上 6-30 的 OpenAI 资本线与 AI 监管线。采集层本轮补采到 14 条(响应『新闻太少』反馈)。"
 }

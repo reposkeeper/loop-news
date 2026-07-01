@@ -19,6 +19,11 @@
       "date": "2026-07-01",
       "id": "65c0db7305e657e9",
       "title_zh": "Anthropic 秘密递交 IPO:65 亿融资、9650 亿估值,首次反超 OpenAI"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "cd4de9e9e756f73b",
+      "title_zh": "OpenAI 也在筹备秘密 IPO,估值约 7300 亿;收购 Ona 强化 Codex,周活破 500 万"
     }
   ],
   "Anthropic": [
@@ -51,6 +56,16 @@
       "date": "2026-07-01",
       "id": "f9d89c4e9ddbd28c",
       "title_zh": "Anthropic 前沿红队:前沿模型出现'早期预警'信号,但尚未越过国安风险线"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "48691b565d63534c",
+      "title_zh": "Claude Code 被曝暗藏『中国用户指纹』:检测结果编码进系统提示词,Anthropic 已确认将回滚"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "5d7bdeabf2cfbdec",
+      "title_zh": "Anthropic 向参议院指控:中国实验室用约 1600 万次 Claude 查询蒸馏抄模型,阿里涉最大规模"
     }
   ],
   "美联储": [
@@ -355,6 +370,138 @@
       "date": "2026-07-01",
       "id": "20e8634f9461793b",
       "title_zh": "Satya Nadella 首登 No Priors × Latent Space 交叉特辑(Build 2026)"
+    }
+  ],
+  "Claude Code": [
+    {
+      "date": "2026-07-01",
+      "id": "48691b565d63534c",
+      "title_zh": "Claude Code 被曝暗藏『中国用户指纹』:检测结果编码进系统提示词,Anthropic 已确认将回滚"
+    }
+  ],
+  "Alibaba": [
+    {
+      "date": "2026-07-01",
+      "id": "5d7bdeabf2cfbdec",
+      "title_zh": "Anthropic 向参议院指控:中国实验室用约 1600 万次 Claude 查询蒸馏抄模型,阿里涉最大规模"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "ba01da4854cdf785",
+      "title_zh": "中国开源 AI 成气候:阿里 Qwen 破 3 亿月活、Hugging Face 下载超 10 亿,GLM-5 登顶、DeepSeek V4 最便宜"
+    }
+  ],
+  "Codex": [
+    {
+      "date": "2026-07-01",
+      "id": "cd4de9e9e756f73b",
+      "title_zh": "OpenAI 也在筹备秘密 IPO,估值约 7300 亿;收购 Ona 强化 Codex,周活破 500 万"
+    }
+  ],
+  "Google": [
+    {
+      "date": "2026-07-01",
+      "id": "88208f58dfc8188f",
+      "title_zh": "谷歌 Android 17 内置 Gemini Omni,Gemini 3.5 Flash 原生『电脑操作』,铺路年内 Agent"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "42b9a85757a2eb8e",
+      "title_zh": "苹果确认:Apple Intelligence 部分能力将跑在 Nvidia GPU 上、寄居谷歌云"
+    }
+  ],
+  "Gemini": [
+    {
+      "date": "2026-07-01",
+      "id": "88208f58dfc8188f",
+      "title_zh": "谷歌 Android 17 内置 Gemini Omni,Gemini 3.5 Flash 原生『电脑操作』,铺路年内 Agent"
+    }
+  ],
+  "Apple": [
+    {
+      "date": "2026-07-01",
+      "id": "42b9a85757a2eb8e",
+      "title_zh": "苹果确认:Apple Intelligence 部分能力将跑在 Nvidia GPU 上、寄居谷歌云"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "c59de545442b78e6",
+      "title_zh": "Nvidia 发债 250 亿美元、转向『算力租赁』;台积电路线图 34 年来首次分叉、Intel 18A-P 进风险试产"
+    }
+  ],
+  "Nvidia": [
+    {
+      "date": "2026-07-01",
+      "id": "42b9a85757a2eb8e",
+      "title_zh": "苹果确认:Apple Intelligence 部分能力将跑在 Nvidia GPU 上、寄居谷歌云"
+    },
+    {
+      "date": "2026-07-01",
+      "id": "c59de545442b78e6",
+      "title_zh": "Nvidia 发债 250 亿美元、转向『算力租赁』;台积电路线图 34 年来首次分叉、Intel 18A-P 进风险试产"
+    }
+  ],
+  "Qwen": [
+    {
+      "date": "2026-07-01",
+      "id": "ba01da4854cdf785",
+      "title_zh": "中国开源 AI 成气候:阿里 Qwen 破 3 亿月活、Hugging Face 下载超 10 亿,GLM-5 登顶、DeepSeek V4 最便宜"
+    }
+  ],
+  "DeepSeek": [
+    {
+      "date": "2026-07-01",
+      "id": "ba01da4854cdf785",
+      "title_zh": "中国开源 AI 成气候:阿里 Qwen 破 3 亿月活、Hugging Face 下载超 10 亿,GLM-5 登顶、DeepSeek V4 最便宜"
+    }
+  ],
+  "Zhipu": [
+    {
+      "date": "2026-07-01",
+      "id": "ba01da4854cdf785",
+      "title_zh": "中国开源 AI 成气候:阿里 Qwen 破 3 亿月活、Hugging Face 下载超 10 亿,GLM-5 登顶、DeepSeek V4 最便宜"
+    }
+  ],
+  "Huawei": [
+    {
+      "date": "2026-07-01",
+      "id": "ba01da4854cdf785",
+      "title_zh": "中国开源 AI 成气候:阿里 Qwen 破 3 亿月活、Hugging Face 下载超 10 亿,GLM-5 登顶、DeepSeek V4 最便宜"
+    }
+  ],
+  "EU": [
+    {
+      "date": "2026-07-01",
+      "id": "26d6de038a22be35",
+      "title_zh": "欧盟 AI 法 8 月 2 日全面适用,理事会 6/29 终批『简化包』;美国转向联邦预占州法"
+    }
+  ],
+  "欧盟 AI 法": [
+    {
+      "date": "2026-07-01",
+      "id": "26d6de038a22be35",
+      "title_zh": "欧盟 AI 法 8 月 2 日全面适用,理事会 6/29 终批『简化包』;美国转向联邦预占州法"
+    }
+  ],
+  "白宫": [
+    {
+      "date": "2026-07-01",
+      "id": "26d6de038a22be35",
+      "title_zh": "欧盟 AI 法 8 月 2 日全面适用,理事会 6/29 终批『简化包』;美国转向联邦预占州法"
+    }
+  ],
+  "TSMC": [
+    {
+      "date": "2026-07-01",
+      "id": "c59de545442b78e6",
+      "title_zh": "Nvidia 发债 250 亿美元、转向『算力租赁』;台积电路线图 34 年来首次分叉、Intel 18A-P 进风险试产"
+    }
+  ],
+  "Intel": [
+    {
+      "date": "2026-07-01",
+      "id": "c59de545442b78e6",
+      "title_zh": "Nvidia 发债 250 亿美元、转向『算力租赁』;台积电路线图 34 年来首次分叉、Intel 18A-P 进风险试产"
     }
   ]
 }

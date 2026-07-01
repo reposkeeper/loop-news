@@ -16,10 +16,17 @@ site:
   language: zh-CN
 
 output:
-  max_consensus_items: 15   # 每期"今日要闻(共识类)"最多条数
+  max_consensus_items: 18   # 每期"今日要闻(共识类)"最多条数
   max_deep_items: 12        # 每期"深度原声"最多条数
-  max_connections: 6        # 每期"关联"最多条数
-  max_conclusions: 8        # 每期"结论"最多条数
+  max_connections: 8        # 每期"关联"最多条数
+  max_conclusions: 10       # 每期"结论"最多条数
+
+# 采集量目标(奖励维度:采集层高召回——广撒网、宁多勿漏;欠采=失职,因为没料就没洞察)
+# 呈现层仍宁缺毋滥(见 GOALS)。二者不矛盾:先有量的池子,才有质的萃取。
+collect:
+  volume_target: 20          # 每轮目标条数(达标才算尽责)
+  volume_floor: 12           # 低于此=欠采,metrics 记 under_collected,ln-evolve 本轮优先补来源/加 query
+  breadth_queries_min: 8     # 每轮至少跑几组不同角度的检索(AI/芯片/中国/融资/安全/监管/经济/机器人…)
 
 thresholds:
   importance_min: 0.30        # 低于此重要性的条目不进入网页

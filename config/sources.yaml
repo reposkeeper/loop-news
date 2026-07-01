@@ -11,6 +11,11 @@ consensus:
     - "AI 安全 前沿模型 frontier model safety 最新"    # 关注聚合:AI 安全 / 前沿模型
     - "机器人 具身智能 embodied AI 创业公司 融资 最新"  # 请求:机器人/具身智能创业融资
     - "AI harness eval agent 企业落地 最新"            # 请求:AI 在企业中的应用(harness engineering)
+    - "AI 芯片 算力 GPU Nvidia 台积电 最新"            # 广度:AI 芯片/算力
+    - "中国 AI 大模型 DeepSeek Qwen 华为昇腾 最新"     # 广度:中国 AI
+    - "AI 融资 并购 IPO 估值 最新"                     # 广度:资本
+    - "AI 争议 安全事件 隐私 泄露 最新"                # 广度:AI 安全/争议(易引爆圈层)
+    - "AI 产品发布 model release today"               # 广度:新模型/产品
     - "global economy breaking news today"
     - "technology breaking news today"
     - "美联储 / 央行 政策 最新"

@@ -149,5 +149,24 @@
       "note": "核心洞察『叙事领先兑现』为非显然共识缺口;跨日期接 OpenAI 资本线;预测(抢窗口/能否兑现)可证伪。"
     },
     "notes": "晚采晚汇(用户要求当日发布);AI 权重高;两条请求(企业AI/机器人融资)已成稿进页面。"
+  },
+  {
+    "run": "2026-07-01-resynth",
+    "date": "2026-07-01",
+    "type": "synthesize+collect-expand",
+    "collected": 14,
+    "volume_target": 20,
+    "under_collected": false,
+    "consensus": 11,
+    "deep": 2,
+    "connections": 6,
+    "conclusions": 7,
+    "north_star": {
+      "non_obvious": 4,
+      "edge": 3,
+      "cross_date": 3,
+      "falsifiable": 2
+    },
+    "notes": "响应反馈『新闻太少』:补采到 14 条(原 6),并把『多采集』作为奖励维度写入 loop.yaml/GOALS/提示词/ln-evolve;含用户点名的 Claude Code 中国指纹事件。"
   }
 ]

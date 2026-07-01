@@ -205,5 +205,246 @@
     "insight_zh": "",
     "id": "20e8634f9461793b",
     "collected_at": "2026-07-01T12:09:00+08:00"
+  },
+  {
+    "category": "deep",
+    "source_type": "media",
+    "source": "International Cyber Digest / GitHub 分析",
+    "lang": "en",
+    "url": "https://www.internationalcyberdigest.com/claude-code-accused-of-hiding-china-proxy-fingerprints-inside-system-prompts/",
+    "title_zh": "Claude Code 被曝暗藏『中国用户指纹』:检测结果编码进系统提示词,Anthropic 已确认将回滚",
+    "summary_zh": "Reddit 用户与 GitHub 分析发现:Anthropic 的 Claude Code(自 4/2 的 v2.1.91 起、XOR 混淆、更新日志只字未提)会检测中国相关环境——查 ANTHROPIC_BASE_URL、Asia/Shanghai/Urumqi 时区、并对照一份 147 条域名清单(百度/阿里/字节及代理),再把结果偷偷编码进系统提示词的『Today's date』行(中国时区把日期分隔符 - 改成 /、并替换 Unicode 撇号)。Anthropic 一名技术员工已确认属实、称相关代码明天回滚;多方推测意图是反盗版/防蒸馏水印。",
+    "original_quote": "the code is being rolled back in tomorrow's release",
+    "entities": [
+      "Anthropic",
+      "Claude Code"
+    ],
+    "topics": [
+      "AI 安全",
+      "隐私",
+      "美中 AI"
+    ],
+    "importance": 0.88,
+    "consensus_count": 0,
+    "insight_zh": "合规意图(反蒸馏水印)与知情同意的边界之争:引爆点不是『要不要防盗』,而是『偷偷编码进用户提示词』。",
+    "id": "48691b565d63534c",
+    "collected_at": "2026-07-01T12:40:00+08:00"
+  },
+  {
+    "category": "consensus",
+    "source_type": "media",
+    "source": "The Hacker News / TechTimes / CyberScoop",
+    "lang": "en",
+    "url": "https://www.techtimes.com/articles/319105/20260625/alibaba-ran-largest-known-ai-theft-campaign-against-claude-anthropic-tells-senate.htm",
+    "source_links": [
+      {
+        "name": "TechTimes",
+        "url": "https://www.techtimes.com/articles/319105/20260625/alibaba-ran-largest-known-ai-theft-campaign-against-claude-anthropic-tells-senate.htm"
+      },
+      {
+        "name": "The Hacker News",
+        "url": "https://thehackernews.com/2026/02/anthropic-says-chinese-ai-firms-used-16.html"
+      },
+      {
+        "name": "CyberScoop",
+        "url": "https://cyberscoop.com/anthropic-accuses-chinese-labs-ai-distillation-cyber-risk/"
+      }
+    ],
+    "title_zh": "Anthropic 向参议院指控:中国实验室用约 1600 万次 Claude 查询蒸馏抄模型,阿里涉最大规模",
+    "summary_zh": "Anthropic 称中国 AI 公司通过约 1600 万次 Claude 查询做蒸馏、试图复制其能力,并向参议院指认阿里巴巴主导了已知最大规模的一次『AI 窃取』行动;并借此论证仅靠出口管制守不住美中 AI 竞赛的防线。这条与今日 Claude Code『中国指纹』风波互为背景。",
+    "original_quote": "",
+    "entities": [
+      "Anthropic",
+      "Alibaba"
+    ],
+    "topics": [
+      "美中 AI",
+      "蒸馏",
+      "AI 安全"
+    ],
+    "importance": 0.8,
+    "consensus_count": 3,
+    "insight_zh": "",
+    "id": "5d7bdeabf2cfbdec",
+    "collected_at": "2026-07-01T12:40:00+08:00"
+  },
+  {
+    "category": "consensus",
+    "source_type": "media",
+    "source": "OpenAI 新闻室",
+    "lang": "en",
+    "url": "https://openai.com/news/",
+    "title_zh": "OpenAI 也在筹备秘密 IPO,估值约 7300 亿;收购 Ona 强化 Codex,周活破 500 万",
+    "summary_zh": "据报道 OpenAI 正与高盛、摩根士丹利筹备秘密递交 IPO,最快 9 月上市,私募估值约 7300 亿美元;同时收购德国初创 Ona 以增强 Codex 的云端常驻智能体能力,Codex 周活用户已超 500 万。与今日 Anthropic 以 9650 亿反超形成对照。",
+    "original_quote": "",
+    "entities": [
+      "OpenAI",
+      "Codex"
+    ],
+    "topics": [
+      "AI 融资",
+      "IPO",
+      "智能体"
+    ],
+    "importance": 0.82,
+    "consensus_count": 2,
+    "insight_zh": "",
+    "id": "cd4de9e9e756f73b",
+    "collected_at": "2026-07-01T12:40:00+08:00"
+  },
+  {
+    "category": "consensus",
+    "source_type": "media",
+    "source": "AI Weekly / 厂商",
+    "lang": "en",
+    "url": "https://aiweekly.co/ai-news-today/google-ai-news",
+    "title_zh": "谷歌 Android 17 内置 Gemini Omni,Gemini 3.5 Flash 原生『电脑操作』,铺路年内 Agent",
+    "summary_zh": "谷歌发布 Android 17,内置 Gemini Omni、Lyria 3 音乐生成与 AudioLM 翻译;并把『电脑操作(computer use)』原生集成进 Gemini 3.5 Flash 的 API 与企业 Agent 平台,为下半年的『Gemini Intelligence』智能体打底。",
+    "original_quote": "",
+    "entities": [
+      "Google",
+      "Gemini"
+    ],
+    "topics": [
+      "大模型",
+      "智能体",
+      "Android"
+    ],
+    "importance": 0.7,
+    "consensus_count": 1,
+    "insight_zh": "",
+    "id": "88208f58dfc8188f",
+    "collected_at": "2026-07-01T12:40:00+08:00"
+  },
+  {
+    "category": "consensus",
+    "source_type": "media",
+    "source": "CNBC",
+    "lang": "en",
+    "url": "https://www.cnbc.com/2026/06/08/apple-google-nvidia-ai-chips.html",
+    "title_zh": "苹果确认:Apple Intelligence 部分能力将跑在 Nvidia GPU 上、寄居谷歌云",
+    "summary_zh": "苹果官方确认,Apple Intelligence 的部分功能将在云端跑在 Nvidia GPU 上,作为其『私有云计算』基础设施的一部分、并部署在谷歌云中;苹果同时与谷歌、Nvidia 合作打造更先进的 AI 模型。一向自研的苹果在 AI 算力上转向外部,信号明显。",
+    "original_quote": "",
+    "entities": [
+      "Apple",
+      "Nvidia",
+      "Google"
+    ],
+    "topics": [
+      "AI 芯片",
+      "算力",
+      "云"
+    ],
+    "importance": 0.75,
+    "consensus_count": 1,
+    "insight_zh": "",
+    "id": "42b9a85757a2eb8e",
+    "collected_at": "2026-07-01T12:40:00+08:00"
+  },
+  {
+    "category": "consensus",
+    "source_type": "media",
+    "source": "Forbes / Fortune / Stanford HAI",
+    "lang": "en",
+    "url": "https://www.forbes.com/sites/jonmarkman/2026/04/28/chinas-deepseek-v4-and-qwen-reshape-the-open-source-ai-race/",
+    "source_links": [
+      {
+        "name": "Forbes",
+        "url": "https://www.forbes.com/sites/jonmarkman/2026/04/28/chinas-deepseek-v4-and-qwen-reshape-the-open-source-ai-race/"
+      },
+      {
+        "name": "Fortune",
+        "url": "https://fortune.com/2026/04/24/deepseek-v4-ai-model-price-performance-china-open-source/"
+      },
+      {
+        "name": "Stanford HAI",
+        "url": "https://hai.stanford.edu/policy/beyond-deepseek-chinas-diverse-open-weight-ai-ecosystem-and-its-policy-implications"
+      }
+    ],
+    "title_zh": "中国开源 AI 成气候:阿里 Qwen 破 3 亿月活、Hugging Face 下载超 10 亿,GLM-5 登顶、DeepSeek V4 最便宜",
+    "summary_zh": "中国开源阵营快速扩张:阿里 Qwen 消费端月活破 3 亿、Hugging Face 累计下载超 10 亿、已开源逾百个 Apache-2.0 模型(含 2350 亿参数 MoE);智谱 GLM-5 以 BenchLM 85 分登顶、且完全用华为昇腾训练;DeepSeek V4 以 0.14–0.30 美元/百万 tokens 保持最便宜。一个多玩家、绑定国产芯片的开源生态正在成形。",
+    "original_quote": "",
+    "entities": [
+      "Alibaba",
+      "Qwen",
+      "DeepSeek",
+      "Zhipu",
+      "Huawei"
+    ],
+    "topics": [
+      "开源模型",
+      "中国 AI",
+      "算力"
+    ],
+    "importance": 0.8,
+    "consensus_count": 3,
+    "insight_zh": "",
+    "id": "ba01da4854cdf785",
+    "collected_at": "2026-07-01T12:40:00+08:00"
+  },
+  {
+    "category": "consensus",
+    "source_type": "media",
+    "source": "Collibra / Crowell / Holland & Knight",
+    "lang": "en",
+    "url": "https://www.collibra.com/blog/ai-regulatory-compliance-in-2026-eu-ai-act-us-orders-and-state-laws-and-how-to-operationalize",
+    "source_links": [
+      {
+        "name": "Collibra",
+        "url": "https://www.collibra.com/blog/ai-regulatory-compliance-in-2026-eu-ai-act-us-orders-and-state-laws-and-how-to-operationalize"
+      },
+      {
+        "name": "Crowell & Moring",
+        "url": "https://www.crowell.com/en/insights/client-alerts/executive-order-tries-to-thwart-onerous-ai-state-regulation-calls-for-national-framework"
+      },
+      {
+        "name": "Holland & Knight",
+        "url": "https://www.hklaw.com/en/insights/publications/2026/04/us-companies-face-eu-ai-acts-possible-august-2026-compliance-deadline"
+      }
+    ],
+    "title_zh": "欧盟 AI 法 8 月 2 日全面适用,理事会 6/29 终批『简化包』;美国转向联邦预占州法",
+    "summary_zh": "欧盟《AI 法》将于 8 月 2 日全面适用,理事会 6 月 29 日为『数字简化包(Digital Omnibus)』开绿灯——把部分高风险义务再延后;美国这边则是 2025 年 12 月行政令 + 2026 年 3 月白宫框架,推动『轻触式』联邦标准并预占各州 AI 法(接 6-30 那条参院 99–1 否决禁令的后续)。",
+    "original_quote": "",
+    "entities": [
+      "EU",
+      "欧盟 AI 法",
+      "白宫"
+    ],
+    "topics": [
+      "AI 监管",
+      "合规",
+      "美中欧"
+    ],
+    "importance": 0.78,
+    "consensus_count": 3,
+    "insight_zh": "",
+    "id": "26d6de038a22be35",
+    "collected_at": "2026-07-01T12:40:00+08:00"
+  },
+  {
+    "category": "consensus",
+    "source_type": "media",
+    "source": "TechInsights / Distill Intelligence",
+    "lang": "en",
+    "url": "https://www.distillintelligence.com/briefings/semiconductors-ai-chips-2026-06-19",
+    "title_zh": "Nvidia 发债 250 亿美元、转向『算力租赁』;台积电路线图 34 年来首次分叉、Intel 18A-P 进风险试产",
+    "summary_zh": "AI 芯片版图继续重排:Nvidia 创纪录业绩之外,以 250 亿美元发债扩表并转向算力租赁模式;台积电 4 月的先进制程路线图出现 1992 年以来首次『分叉』,按移动与 AI-HPC 两条线走(苹果、Nvidia 为其两大客户);Intel 18A-P 进入风险试产、传获苹果与谷歌兴趣。",
+    "original_quote": "",
+    "entities": [
+      "Nvidia",
+      "TSMC",
+      "Intel",
+      "Apple"
+    ],
+    "topics": [
+      "AI 芯片",
+      "半导体",
+      "算力"
+    ],
+    "importance": 0.72,
+    "consensus_count": 2,
+    "insight_zh": "",
+    "id": "c59de545442b78e6",
+    "collected_at": "2026-07-01T12:40:00+08:00"
   }
 ]

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T12:22:00+08:00",
+  "generated_at": "2026-07-01T12:52:00+08:00",
   "threads": [
     {
       "id": "thread-ai-regulation",
@@ -126,6 +126,49 @@
           "item_id": "65c0db7305e657e9",
           "title_zh": "Anthropic 9650 亿估值首超 OpenAI、秘密递交 IPO",
           "note_zh": "资本主角交接:OpenAI 承压之际 Anthropic 反超并抢先递交上市"
+        },
+        {
+          "date": "2026-07-01",
+          "item_id": "cd4de9e9e756f73b",
+          "title_zh": "OpenAI 也筹秘密 IPO(约 7300 亿),Codex 周活破 500 万",
+          "note_zh": "两强同赴 IPO,Anthropic 暂领先"
+        }
+      ]
+    },
+    {
+      "id": "thread-us-china-ai",
+      "title_zh": "美中 AI 角力:从模型层下沉到工具链/芯片/合规",
+      "key_entities": [
+        "Anthropic",
+        "Alibaba",
+        "美中 AI"
+      ],
+      "summary_zh": "美中 AI 竞争从『谁模型强』下沉到工具链暗战(Claude Code 指纹)、国产芯片(昇腾)与法律层(蒸馏指控/出口管制/预占)。",
+      "status_zh": "升级中 · 下沉到代码与合规",
+      "timeline": [
+        {
+          "date": "2026-06-30",
+          "item_id": "co-anthropic-fraud-accounts",
+          "title_zh": "Anthropic 称遭近 2.5 万欺诈账号探测 Claude",
+          "note_zh": "滥用/探测,美中 AI 摩擦的前奏"
+        },
+        {
+          "date": "2026-07-01",
+          "item_id": "5d7bdeabf2cfbdec",
+          "title_zh": "Anthropic 向参院指控阿里 1600 万次查询蒸馏",
+          "note_zh": "把蒸馏/盗用摆上国会"
+        },
+        {
+          "date": "2026-07-01",
+          "item_id": "48691b565d63534c",
+          "title_zh": "Claude Code 暗藏『中国用户指纹』(已认回滚)",
+          "note_zh": "防蒸馏水印下沉到工具链,引隐私争议"
+        },
+        {
+          "date": "2026-07-01",
+          "item_id": "ba01da4854cdf785",
+          "title_zh": "中国开源反超:Qwen 3 亿月活、GLM-5 用昇腾登顶",
+          "note_zh": "国产芯片 + 开源低价,竞争另一端"
         }
       ]
     }
