@@ -23,7 +23,9 @@
     ],
     "importance": 0.72,
     "consensus_count": 3,
-    "insight_zh": ""
+    "insight_zh": "",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "co-nasdaq-openai-ipo",
@@ -49,7 +51,9 @@
     ],
     "importance": 0.78,
     "consensus_count": 4,
-    "insight_zh": ""
+    "insight_zh": "",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "co-warsh-fed-chair",
@@ -75,7 +79,9 @@
     ],
     "importance": 0.7,
     "consensus_count": 3,
-    "insight_zh": ""
+    "insight_zh": "",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "co-central-bank-divergence",
@@ -101,7 +107,9 @@
     ],
     "importance": 0.68,
     "consensus_count": 3,
-    "insight_zh": ""
+    "insight_zh": "",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "co-crude-oil",
@@ -127,7 +135,9 @@
     ],
     "importance": 0.55,
     "consensus_count": 2,
-    "insight_zh": ""
+    "insight_zh": "",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "co-anthropic-fraud-accounts",
@@ -151,7 +161,9 @@
     ],
     "importance": 0.6,
     "consensus_count": 2,
-    "insight_zh": ""
+    "insight_zh": "",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "co-worldbank-growth",
@@ -175,7 +187,9 @@
     ],
     "importance": 0.62,
     "consensus_count": 2,
-    "insight_zh": ""
+    "insight_zh": "",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "dp-noah-transaction-costs",
@@ -200,7 +214,9 @@
     ],
     "importance": 0.75,
     "consensus_count": 0,
-    "insight_zh": "用交易成本这一经典框架，把“AI 改变就业”的模糊讨论收敛成一个可证伪的判断：成本升→大公司，成本降→单人公司。"
+    "insight_zh": "用交易成本这一经典框架，把“AI 改变就业”的模糊讨论收敛成一个可证伪的判断：成本升→大公司，成本降→单人公司。",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "dp-clark-import-ai-463",
@@ -227,7 +243,9 @@
     ],
     "importance": 0.78,
     "consensus_count": 0,
-    "insight_zh": "在资本市场担心 AI 泡沫的同时，圈内人给出的是“能力仍在硬性、快速进步”的第一手信号——技术叙事与资本叙事正在背离。"
+    "insight_zh": "在资本市场担心 AI 泡沫的同时，圈内人给出的是“能力仍在硬性、快速进步”的第一手信号——技术叙事与资本叙事正在背离。",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "dp-altman-ai-policy",
@@ -253,7 +271,9 @@
     ],
     "importance": 0.6,
     "consensus_count": 0,
-    "insight_zh": "头部厂商把“安全”与“国家竞争力”绑定的话术，正成为塑造监管落地方向的关键力量。"
+    "insight_zh": "头部厂商把“安全”与“国家竞争力”绑定的话术，正成为塑造监管落地方向的关键力量。",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "dp-qwen-local-hn",
@@ -279,7 +299,9 @@
     ],
     "importance": 0.58,
     "consensus_count": 0,
-    "insight_zh": "与“资本担心 AI 融资”相反，技术圈的注意力在转向更便宜、可自托管、且非美国出品的模型——降本与去中心化是另一条暗线。"
+    "insight_zh": "与“资本担心 AI 融资”相反，技术圈的注意力在转向更便宜、可自托管、且非美国出品的模型——降本与去中心化是另一条暗线。",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "dp-sama-redteaming",
@@ -305,7 +327,9 @@
     ],
     "importance": 0.66,
     "consensus_count": 0,
-    "insight_zh": "头部厂商在监管上的『可接受边界』正公开成形:接受安全测试、拒绝政府干预市场——这会直接影响行政令/立法的落点。"
+    "insight_zh": "头部厂商在监管上的『可接受边界』正公开成形:接受安全测试、拒绝政府干预市场——这会直接影响行政令/立法的落点。",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "dp-karpathy-llm-uiux",
@@ -331,7 +355,9 @@
     ],
     "importance": 0.74,
     "consensus_count": 0,
-    "insight_zh": "把『聊天框』升维成『组织里的常驻同事』——这是 agent 产品形态的关键判断,也解释了各家为何都在做组织级集成与记忆。"
+    "insight_zh": "把『聊天框』升维成『组织里的常驻同事』——这是 agent 产品形态的关键判断,也解释了各家为何都在做组织级集成与记忆。",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "dp-elerian-fed-dovish",
@@ -357,7 +383,9 @@
     ],
     "importance": 0.7,
     "consensus_count": 0,
-    "insight_zh": "在『通胀粘性→鹰派加息』的主流叙事里,El-Erian 给出反向判断;这种共识缺口往往是利率拐点的早期信号。"
+    "insight_zh": "在『通胀粘性→鹰派加息』的主流叙事里,El-Erian 给出反向判断;这种共识缺口往往是利率拐点的早期信号。",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "co-qualcomm-tenstorrent",
@@ -384,7 +412,9 @@
     ],
     "importance": 0.68,
     "consensus_count": 4,
-    "insight_zh": ""
+    "insight_zh": "",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "co-anthropic-mythos",
@@ -412,7 +442,9 @@
     ],
     "importance": 0.8,
     "consensus_count": 4,
-    "insight_zh": ""
+    "insight_zh": "",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "co-skorea-1t-chips",
@@ -438,7 +470,9 @@
     ],
     "importance": 0.66,
     "consensus_count": 2,
-    "insight_zh": ""
+    "insight_zh": "",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   },
   {
     "id": "co-pce-fed-hikes",
@@ -465,6 +499,8 @@
     ],
     "importance": 0.7,
     "consensus_count": 3,
-    "insight_zh": ""
+    "insight_zh": "",
+    "published": "2026-06-29",
+    "first_seen": "2026-06-30"
   }
 ]

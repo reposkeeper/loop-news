@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Loop News 系统评分器(确定性,非 LLM)。四个分数,每轮都算、都要往上涨:
-  1) correlation 新闻关联度   —— 关联/跨日期/非显然 结论的密度
-  2) volume      新闻数量      —— 采集量 vs 目标;低于底线 = 陡峭惩罚
-  3) analysis    分析整合      —— 分级结论/证据回链/共识缺口/可证伪
-  4) breadth     自进化广度    —— 来源角度/话题覆盖/领域专题/已消化反馈
-外加 composite = 四者均值。写入 state/scores.json(时间序列 + 与上轮的 delta)。
+Loop News 系统评分器(确定性,非 LLM)。六个分数,每轮都算、都要往上涨:
+  1) correlation   新闻关联度   —— 关联/跨日期/非显然 结论的密度
+  2) volume        新闻数量      —— 采集量 vs 目标;低于底线 = 陡峭惩罚
+  3) analysis      分析整合      —— 分级结论/证据回链/共识缺口/可证伪
+  4) breadth       自进化广度    —— 来源角度/话题覆盖/领域专题/已消化反馈
+  5) source_quality 信息源固化   —— 已固化 core 源数量/质量、采自 core 占比、是否在持续评选(否则衰减)
+  6) timeliness    新闻及时性    —— 采集日−事件日 的 lateness;旧闻/漏采后补 双重惩罚,多条陈旧强惩罚
+外加 composite = 六者均值。写入 state/scores.json(时间序列 + 与上轮的 delta)。
 用法:python3 scripts/score.py [YYYY-MM-DD]   # 默认最新有分析的日期
 被 ln-synthesize/ln-evolve/ln-daily 调用;agent 每轮都要看分数、并优先把最低/下滑的那个提上去。
 """
@@ -24,7 +26,8 @@ def txt(p):
 
 TARGETS = {"volume_target": 20, "volume_floor": 12, "connections": 6, "cross_date": 3,
            "non_obvious": 4, "conclusions": 8, "edge": 3, "falsifiable": 2,
-           "sources": 30, "topics": 20, "domains": 3, "feedback_recent": 6, "angles": 8, "core_sources": 12}
+           "sources": 30, "topics": 20, "domains": 3, "feedback_recent": 6, "angles": 8, "core_sources": 12,
+           "fresh_days": 4, "stale_decay": 0.78}
 
 def clamp01(x): return max(0.0, min(1.0, x))
 
@@ -94,16 +97,39 @@ def compute(date):
         curation = 0.3
     source_quality = 100 * (0.35 * clamp01(core_n / TARGETS["core_sources"]) + 0.25 * clamp01(core_q)
                           + 0.25 * clamp01(from_core) + 0.15 * curation)
+    # 及时性(第 6 分):lateness = 采集日 − 事件日(published)。越大 = 既是旧闻、又说明当时漏采现在才补 →
+    # 双重触发惩罚;一天里多条『超过几天』→ 用 0.78ⁿ 强惩罚,几条就大跌(硬约束:新闻要实时,漏采要罚)。
+    def d2(sd):
+        try: return datetime.date(*map(int, str(sd).split("-")))
+        except Exception: return None
+    col = d2(date)
+    news = [it for it in corpus if it.get("category") in ("consensus", "deep")]
+    def lateness(it):
+        p = d2(it.get("published"))
+        return max(0, (col - p).days) if (p and col) else None
+    lts = [lateness(it) for it in news]
+    stamped = [x for x in lts if x is not None]
+    coverage = (len(stamped) / len(news)) if news else 1.0      # 未标事件日 = 无法主张及时 → 拉低
+    def fresh_w(x):
+        return 1.0 if x <= 1 else 0.85 if x <= 3 else 0.5 if x <= 5 else 0.2 if x <= 8 else 0.05
+    recency = (sum(fresh_w(x) for x in stamped) / len(stamped)) if stamped else 0.0
+    realtime = (sum(1 for x in stamped if x <= 2) / len(stamped)) if stamped else 0.0
+    stale_n = sum(1 for x in stamped if x > TARGETS["fresh_days"])   # 超过几天 = 陈旧/漏采后补
+    penalty = TARGETS["stale_decay"] ** max(0, stale_n - 1)          # 容忍 1 条,之后每条 ×0.78 → 多条即大跌
+    avg_late = round(sum(stamped) / len(stamped), 1) if stamped else None
+    timeliness = 100 * coverage * (0.5 * recency + 0.5 * realtime) * penalty
     scores = {k: round(v, 1) for k, v in {"correlation": correlation, "volume": volume, "analysis": analysis,
-              "breadth": breadth, "source_quality": source_quality}.items()}
-    scores["composite"] = round((scores["correlation"] + scores["volume"] + scores["analysis"]
-                               + scores["breadth"] + scores["source_quality"]) / 5, 1)
+              "breadth": breadth, "source_quality": source_quality, "timeliness": timeliness}.items()}
+    scores["composite"] = round((scores["correlation"] + scores["volume"] + scores["analysis"] + scores["breadth"]
+                               + scores["source_quality"] + scores["timeliness"]) / 6, 1)
     comps = {"collected": collected, "connections": len(conns), "cross_date": cross_date,
              "non_obvious": non_obvious, "conclusions": len(concls), "edge": edge,
              "falsifiable": falsifiable, "evidence_ratio": round(ev_ratio, 2), "graded": graded,
              "sources": sources, "topics": topics, "domains": domains, "feedback_recent": feedback_recent,
              "angles": angles, "core_sources": core_n, "core_quality": round(core_q, 2),
-             "from_core_share": round(from_core, 2), "curation_freshness": round(curation, 2)}
+             "from_core_share": round(from_core, 2), "curation_freshness": round(curation, 2),
+             "fresh_le2d": sum(1 for x in stamped if x <= 2), "stale_gt4d": stale_n,
+             "avg_lateness_d": avg_late, "recency_coverage": round(coverage, 2)}
     return scores, comps
 
 def main():
@@ -124,8 +150,8 @@ def main():
     store["history"] = hist; store["targets"] = TARGETS
     with open(os.path.join(ROOT, "state/scores.json"), "w", encoding="utf-8") as f:
         json.dump(store, f, ensure_ascii=False, indent=2)
-    print(f"[score] {date}  综合 {scores['composite']}  = 关联 {scores['correlation']} · 数量 {scores['volume']} · 分析 {scores['analysis']} · 广度 {scores['breadth']} · 源固化 {scores['source_quality']}")
-    if prev: print(f"        Δvs {prev['date']}: " + " ".join(f"{k}{'+' if (delta[k] or 0)>=0 else ''}{delta[k]}" for k in ["composite","correlation","volume","analysis","breadth","source_quality"]))
+    print(f"[score] {date}  综合 {scores['composite']}  = 关联 {scores['correlation']} · 数量 {scores['volume']} · 分析 {scores['analysis']} · 广度 {scores['breadth']} · 源固化 {scores['source_quality']} · 及时 {scores['timeliness']}")
+    if prev: print(f"        Δvs {prev['date']}: " + " ".join(f"{k}{'+' if (delta[k] or 0)>=0 else ''}{delta[k]}" for k in ["composite","correlation","volume","analysis","breadth","source_quality","timeliness"]))
     low = min(scores, key=lambda k: scores[k] if k != "composite" else 999)
     print(f"        ⚠ 最低分 = {low}({scores[low]})→ 下一轮优先把它提上去")
     return scores

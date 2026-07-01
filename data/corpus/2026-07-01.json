@@ -36,7 +36,9 @@
     "consensus_count": 3,
     "insight_zh": "",
     "id": "65c0db7305e657e9",
-    "collected_at": "2026-07-01T12:09:00+08:00"
+    "collected_at": "2026-07-01T12:09:00+08:00",
+    "published": "2026-06-01",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "consensus",
@@ -74,7 +76,9 @@
     "consensus_count": 3,
     "insight_zh": "",
     "id": "187b5d8a65b65600",
-    "collected_at": "2026-07-01T12:09:00+08:00"
+    "collected_at": "2026-07-01T12:09:00+08:00",
+    "published": "2026-06-17",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "consensus",
@@ -107,7 +111,9 @@
     "consensus_count": 3,
     "insight_zh": "",
     "id": "dc9436282621ed97",
-    "collected_at": "2026-07-01T12:09:00+08:00"
+    "collected_at": "2026-07-01T12:09:00+08:00",
+    "published": "2026-06-29",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "consensus",
@@ -146,7 +152,9 @@
     "consensus_count": 3,
     "insight_zh": "",
     "id": "26b3e31bac3726e6",
-    "collected_at": "2026-07-01T12:09:00+08:00"
+    "collected_at": "2026-07-01T12:09:00+08:00",
+    "published": "2026-06-29",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "deep",
@@ -170,7 +178,9 @@
     "consensus_count": 0,
     "insight_zh": "'能力在涨、但还没到国安红线' 的克制表述,本身是行业给监管与自身争取时间窗的信号。",
     "id": "f9d89c4e9ddbd28c",
-    "collected_at": "2026-07-01T12:09:00+08:00"
+    "collected_at": "2026-07-01T12:09:00+08:00",
+    "published": "2026-06-30",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "podcast",
@@ -204,7 +214,9 @@
     "importance": 0.72,
     "insight_zh": "",
     "id": "20e8634f9461793b",
-    "collected_at": "2026-07-01T12:09:00+08:00"
+    "collected_at": "2026-07-01T12:09:00+08:00",
+    "published": "2026-06-04",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "deep",
@@ -228,7 +240,9 @@
     "consensus_count": 0,
     "insight_zh": "合规意图(反蒸馏水印)与知情同意的边界之争:引爆点不是『要不要防盗』,而是『偷偷编码进用户提示词』。",
     "id": "48691b565d63534c",
-    "collected_at": "2026-07-01T12:40:00+08:00"
+    "collected_at": "2026-07-01T12:40:00+08:00",
+    "published": "2026-06-30",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "consensus",
@@ -266,7 +280,9 @@
     "consensus_count": 3,
     "insight_zh": "",
     "id": "5d7bdeabf2cfbdec",
-    "collected_at": "2026-07-01T12:40:00+08:00"
+    "collected_at": "2026-07-01T12:40:00+08:00",
+    "published": "2026-06-25",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "consensus",
@@ -290,7 +306,9 @@
     "consensus_count": 2,
     "insight_zh": "",
     "id": "cd4de9e9e756f73b",
-    "collected_at": "2026-07-01T12:40:00+08:00"
+    "collected_at": "2026-07-01T12:40:00+08:00",
+    "published": "2026-06-29",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "consensus",
@@ -314,7 +332,9 @@
     "consensus_count": 1,
     "insight_zh": "",
     "id": "88208f58dfc8188f",
-    "collected_at": "2026-07-01T12:40:00+08:00"
+    "collected_at": "2026-07-01T12:40:00+08:00",
+    "published": "2026-06-28",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "consensus",
@@ -339,48 +359,9 @@
     "consensus_count": 1,
     "insight_zh": "",
     "id": "42b9a85757a2eb8e",
-    "collected_at": "2026-07-01T12:40:00+08:00"
-  },
-  {
-    "category": "consensus",
-    "source_type": "media",
-    "source": "Forbes / Fortune / Stanford HAI",
-    "lang": "en",
-    "url": "https://www.forbes.com/sites/jonmarkman/2026/04/28/chinas-deepseek-v4-and-qwen-reshape-the-open-source-ai-race/",
-    "source_links": [
-      {
-        "name": "Forbes",
-        "url": "https://www.forbes.com/sites/jonmarkman/2026/04/28/chinas-deepseek-v4-and-qwen-reshape-the-open-source-ai-race/"
-      },
-      {
-        "name": "Fortune",
-        "url": "https://fortune.com/2026/04/24/deepseek-v4-ai-model-price-performance-china-open-source/"
-      },
-      {
-        "name": "Stanford HAI",
-        "url": "https://hai.stanford.edu/policy/beyond-deepseek-chinas-diverse-open-weight-ai-ecosystem-and-its-policy-implications"
-      }
-    ],
-    "title_zh": "中国开源 AI 成气候:阿里 Qwen 破 3 亿月活、Hugging Face 下载超 10 亿,GLM-5 登顶、DeepSeek V4 最便宜",
-    "summary_zh": "中国开源阵营快速扩张:阿里 Qwen 消费端月活破 3 亿、Hugging Face 累计下载超 10 亿、已开源逾百个 Apache-2.0 模型(含 2350 亿参数 MoE);智谱 GLM-5 以 BenchLM 85 分登顶、且完全用华为昇腾训练;DeepSeek V4 以 0.14–0.30 美元/百万 tokens 保持最便宜。一个多玩家、绑定国产芯片的开源生态正在成形。",
-    "original_quote": "",
-    "entities": [
-      "Alibaba",
-      "Qwen",
-      "DeepSeek",
-      "Zhipu",
-      "Huawei"
-    ],
-    "topics": [
-      "开源模型",
-      "中国 AI",
-      "算力"
-    ],
-    "importance": 0.8,
-    "consensus_count": 3,
-    "insight_zh": "",
-    "id": "ba01da4854cdf785",
-    "collected_at": "2026-07-01T12:40:00+08:00"
+    "collected_at": "2026-07-01T12:40:00+08:00",
+    "published": "2026-06-08",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "consensus",
@@ -419,7 +400,9 @@
     "consensus_count": 3,
     "insight_zh": "",
     "id": "26d6de038a22be35",
-    "collected_at": "2026-07-01T12:40:00+08:00"
+    "collected_at": "2026-07-01T12:40:00+08:00",
+    "published": "2026-06-29",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "consensus",
@@ -445,7 +428,9 @@
     "consensus_count": 2,
     "insight_zh": "",
     "id": "c59de545442b78e6",
-    "collected_at": "2026-07-01T12:40:00+08:00"
+    "collected_at": "2026-07-01T12:40:00+08:00",
+    "published": "2026-06-19",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "consensus",
@@ -468,7 +453,9 @@
     "consensus_count": 1,
     "insight_zh": "",
     "id": "4ac906a950f5dfbc",
-    "collected_at": "2026-07-01T13:05:00+08:00"
+    "collected_at": "2026-07-01T13:05:00+08:00",
+    "published": "2026-06-28",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "consensus",
@@ -494,54 +481,9 @@
     "consensus_count": 1,
     "insight_zh": "",
     "id": "ac8acb987a35420a",
-    "collected_at": "2026-07-01T13:05:00+08:00"
-  },
-  {
-    "category": "consensus",
-    "source_type": "media",
-    "source": "CNBC",
-    "lang": "en",
-    "url": "https://www.cnbc.com/2026/04/08/meta-debuts-first-major-ai-model-since-14-billion-deal-to-bring-in-alexandr-wang.html",
-    "title_zh": "Meta 推 Muse 系列首个模型 Muse Spark,追赶 Google 与 OpenAI",
-    "summary_zh": "Meta 超级智能实验室(Meta Superintelligence Labs)发布 Muse 系列首个模型 Muse Spark(原代号 Avocado),这是其斥资引入 Alexandr Wang 后的首批重大成果,意在追赶 Google 与 OpenAI 的前沿。",
-    "original_quote": "",
-    "entities": [
-      "Meta",
-      "Muse"
-    ],
-    "topics": [
-      "大模型",
-      "前沿模型"
-    ],
-    "importance": 0.68,
-    "consensus_count": 1,
-    "insight_zh": "",
-    "id": "9a4e87cb64a8377c",
-    "collected_at": "2026-07-01T13:05:00+08:00"
-  },
-  {
-    "category": "consensus",
-    "source_type": "media",
-    "source": "Fortune",
-    "lang": "en",
-    "url": "https://fortune.com/2026/04/24/deepseek-v4-ai-model-price-performance-china-open-source/",
-    "title_zh": "DeepSeek V4 以极低价 + 深绑华为芯片发布,搅动开源格局",
-    "summary_zh": "DeepSeek 发布 V4,以极低定价(0.14–0.30 美元/百万 tokens)和与华为芯片的紧密整合面世,延续中国开源阵营的价格战;虽在综合基准上落后于 GLM-5、Kimi,但以性价比继续压低行业价格锚。",
-    "original_quote": "",
-    "entities": [
-      "DeepSeek",
-      "Huawei"
-    ],
-    "topics": [
-      "开源模型",
-      "中国 AI",
-      "算力"
-    ],
-    "importance": 0.7,
-    "consensus_count": 1,
-    "insight_zh": "",
-    "id": "182bccd3005c9aee",
-    "collected_at": "2026-07-01T13:05:00+08:00"
+    "collected_at": "2026-07-01T13:05:00+08:00",
+    "published": "2026-06-01",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "consensus",
@@ -565,7 +507,9 @@
     "consensus_count": 1,
     "insight_zh": "",
     "id": "325db0c102673aa0",
-    "collected_at": "2026-07-01T13:05:00+08:00"
+    "collected_at": "2026-07-01T13:05:00+08:00",
+    "published": "2026-06-03",
+    "first_seen": "2026-07-01"
   },
   {
     "category": "deep",
@@ -589,6 +533,8 @@
     "consensus_count": 0,
     "insight_zh": "把'中国 AI = DeepSeek'当靶子,是最常见也最误导的简化——真正的变量是整个国产开源+芯片生态。",
     "id": "f6c9fab363aa377d",
-    "collected_at": "2026-07-01T13:05:00+08:00"
+    "collected_at": "2026-07-01T13:05:00+08:00",
+    "published": "2026-06-26",
+    "first_seen": "2026-07-01"
   }
 ]

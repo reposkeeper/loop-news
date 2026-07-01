@@ -13,19 +13,22 @@
     "domains": 3,
     "feedback_recent": 6,
     "angles": 8,
-    "core_sources": 12
+    "core_sources": 12,
+    "fresh_days": 4,
+    "stale_decay": 0.78
   },
   "history": [
     {
       "date": "2026-06-30",
-      "computed_at": "2026-07-01T12:49:46+08:00",
+      "computed_at": "2026-07-01T13:09:39+08:00",
       "scores": {
         "correlation": 76.7,
         "volume": 88.8,
         "analysis": 93.3,
         "breadth": 78.7,
         "source_quality": 76.6,
-        "composite": 82.8
+        "timeliness": 100.0,
+        "composite": 85.7
       },
       "components": {
         "collected": 18,
@@ -45,30 +48,36 @@
         "core_sources": 14,
         "core_quality": 0.84,
         "from_core_share": 0.22,
-        "curation_freshness": 1.0
+        "curation_freshness": 1.0,
+        "fresh_le2d": 18,
+        "stale_gt4d": 0,
+        "avg_lateness_d": 1.0,
+        "recency_coverage": 1.0
       },
       "delta_vs_prev": {
         "correlation": -11.6,
         "volume": -11.2,
         "analysis": 9.8,
         "breadth": 0.0,
-        "source_quality": 76.6,
-        "composite": -4.8
+        "source_quality": -11.9,
+        "timeliness": 100.0,
+        "composite": -2.1
       }
     },
     {
       "date": "2026-07-01",
-      "computed_at": "2026-07-01T12:49:46+08:00",
+      "computed_at": "2026-07-01T13:09:39+08:00",
       "scores": {
         "correlation": 88.3,
-        "volume": 100.0,
+        "volume": 83.1,
         "analysis": 83.5,
         "breadth": 78.7,
-        "source_quality": 88.5,
-        "composite": 87.8
+        "source_quality": 87.2,
+        "timeliness": 7.7,
+        "composite": 71.4
       },
       "components": {
-        "collected": 20,
+        "collected": 17,
         "connections": 6,
         "cross_date": 2,
         "non_obvious": 5,
@@ -78,22 +87,27 @@
         "evidence_ratio": 1.0,
         "graded": 1.0,
         "sources": 36,
-        "topics": 35,
+        "topics": 34,
         "domains": 1,
         "feedback_recent": 3,
         "angles": 14,
         "core_sources": 14,
         "core_quality": 0.84,
-        "from_core_share": 0.7,
-        "curation_freshness": 1.0
+        "from_core_share": 0.65,
+        "curation_freshness": 1.0,
+        "fresh_le2d": 6,
+        "stale_gt4d": 8,
+        "avg_lateness_d": 10.2,
+        "recency_coverage": 1.0
       },
       "delta_vs_prev": {
         "correlation": 11.6,
-        "volume": 11.2,
+        "volume": -5.7,
         "analysis": -9.8,
         "breadth": 0.0,
-        "source_quality": 11.9,
-        "composite": 5.0
+        "source_quality": 10.6,
+        "timeliness": -92.3,
+        "composite": -14.3
       }
     }
   ]

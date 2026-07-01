@@ -1,32 +1,155 @@
 {
-  "note": "信息源固化台账。ln-evolve 每轮评选:持续产优质(被展示/采用/贡献非显然结论、低噪音)的源→升 core(固化);噪音/重复/无产的→降 watch→drop。score.py 据此算第 5 分『信息源固化』。tier: core(已固化) / trial(试用) / watch(观察,岌岌可危) / demoted(降级淘汰)。quality 0–1。",
-  "targets": { "core": 12 },
+  "note": "信息源固化台账。ln-evolve 每轮评选:持续产优质(被展示/采用/贡献非显然结论、低噪音)的源→升 core(固化);噪音/重复/无产的→降 watch→drop。score.py 据此算第 5 分『信息源固化』。tier: core(已固化) / trial(试用) / watch(观察,岌岌可危) / demoted(降级淘汰)。quality 0–1。 recency: realtime(快讯/官方) / fast(当日新闻) / slow(周报/分析/数据);及时性分优先 realtime/fast,slow 源采到旧闻计入 stale。",
+  "targets": {
+    "core": 12
+  },
   "last_curation": "2026-07-01",
   "sources": {
-    "Reuters":       { "tier": "core", "quality": 0.9,  "note": "一手快讯" },
-    "AP":            { "tier": "core", "quality": 0.9,  "note": "一手快讯" },
-    "CNBC":          { "tier": "core", "quality": 0.85, "note": "科技/财经一手,本轮多条命中" },
-    "Fortune":       { "tier": "core", "quality": 0.82, "note": "Anthropic IPO 一手" },
-    "TechCrunch":    { "tier": "core", "quality": 0.8 },
-    "Anthropic":     { "tier": "core", "quality": 0.85, "note": "官方博客/披露,一手" },
-    "Import AI":     { "tier": "core", "quality": 0.85, "note": "Jack Clark 深度原声" },
-    "Stratechery":   { "tier": "core", "quality": 0.85, "note": "Ben Thompson 深度" },
-    "Gartner":       { "tier": "core", "quality": 0.8,  "note": "企业 AI 权威数据" },
-    "Crunchbase":    { "tier": "core", "quality": 0.8,  "note": "融资数据一手" },
-    "NCSL":          { "tier": "core", "quality": 0.85, "note": "一手立法统计" },
-    "CyberScoop":    { "tier": "core", "quality": 0.8 },
-    "参议院":         { "tier": "core", "quality": 0.85, "note": "官方稿" },
-    "Stanford HAI":  { "tier": "core", "quality": 0.85, "note": "政策深度" },
-    "Forbes":        { "tier": "trial", "quality": 0.6 },
-    "International Cyber Digest": { "tier": "trial", "quality": 0.55, "note": "命中 Claude Code 爆料;可信度待多轮观察" },
-    "BuildFastWithAI": { "tier": "trial", "quality": 0.5, "note": "聚合页,信息密度偏低,试用" },
-    "aiweekly":      { "tier": "trial", "quality": 0.55, "note": "AI 追踪,试用" },
-    "TechTimes":     { "tier": "trial", "quality": 0.55 },
-    "财新网":         { "tier": "watch", "quality": 0.5,  "note": "尚未实测出稿,观察" },
-    "Reddit":        { "tier": "watch", "quality": 0.4,  "note": "WebFetch 被拦,仅作信号" },
-    "@ylecun":       { "tier": "demoted", "quality": 0.25, "note": "多政治口水,已降权" },
-    "@DrJimFan":     { "tier": "demoted", "quality": 0.3,  "note": "近期无实质" },
-    "@paulkrugman":  { "tier": "demoted", "quality": 0.3,  "note": "近 7 日无实质" },
-    "@RayDalio":     { "tier": "demoted", "quality": 0.3,  "note": "仅格言" }
+    "Reuters": {
+      "tier": "core",
+      "quality": 0.9,
+      "note": "一手快讯",
+      "recency": "realtime"
+    },
+    "AP": {
+      "tier": "core",
+      "quality": 0.9,
+      "note": "一手快讯",
+      "recency": "realtime"
+    },
+    "CNBC": {
+      "tier": "core",
+      "quality": 0.85,
+      "note": "科技/财经一手,本轮多条命中",
+      "recency": "realtime"
+    },
+    "Fortune": {
+      "tier": "core",
+      "quality": 0.82,
+      "note": "Anthropic IPO 一手",
+      "recency": "fast"
+    },
+    "TechCrunch": {
+      "tier": "core",
+      "quality": 0.8,
+      "recency": "fast"
+    },
+    "Anthropic": {
+      "tier": "core",
+      "quality": 0.85,
+      "note": "官方博客/披露,一手",
+      "recency": "fast"
+    },
+    "Import AI": {
+      "tier": "core",
+      "quality": 0.85,
+      "note": "Jack Clark 深度原声",
+      "recency": "slow"
+    },
+    "Stratechery": {
+      "tier": "core",
+      "quality": 0.85,
+      "note": "Ben Thompson 深度",
+      "recency": "slow"
+    },
+    "Gartner": {
+      "tier": "core",
+      "quality": 0.8,
+      "note": "企业 AI 权威数据",
+      "recency": "slow"
+    },
+    "Crunchbase": {
+      "tier": "core",
+      "quality": 0.8,
+      "note": "融资数据一手",
+      "recency": "slow"
+    },
+    "NCSL": {
+      "tier": "core",
+      "quality": 0.85,
+      "note": "一手立法统计",
+      "recency": "slow"
+    },
+    "CyberScoop": {
+      "tier": "core",
+      "quality": 0.8,
+      "recency": "fast"
+    },
+    "参议院": {
+      "tier": "core",
+      "quality": 0.85,
+      "note": "官方稿",
+      "recency": "realtime"
+    },
+    "Stanford HAI": {
+      "tier": "core",
+      "quality": 0.85,
+      "note": "政策深度",
+      "recency": "slow"
+    },
+    "Forbes": {
+      "tier": "trial",
+      "quality": 0.6,
+      "recency": "fast"
+    },
+    "International Cyber Digest": {
+      "tier": "trial",
+      "quality": 0.55,
+      "note": "命中 Claude Code 爆料;可信度待多轮观察",
+      "recency": "fast"
+    },
+    "BuildFastWithAI": {
+      "tier": "trial",
+      "quality": 0.5,
+      "note": "聚合页,信息密度偏低,试用",
+      "recency": "slow"
+    },
+    "aiweekly": {
+      "tier": "trial",
+      "quality": 0.55,
+      "note": "AI 追踪,试用",
+      "recency": "fast"
+    },
+    "TechTimes": {
+      "tier": "trial",
+      "quality": 0.55,
+      "recency": "fast"
+    },
+    "财新网": {
+      "tier": "watch",
+      "quality": 0.5,
+      "note": "尚未实测出稿,观察",
+      "recency": "fast"
+    },
+    "Reddit": {
+      "tier": "watch",
+      "quality": 0.4,
+      "note": "WebFetch 被拦,仅作信号",
+      "recency": "fast"
+    },
+    "@ylecun": {
+      "tier": "demoted",
+      "quality": 0.25,
+      "note": "多政治口水,已降权",
+      "recency": "fast"
+    },
+    "@DrJimFan": {
+      "tier": "demoted",
+      "quality": 0.3,
+      "note": "近期无实质",
+      "recency": "fast"
+    },
+    "@paulkrugman": {
+      "tier": "demoted",
+      "quality": 0.3,
+      "note": "近 7 日无实质",
+      "recency": "slow"
+    },
+    "@RayDalio": {
+      "tier": "demoted",
+      "quality": 0.3,
+      "note": "仅格言",
+      "recency": "slow"
+    }
   }
 }

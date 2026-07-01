@@ -590,7 +590,7 @@ def render_feedback(ledger):
 
 
 DASH_LABELS = [("correlation", "关联度"), ("volume", "数量"), ("analysis", "分析整合"),
-               ("breadth", "自进化广度"), ("source_quality", "信息源固化")]
+               ("breadth", "自进化广度"), ("source_quality", "信息源固化"), ("timeliness", "及时性")]
 
 
 def render_dashboard(scores, srcq):
@@ -634,7 +634,7 @@ def render_dashboard(scores, srcq):
     return (
         '<section class="view" id="view-dashboard">'
         '<h1 class="day-date">📊 自进化仪表盘</h1>'
-        f'<p class="intro">系统每轮自评的 5 个分数,目标是都向上涨。数据 {e(cur.get("date",""))} · 由 <code>scripts/score.py</code> 确定性计算。</p>'
+        f'<p class="intro">系统每轮自评的 {len(DASH_LABELS)} 个分数,目标是都向上涨。数据 {e(cur.get("date",""))} · 由 <code>scripts/score.py</code> 确定性计算。</p>'
         f'<div class="dash-composite"><div class="dash-comp-num">{comp}<span class="dash-comp-d">{comp_d}</span></div>'
         f'<div class="dash-comp-lab">综合分</div><div class="dash-trend">{trend}</div></div>'
         f'<div class="dashboard">{cards}</div>'

@@ -168,37 +168,6 @@
       "id": "5d7bdeabf2cfbdec"
     },
     {
-      "title_zh": "中国开源 AI 成气候:阿里 Qwen 破 3 亿月活、Hugging Face 下载超 10 亿,GLM-5 登顶、DeepSeek V4 最便宜",
-      "summary_zh": "中国开源阵营快速扩张:阿里 Qwen 消费端月活破 3 亿、Hugging Face 累计下载超 10 亿、已开源逾百个 Apache-2.0 模型(含 2350 亿参数 MoE);智谱 GLM-5 以 BenchLM 85 分登顶、且完全用华为昇腾训练;DeepSeek V4 以 0.14–0.30 美元/百万 tokens 保持最便宜。一个多玩家、绑定国产芯片的开源生态正在成形。",
-      "sources": [
-        "Forbes",
-        "Fortune",
-        "Stanford HAI"
-      ],
-      "source_links": [
-        {
-          "name": "Forbes",
-          "url": "https://www.forbes.com/sites/jonmarkman/2026/04/28/chinas-deepseek-v4-and-qwen-reshape-the-open-source-ai-race/"
-        },
-        {
-          "name": "Fortune",
-          "url": "https://fortune.com/2026/04/24/deepseek-v4-ai-model-price-performance-china-open-source/"
-        },
-        {
-          "name": "Stanford HAI",
-          "url": "https://hai.stanford.edu/policy/beyond-deepseek-chinas-diverse-open-weight-ai-ecosystem-and-its-policy-implications"
-        }
-      ],
-      "consensus_count": 3,
-      "url": "https://www.forbes.com/sites/jonmarkman/2026/04/28/chinas-deepseek-v4-and-qwen-reshape-the-open-source-ai-race/",
-      "topics": [
-        "开源模型",
-        "中国 AI",
-        "算力"
-      ],
-      "id": "ba01da4854cdf785"
-    },
-    {
       "title_zh": "苹果确认:Apple Intelligence 部分能力将跑在 Nvidia GPU 上、寄居谷歌云",
       "summary_zh": "苹果官方确认,Apple Intelligence 的部分功能将在云端跑在 Nvidia GPU 上,作为其『私有云计算』基础设施的一部分、并部署在谷歌云中;苹果同时与谷歌、Nvidia 合作打造更先进的 AI 模型。一向自研的苹果在 AI 算力上转向外部,信号明显。",
       "sources": [],
@@ -298,33 +267,6 @@
         "大模型"
       ],
       "id": "ac8acb987a35420a"
-    },
-    {
-      "title_zh": "Meta 推 Muse 系列首个模型 Muse Spark,追赶 Google 与 OpenAI",
-      "summary_zh": "Meta 超级智能实验室(Meta Superintelligence Labs)发布 Muse 系列首个模型 Muse Spark(原代号 Avocado),这是其斥资引入 Alexandr Wang 后的首批重大成果,意在追赶 Google 与 OpenAI 的前沿。",
-      "sources": [],
-      "source_links": null,
-      "consensus_count": 1,
-      "url": "https://www.cnbc.com/2026/04/08/meta-debuts-first-major-ai-model-since-14-billion-deal-to-bring-in-alexandr-wang.html",
-      "topics": [
-        "大模型",
-        "前沿模型"
-      ],
-      "id": "9a4e87cb64a8377c"
-    },
-    {
-      "title_zh": "DeepSeek V4 以极低价 + 深绑华为芯片发布,搅动开源格局",
-      "summary_zh": "DeepSeek 发布 V4,以极低定价(0.14–0.30 美元/百万 tokens)和与华为芯片的紧密整合面世,延续中国开源阵营的价格战;虽在综合基准上落后于 GLM-5、Kimi,但以性价比继续压低行业价格锚。",
-      "sources": [],
-      "source_links": null,
-      "consensus_count": 1,
-      "url": "https://fortune.com/2026/04/24/deepseek-v4-ai-model-price-performance-china-open-source/",
-      "topics": [
-        "开源模型",
-        "中国 AI",
-        "算力"
-      ],
-      "id": "182bccd3005c9aee"
     },
     {
       "title_zh": "人形机器人被捧为下一个万亿级 AI 投资风口",
@@ -437,7 +379,7 @@
       "evidence": [
         "48691b565d63534c",
         "5d7bdeabf2cfbdec",
-        "ba01da4854cdf785"
+        "f6c9fab363aa377d"
       ]
     },
     {
@@ -490,7 +432,7 @@
       "evidence": [
         "48691b565d63534c",
         "5d7bdeabf2cfbdec",
-        "ba01da4854cdf785"
+        "f6c9fab363aa377d"
       ]
     },
     {
@@ -517,7 +459,7 @@
       "confidence": 0.45,
       "evidence": [
         "26d6de038a22be35",
-        "ba01da4854cdf785"
+        "f6c9fab363aa377d"
       ]
     },
     {

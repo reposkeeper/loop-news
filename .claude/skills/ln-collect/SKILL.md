@@ -63,11 +63,23 @@ description: Loop News 采集步骤。从四类来源(主流媒体/RSS、X名人
   "topics": ["AI 监管", "算力"],
   "importance": 0.62,
   "consensus_count": 4,
+  "published": "2026-06-30",
+  "first_seen": "2026-06-30",
   "insight_zh": "深度类:一句话说清为何值得注意;共识类可为空"
 }
 ```
+- **`published`(事件发生日,YYYY-MM-DD,必填)**:据实取报道/官方稿的事件日期,不是采集日、不是文章 SEO 日期。**及时性分(第 6 分)据此算**——不标 = 无法主张及时、拉低分数。
+- **`first_seen`(首次采到日)**:本条首次进 corpus 的日期(通常=今天)。用于识别"漏采后补"。
+
+## 及时性(第 6 分,强惩罚)—— 新闻必须实时,漏采要罚
+制度见 [prompts/scoring.md](../../../prompts/scoring.md)。采集时:
+- **优先当日/昨日一手快讯**:`lateness = 采集日 − published`,超过 `fresh_days`(4 天)即判 `stale`;**一天里多条 stale → 及时性分用 0.78ⁿ 强惩罚,几条就大跌**。别用一周前的综述/回顾页充数。
+- **来源要实时**:优先 `source_quality.json` 里 `recency: realtime/fast` 的源(快讯/官方稿/当日报道);`slow`(回顾/分析)源采到的旧闻会计入 stale。
+- **堵漏采**:重大事件当天没采到、次日才补 = 漏采后补(`lateness` 大),同样扣分。**晚班也认真采**、下轮开头补齐上轮漏的当日大新闻,别把"当时没采"拖成"过期补"。
+- 深度/播客类时效性弱,但也标 `published`;及时性分只对 `consensus/deep` 算。
 
 ## 纪律
 - 输出中文;深度类原文保真,**不臆造引文/链接**。
 - 不把同一事件刷成多条;低于 `thresholds.importance_min` 丢弃。
+- **每条必标 `published`(据实)**;旧闻/漏采后补会被及时性分惩罚,别为凑数塞过期新闻。
 - 失败的来源记进 metrics(供 ln-evolve 优化),不要静默跳过。
