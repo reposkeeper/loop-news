@@ -549,22 +549,34 @@ def _render_graded(items, id_to_date):
     return "".join(out)
 
 
-def render_dossier(d, id_to_date):
-    """领域专题(产业级深度报告):综述 + KOL原声 + 历年数据 + 脉络 + 未来 + 周边产业 + 洞察。"""
-    did = e(d.get("id", ""))
-    P = [f'<div class="dossier-head"><h1 class="day-date">📂 {e(d.get("name",""))}</h1>'
-         f'<span class="dossier-upd">持续追踪 · 更新 {e(d.get("updated",""))}</span></div>']
-    if d.get("summary_zh"):
-        P.append(f'<p class="day-summary">{hl(d.get("summary_zh"))}</p>')
-    voices = []
-    for v in d.get("kol_voices", []):
-        q = v.get("original_quote", "")
+def _paras(text):
+    """多段正文:按换行分段,每段过 hl() 支持 ==高亮==。"""
+    parts = [hl(p.strip()) for p in re.split(r"\n+", str(text or "")) if p.strip()]
+    return "".join(f"<p>{p}</p>" for p in parts)
+
+
+def _dossier_voices(voices):
+    """各方立场:多方在录原声(带角色标签,深度保真原文)。"""
+    out = []
+    for v in voices or []:
+        q = v.get("quote") or v.get("original_quote", "")
         pq = f'<blockquote class="pq" lang="{e(v.get("lang","en"))}">{e(q)}</blockquote>' if q else ""
+        role = v.get("role", "")
+        role_html = f'<span class="voice-role">{e(role)}</span>' if role else ""
+        who = e(v.get("who") or v.get("source", ""))
         url = v.get("url", "")
         link = f'<a class="src-link" href="{e(url)}" target="_blank" rel="noopener">来源 ↗</a>' if url else ""
-        voices.append(f'<article class="card deep"><div class="byline"><span class="byline-src">{e(v.get("source",""))}</span><span class="topic">{e(v.get("date",""))}</span>{link}</div>{pq}<p class="deep-sum">{e(v.get("summary_zh",""))}</p></article>')
+        stance = v.get("stance_zh") or v.get("summary_zh", "")
+        stance_html = f'<p class="deep-sum">{e(stance)}</p>' if stance else ""
+        out.append(f'<article class="card deep voice"><div class="byline">{role_html}<span class="byline-src">{who}</span>{link}</div>{pq}{stance_html}</article>')
+    return "".join(out)
+
+
+def _render_dossier_legacy(d, id_to_date, P):
+    """旧字段兼容渲染(kol_voices/data/timeline/outlook/adjacent)。"""
+    voices = _dossier_voices([dict(v, role="") for v in d.get("kol_voices", [])])
     if voices:
-        P.append('<section class="section"><h2 class="section-title">KOL / KOC 在说什么</h2>' + "".join(voices) + "</section>")
+        P.append('<section class="section"><h2 class="section-title">KOL / KOC 在说什么</h2>' + voices + "</section>")
     charts = render_charts(d.get("data"))
     if charts:
         P.append('<section class="section"><h2 class="section-title">历年数据 · 变化</h2>' + charts + "</section>")
@@ -574,18 +586,60 @@ def render_dossier(d, id_to_date):
         P.append('<section class="section"><h2 class="section-title">脉络</h2><ul class="timeline">' + items + "</ul></section>")
     if d.get("outlook"):
         P.append('<section class="section"><h2 class="section-title">未来展望</h2>' + _render_graded(d.get("outlook"), id_to_date) + "</section>")
-    adj = d.get("adjacent", [])
-    if adj:
-        cards = []
-        for a in adj:
-            ev = ev_links(a.get("evidence", []), id_to_date)
-            evhtml = f'<div class="evidence">证据:{ev}</div>' if ev else ""
-            cards.append(f'<div class="adj"><h3>{e(a.get("name",""))}</h3><p>{e(a.get("note_zh",""))}</p>{evhtml}</div>')
-        P.append('<section class="section"><h2 class="section-title">周边产业</h2>' + "".join(cards) + "</section>")
+    for a in d.get("adjacent", []):
+        ev = ev_links(a.get("evidence", []), id_to_date)
+        evhtml = f'<div class="evidence">证据:{ev}</div>' if ev else ""
+        P.append(f'<section class="section"><h2 class="section-title">周边产业 · {e(a.get("name",""))}</h2><p>{e(a.get("note_zh",""))}</p>{evhtml}</section>')
+
+
+def render_dossier(d, id_to_date):
+    """领域专题(深度报道):核心判断→脉络→数据→各方→分析→反方→看点→来源→方法。"""
+    did = e(d.get("id", ""))
+    title = e(d.get("title_zh") or d.get("name", ""))
+    P = [f'<div class="dossier-head"><span class="dossier-kicker">📂 {e(d.get("name",""))} · 深度报道</span>'
+         f'<h1 class="dossier-title">{title}</h1>']
+    if d.get("dek_zh"):
+        P.append(f'<p class="dossier-dek">{e(d.get("dek_zh"))}</p>')
+    P.append(f'<span class="dossier-upd">持续追踪 · 更新 {e(d.get("updated",""))}</span></div>')
+    # 核心判断(lede)
+    if d.get("lede_zh"):
+        P.append(f'<div class="dossier-lede">{_paras(d.get("lede_zh"))}</div>')
+    elif d.get("summary_zh"):
+        P.append(f'<p class="day-summary">{hl(d.get("summary_zh"))}</p>')
+    # 文章主体(sections);无则退化到旧字段
+    if d.get("sections"):
+        for s in d.get("sections", []):
+            inner = _paras(s.get("body_zh", "")) if s.get("body_zh") else ""
+            if s.get("charts"):
+                inner += render_charts(s.get("charts"))
+            if s.get("voices"):
+                inner += _dossier_voices(s.get("voices"))
+            ev = ev_links(s.get("evidence", []), id_to_date)
+            if ev:
+                inner += f'<div class="evidence">证据:{ev}</div>'
+            P.append(f'<section class="section"><h2 class="section-title">{e(s.get("heading_zh",""))}</h2>{inner}</section>')
+    else:
+        _render_dossier_legacy(d, id_to_date, P)
+    # 分级结论
     if d.get("conclusions"):
-        P.append('<section class="section"><h2 class="section-title">综合洞察</h2>' + _render_graded(d.get("conclusions"), id_to_date) + "</section>")
+        P.append('<section class="section"><h2 class="section-title">分级结论</h2>' + _render_graded(d.get("conclusions"), id_to_date) + "</section>")
+    # 反方与不确定
+    if d.get("counterpoints_zh"):
+        items = "".join(f'<li>{hl(x)}</li>' for x in d.get("counterpoints_zh"))
+        P.append('<section class="section"><h2 class="section-title">反方与不确定</h2><ul class="counter-list">' + items + "</ul></section>")
+    # 后续看点
+    if d.get("watch_zh"):
+        items = "".join(f'<li>{hl(x)}</li>' for x in d.get("watch_zh"))
+        P.append('<section class="section"><h2 class="section-title">后续看点</h2><ul class="watch-list">' + items + "</ul></section>")
+    # 来源(透明)
+    if d.get("sources"):
+        srcs = " · ".join(
+            (f'<a class="src-link" href="{e(x.get("url"))}" target="_blank" rel="noopener">{e(x.get("name") or "来源")} ↗</a>' if x.get("url") else e(x.get("name", "")))
+            for x in d.get("sources"))
+        P.append(f'<section class="section"><h2 class="section-title">来源</h2><p class="dossier-sources">{srcs}</p></section>')
+    # 方法与局限
     if d.get("methodology_note_zh"):
-        P.append('<div class="section"><h2 class="section-title">本专题的搜索方式(自进化)</h2><p>' + e(d.get("methodology_note_zh")) + "</p></div>")
+        P.append('<section class="section dossier-method"><h2 class="section-title">方法与局限</h2><p>' + e(d.get("methodology_note_zh")) + "</p></section>")
     return f'<section class="view dossier-view" id="dossier-{did}">' + "".join(P) + "</section>"
 
 

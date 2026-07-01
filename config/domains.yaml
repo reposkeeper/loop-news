@@ -13,6 +13,15 @@ domains:
       kol: ["@sama", "@ylecun", "Jack Clark(Import AI)", "白宫 / 国会相关账号"]
       koc: ["r/MachineLearning 合规讨论", "法律 / 政策圈 Substack"]
       series: ["us_state_ai_bills"]                 # 历年数据:逐年法案数
+      primary_sources:                              # 一手优先(深度报道靠它,不靠聚合)
+        - "NCSL AI 立法库 / 综述"
+        - "州议会法案原文(如 CO SB205/SB189、NY RAISE Act)"
+        - "参议院商业委员会 / 议员办公室一手稿"
+        - "白宫 AI 行政令原文"
+        - "律所对具体法案的逐条解读"
+      opposing_voices:                              # 深度报道必须多方:正反都要在录原话
+        - "主推预占 / 联邦统一:Cruz、部分产业(反对各州拼盘)"
+        - "反对预占 / 护州权:Markey、40 州总检察长、部分共和党州长"
       adjacent: ["算力 / 芯片", "云服务 / 合规", "保险 / 责任认定"]
       angles:
         - "联邦行政令 vs 州级成文法 的落地差"

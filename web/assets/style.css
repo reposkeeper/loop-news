@@ -146,9 +146,24 @@ mark.hl{background:linear-gradient(transparent 56%, rgba(232,198,110,.6) 56%);co
 .fav-remove{font-size:11.5px;color:var(--faint);background:none;border:1px solid var(--line);border-radius:999px;padding:2px 10px;cursor:pointer;flex:none;}
 .fav-remove:hover{border-color:#B0413E;color:#B0413E;}
 
-/* 专题(产业级深度报告)*/
-.dossier-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
+/* 专题(领域深度报道)*/
+.dossier-head{display:flex;flex-direction:column;gap:8px;margin-bottom:6px;}
+.dossier-kicker{font-family:var(--sans);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);}
+.dossier-title{font-family:var(--serif-cjk,var(--serif));font-size:clamp(30px,4.4vw,44px);font-weight:700;line-height:1.2;letter-spacing:-.01em;color:var(--ink);margin:0;}
+.dossier-dek{font-family:var(--serif);font-size:19px;line-height:1.5;color:var(--soft);font-style:italic;margin:2px 0 0;max-width:60ch;}
 .dossier-upd{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted);}
+.dossier-lede{font-size:19px;line-height:1.75;color:var(--ink);margin:20px 0 8px;max-width:62ch;}
+.dossier-lede p{margin:0 0 14px;}
+.dossier-lede p:first-child::first-letter{font-family:var(--serif);font-size:3.1em;font-weight:700;float:left;line-height:.86;padding:6px 10px 0 0;color:var(--ink);}
+.voice-role{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.06em;color:#fff;background:var(--accent);border-radius:5px;padding:2px 8px;margin-right:2px;}
+.card.voice{border-left:2px solid var(--line);padding-left:18px;}
+.counter-list,.watch-list{margin:0;padding-left:20px;}
+.counter-list li,.watch-list li{font-size:15.5px;line-height:1.7;color:var(--soft);margin-bottom:9px;}
+.watch-list li::marker{color:var(--accent);}
+.dossier-sources{font-size:13px;line-height:2;color:var(--muted);}
+.dossier-method{opacity:.85;}
+.dossier-method p{font-size:14px;line-height:1.7;color:var(--muted);}
+.nav-link.dossier{font-weight:600;}
 .nav-link.dossier{font-weight:600;}
 .nav-link .dot{display:none;width:7px;height:7px;border-radius:50%;background:#cf3b3b;margin-left:7px;vertical-align:middle;}
 .nav-link.has-update .dot{display:inline-block;}

@@ -1,43 +1,147 @@
 {
   "id": "ai-regulation",
   "name": "AI 监管",
+  "title_zh": "AI 监管的重心落到了州:1200 项法案、一场 99–1 的联邦预占失败,和一次集体降温",
+  "dek_zh": "2025 年全美 50 个州第一次都在立法管 AI;联邦想用十年禁令一锅端,被参议院 99 比 1 否决;而州自己又在给最硬的规则松绑。",
   "updated": "2026-07-01",
-  "summary_zh": "AI 监管在 2026 上半年走完「行政令 → 联邦立法讨论 → 州级成文法生效」一条链路;美国各州 AI 法案数四年增约 ==25 倍==,头部厂商开始公开框定可接受边界。本专题持续追踪这条产业级主线。",
-  "kol_voices": [
+  "status": "dossier",
+  "lede_zh": "2025 年,美国 50 个州第一次全部在立法管人工智能——全年提出约 1208 项 AI 相关法案,145 项落地成法(据 NCSL)。管 AI 的规则,重心已从迟迟没有综合性联邦法律的华盛顿,转移到各州议会。\n就在这股浪潮最猛时,联邦试图一锅端:一项写进预算法案的条款要给各州 AI 立法按下十年暂停键。2025 年 7 月 1 日,参议院以 99 比 1 把它删除——反对者横跨两党,还包括 40 位州总检察长与 17 位共和党州长。但同一时间,州又在给最硬的规则松绑:科罗拉多把全美首部综合性州级 AI 法大改、推迟到 2027 年。扩张、预占、降温三股力量,正同时拉扯这条产业主线。",
+  "sections": [
     {
-      "source": "@sama (Sam Altman)",
-      "date": "2026-06-30",
-      "lang": "en",
-      "url": "https://x.com/sama/status/2070609190977228893",
-      "original_quote": "actually i think a required preview period for extended redteaming is not a bad idea. i just dont like the idea of the government picking the customers. confident we will get to a better place.",
-      "summary_zh": "接受发布前强制红队测试,但反对政府挑客户——头部 lab 在给监管划「可接受边界」。"
+      "heading_zh": "背景与脉络",
+      "kind": "context",
+      "body_zh": "管 AI 的法律主要由州在写,而非联邦。据 NCSL,各州提出的 AI 相关法案从 2022 年的数十件增至 2025 年的约 1208 件,2025 年成为==每个州都至少提出一项==的第一年;进入 2026 年,截至 3 月已有 45 州提出 1561 件。与之对照,联邦层面至今没有一部综合性 AI 法律——这正是后面'预占之争'的关键背景:要预占的东西,联邦自己还没拿出来。",
+      "evidence": []
     },
     {
-      "source": "Jack Clark (Import AI)",
-      "date": "2026-06-30",
-      "lang": "en",
-      "url": "https://importai.substack.com/feed",
-      "original_quote": "Frontier coding agents can autonomously develop a policy to achieve a 99% success rate on challenging, dexterous manipulation tasks in the real world.",
-      "summary_zh": "前沿能力的硬进步,正是监管紧迫性的来源——能力越强,攻防与合规压力越大。"
+      "heading_zh": "数据透视",
+      "kind": "data",
+      "body_zh": "把'提出'和'落地'分开看很重要:2025 年提出约 1208 件,但真正成法的只有约 145 件(约 12%),多数止步于委员会。口径也需谨慎——不同机构(NCSL、MultiState)对'AI 相关'的界定不同,决议、深度伪造、聊天机器人披露是否计入会让总数差出一截,图中 2026 为 running 的不完全统计。趋势是稳的:四年数量级跳升、已铺满所有州;但绝对数字请按口径打折看。",
+      "charts": [
+        {
+          "type": "line",
+          "title": "美国各州 AI 相关法案数(逐年提出)",
+          "series": "us_state_ai_bills",
+          "recent": 6,
+          "unit": "件",
+          "source": "MultiState / NCSL",
+          "note": "提出数(非成法数);2026 为不完全统计,口径随机构而异"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "heading_zh": "各方立场",
+      "kind": "voices",
+      "body_zh": "这场争论的两端都很清楚,而州自身的动作又给它加了第三个注脚。",
+      "voices": [
+        {
+          "who": "Ted Cruz(参议院商业委员会主席)",
+          "role": "主推预占",
+          "stance_zh": "主张联邦预占、反对'各州法律拼盘';9 月又推 SANDBOX 监管沙盒框架,并称禁令'远没有死'。",
+          "quote": "A single state should not have the power to set AI rules for the entire country ... to prevent an unworkable patchwork of disparate and conflicting state AI laws and to encourage states to adopt commonsense tech-neutral policies.",
+          "lang": "en",
+          "source": "Texas Tribune / Global Policy Watch",
+          "url": "https://www.texastribune.org/2025/06/27/ted-cruz-ai-moratorium-reconciliation-republicans-congress-trump/"
+        },
+        {
+          "who": "Ed Markey(马萨诸塞州参议员)",
+          "role": "反对预占",
+          "stance_zh": "连续数周示警并牵头把禁令删除;主张在没有联邦替代方案时预占等于捆住州的手。",
+          "quote": "This 99-1 vote sent a clear message that Congress will not sell out our kids and local communities in order to pad the pockets of Big Tech billionaires.",
+          "lang": "en",
+          "source": "Markey 参议院办公室",
+          "url": "https://www.markey.senate.gov/news/press-releases/after-weeks-of-markey-raising-the-alarm-senate-strikes-ai-moratorium-from-budget-reconciliation-bill-overnight-in-overwhelming-99-1-vote"
+        },
+        {
+          "who": "科罗拉多州(SB 205 → SB 189)",
+          "role": "州内降温",
+          "stance_zh": "全美首部综合性州级 AI 法,临生效前被大改:删去防算法歧视的注意义务、部署者风险管理与影响评估,生效推迟到 2027 年 1 月——说明'州更严'并非单调趋势。",
+          "quote": "",
+          "lang": "",
+          "source": "Hunton / Littler",
+          "url": "https://www.hunton.com/privacy-and-cybersecurity-law-blog/colorado-ai-act-amended-and-effective-date-delayed"
+        }
+      ],
+      "evidence": []
+    },
+    {
+      "heading_zh": "深度分析",
+      "kind": "analysis",
+      "body_zh": "把三件事放在一起,浮现的不是'监管越来越严',而是==三股力量的角力==。扩张:立法权事实上在州,联邦真空把球推给了 50 个各行其是的议会。预占:联邦(以 Cruz 与白宫 AI 行政令为代表)想用暂停键换统一,但在'没有联邦替代就先捆住州'这点上,连共和党州长和 40 位州总检察长都不买账,才有了 99 比 1。降温:州拿到权力后,真正落地时又向产业让步(科罗拉多);1208 提出只 145 成法,本身就说明'提出'远不等于'管住'。\n对读者的信息优势在于:别把'AI 法案数暴涨'读成'监管在收紧'。更接近事实的是——谁来管(州 vs 联邦)比管多严更早有了答案,而管多严仍在向后拖、向轻处走。",
+      "evidence": []
     }
   ],
-  "data": [
-    { "type": "line", "title": "美国各州 AI 法案数(逐年提出)", "series": "us_state_ai_bills", "recent": 5, "note": "据 MultiState / BSA 等公开统计;仅供参考" }
-  ],
-  "timeline": [
-    { "date": "2026-06-04", "note_zh": "联邦:《Great American AI Act》269 页讨论稿 + 特朗普修订版 AI 行政令" },
-    { "date": "2026-06-30", "note_zh": "州级:科罗拉多《AI 消费者保护法》生效(全美首部综合性州级法)" }
-  ],
-  "outlook": [
-    { "text_zh": "州法快速分裂(2026 已破 2000 件/年)将抬高合规成本,可能倒逼联邦统一立法或先占(preemption)。", "grade": "预测", "confidence": 0.45, "evidence": ["us_state_ai_bills", "co-colorado-ai-law"] },
-    { "text_zh": "前沿模型攻防能力(如 Mythos)会持续推动关键基础设施安全立法加速。", "grade": "预测", "confidence": 0.4, "evidence": ["co-anthropic-mythos", "dp-clark-import-ai-463"] }
-  ],
-  "adjacent": [
-    { "name": "算力 / 芯片", "note_zh": "前沿模型能力(攻防、自改进)是监管紧迫性的根源,见 Mythos 数小时攻破机密系统。", "evidence": ["co-anthropic-mythos", "dp-clark-import-ai-463"] },
-    { "name": "云服务 / 合规", "note_zh": "高风险系统的披露与防歧视义务,外溢到部署方与云厂商。", "evidence": ["co-colorado-ai-law"] }
-  ],
   "conclusions": [
-    { "text_zh": "监管已从纸面进入成本:州级成文法落地 + 法案数指数级增长。", "grade": "事实", "confidence": 0.85, "evidence": ["co-colorado-ai-law", "us_state_ai_bills"] }
+    {
+      "grade": "事实",
+      "text_zh": "2025 年全美 50 州均提出 AI 法案(约 1208 件、145 件成法);联邦十年禁令于 2025-07-01 被参议院 99–1 删除。",
+      "confidence": 0.95,
+      "evidence": []
+    },
+    {
+      "grade": "推断",
+      "text_zh": "'监管重心在州、联邦暂无综合法'是各州法案数暴涨的结构性原因,而非监管一致收紧的信号。",
+      "confidence": 0.7,
+      "evidence": []
+    },
+    {
+      "grade": "预测",
+      "text_zh": "联邦预占不会消失:Cruz 已承诺重推(SANDBOX/框架)、白宫行政令也在推动,未来 12–18 个月大概率再起预占之争。",
+      "confidence": 0.55,
+      "evidence": []
+    }
   ],
-  "methodology_note_zh": "本专题的独特搜索方式(由 ln-evolve 进化):盯头部 lab 的公开立场(KOL 原声)+ 逐年法案数(历年数据变化)+ 联邦/州落地差(脉络)+ 周边产业外溢(算力/合规)。后续按关注与新料持续加深。"
+  "counterpoints_zh": [
+    "拼盘成本是真的:50 州各行其是确会抬高合规成本,预占派并非无理——若出现一部可信的联邦综合法,天平可能迅速倒向统一。",
+    "口径存疑:1208 / 2191 随追踪机构与'AI 相关'定义波动,把决议、深伪、聊天机器人披露都计入会放大数字;别把体量当强度。",
+    "还不知道:多数新法尚未进入执法期,真实约束力要到 2026–2027 才见分晓(科罗拉多 2027、纽约 RAISE Act)。"
+  ],
+  "watch_zh": [
+    "Cruz 是否在 2026 年把 AI 预占/禁令重新塞进某部法案或单独立法(他称'没有死')。",
+    "科罗拉多 2027-01-01 新生效日是否再变;是否有其他州跟进'先立后松'。",
+    "纽约 RAISE Act(前沿模型安全)进入执法后的第一起适用案例。"
+  ],
+  "sources": [
+    {
+      "name": "NCSL:2025 AI 立法综述",
+      "url": "https://www.ncsl.org/technology-and-communication/artificial-intelligence-2025-legislation",
+      "kind": "primary"
+    },
+    {
+      "name": "参议院商业委员会:99–1 删除禁令",
+      "url": "https://www.commerce.senate.gov/2025/7/senate-strikes-ai-moratorium-from-budget-reconciliation-bill-in-overwhelming-99-1-vote/8415a728-fd1d-4269-98ac-101d1d0c71e0",
+      "kind": "primary"
+    },
+    {
+      "name": "Markey 参议院办公室",
+      "url": "https://www.markey.senate.gov/news/press-releases/after-weeks-of-markey-raising-the-alarm-senate-strikes-ai-moratorium-from-budget-reconciliation-bill-overnight-in-overwhelming-99-1-vote",
+      "kind": "primary"
+    },
+    {
+      "name": "Texas Tribune:Cruz 与共和党的分歧",
+      "url": "https://www.texastribune.org/2025/06/27/ted-cruz-ai-moratorium-reconciliation-republicans-congress-trump/",
+      "kind": "media"
+    },
+    {
+      "name": "Hunton:科罗拉多法大改 + 推迟",
+      "url": "https://www.hunton.com/privacy-and-cybersecurity-law-blog/colorado-ai-act-amended-and-effective-date-delayed",
+      "kind": "media"
+    },
+    {
+      "name": "MultiState:2026 州 AI 立法追踪",
+      "url": "https://www.multistate.ai/artificial-intelligence-ai-legislation",
+      "kind": "data"
+    }
+  ],
+  "methodology_note_zh": "综合 NCSL / MultiState 的立法统计、参议院与议员办公室一手稿、以及律所对科罗拉多法的解读;只用可回溯来源,'提出'与'成法'分列,口径差异已在正文标注。局限:2026 为 running 统计;多数新法尚未进入执法期,约束力有待观察。",
+  "quality_self_eval": {
+    "depth": 0.8,
+    "sourcing": 0.85,
+    "balance": 0.85,
+    "data_grounded": 0.8,
+    "non_obvious": 0.85,
+    "anti_sensational": 0.9,
+    "notes": "三方力量框架较非显然;下一步补一手法案文本与一个企业合规成本量化案例。"
+  }
 }

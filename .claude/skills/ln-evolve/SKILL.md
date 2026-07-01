@@ -22,7 +22,7 @@ description: Loop News 自我进化步骤。读质量指标 state/metrics.json +
 4. **诊断弱点**(**先看北极星**),例如:
    - **北极星未上行**(`non_obvious`/`edge` 停滞或靠堆量)→ 强化 `prompts/synthesize.method.md` 的非显然/跨域/共识缺口要求;或在 `config` 增"能制造分歧信号"的来源(更多圈内原声以对照主流)。
    - **出现 over-reach**(无据/过度引申的"洞察")→ 收紧 `synthesize.method.md` 的证据回链与分级门槛,宁缺毋滥。
-   - **领域自进化(产业纵深)**:从 `/follows`(关注)+ `data/threads.json` + 反复出现的实体识别**成熟领域**;在 `config/domains.yaml` 新建/细化其剧本(KOL/KOC、要追的历年数据 `series`、周边产业、独特搜索角度);某领域够深就**调用 `ln-dossier <id>` 生成/更新专题**(决定是否「在页面长出专题」);长期无料的领域标 `dormant`。
+   - **领域自进化(产业纵深)**:从 `/follows`(关注)+ `data/threads.json` + 反复出现的实体识别**成熟领域**;在 `config/domains.yaml` 新建/细化其剧本(KOL/KOC、要追的历年数据 `series`、周边产业、独特搜索角度);某领域够深就**调用 `ln-dossier <id>` 生成/更新专题**(决定是否「在页面长出专题」);长期无料的领域标 `dormant`。**专题质量进化**:读各专题的 `quality_self_eval`(depth/sourcing/balance/data_grounded/non_obvious/anti_sensational),对反复偏低的维度**编辑 `prompts/dossier.method.md`**(加规则 / 换角度 / 调结构)——让专题越来越像严肃深度报道、越来越不像自媒体危言耸听。这是"专题 skill 不断进化"的落点。
    - 某来源连续多轮全是重复/噪音 → 在 `config/sources.yaml` 降权或移除。
    - 深度结论太浅 → 强化 `prompts/synthesize.method.md` 的某个透镜要求。
    - 共识漏报某领域 / 用户想多看某主题 → 在 `config/sources.yaml` 增 query/RSS,或 `config/people.yaml` 增人。
