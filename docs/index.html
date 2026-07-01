@@ -128,6 +128,11 @@
   <ul class="release-body"><li class="rn-item"><strong>改了什么</strong>:</li><li class="rn-sub">1. <strong>📋 反馈台账</strong>(系统区新页):实时拉 <code>/requests</code>+<code>/feedback</code> 显示大家的反馈,并对照 <code>data/feedback_ledger.json</code> 标注每条在<strong>哪一轮进化被覆盖</strong>;下方列出每轮进化覆盖了什么(ln-evolve 每轮维护台账)。</li><li class="rn-sub">2. <strong>分享图改为预览 + 下载/复制</strong>:生成后先在弹窗展示,下面两个按钮(下载 / 复制图片到剪贴板),不再直接下载。</li><li class="rn-sub">3. <strong>分享图更高清</strong>:输出分辨率 1200 → 2000px(HTML 里所有 px 统一缩放,图表用占位符避免误改),治糊。</li><li class="rn-item"><strong>为什么</strong>:让反馈透明可追溯(哪条被哪轮消化);分享前先看效果、支持复制;更高分辨率更清晰。</li><li class="rn-item"><strong>如何回滚</strong>:<code>git revert</code> 对应提交。</li></ul>
   <div class="release-actions"><button class="act share" data-kind="release" data-title="反馈台账页 + 分享图预览/复制 + 更高清" data-date="2026-07-01" data-badge="发布" data-items="[&quot;📋 反馈台账&quot;, &quot;分享图改为预览 + 下载/复制&quot;, &quot;分享图更高清&quot;]">⤴ 分享卡片</button></div>
 </article><article class="release">
+  <div class="release-head"><span class="release-tag">加固</span><time class="release-date">2026-07-01</time></div>
+  <p class="release-note">分享图 R2 缓存 + 每日预热 + 重试;免费版即可,无需付费</p>
+  <ul class="release-body"><li class="rn-item"><strong>依据</strong>:站长反馈分享图 Worker 偶发失败。实测:单张/分散请求基本能出图,但<strong>密集连发时 503</strong>(免费版 Worker CPU 边界被突发渲染顶爆);站长并要求每天新闻生成后自动预渲染所有卡片。</li><li class="rn-item"><strong>改了什么</strong>:</li><li class="rn-sub">1. <strong><code>worker/share-worker.js</code> R2 缓存</strong>:按<strong>卡片 id</strong> 缓存 PNG——命中直接秒发(不再跑 Satori/resvg、不抓字体),每张只渲染一次;字体抓取加 <strong>3 次重试</strong>;<code>force</code> 可刷新;<code>wrangler.share.toml</code> 加 <code>BUCKET</code>(复用 <code>loop-news</code> 桶)。</li><li class="rn-sub">2. <strong>前端重试</strong>:点分享失败<strong>自动重试 3 次</strong>(退避),兜住冷启动/部署瞬间/字体抖动。</li><li class="rn-sub">3. <strong><code>scripts/warm-share.py</code></strong>:每天新闻生成后把所有卡片(共识/深度/播客)按 id 预渲染进缓存;<strong>幂等自收敛</strong>(已缓存走 HIT 跳过、失败的下一轮重渲染,卡间隔降温避免突发顶爆);接进 <code>ln-daily</code> 步骤 7 与 CLAUDE.md 每日循环。</li><li class="rn-item"><strong>为什么</strong>:把&quot;每次点分享都现渲染&quot;改成&quot;每卡只渲一次、之后全命中&quot;,在<strong>免费版</strong>下把偶发 503 基本消除——<strong>不必升级 $5/月 Workers Paid</strong>(除非日后要更高分辨率/更大分享量)。</li><li class="rn-item"><strong>如何回滚</strong>:<code>git revert</code>;去掉 R2 绑定即回到纯即时渲染。</li></ul>
+  <div class="release-actions"><button class="act share" data-kind="release" data-title="分享图 R2 缓存 + 每日预热 + 重试;免费版即可,无需付费" data-date="2026-07-01" data-badge="加固" data-items="[&quot;`worker/share-worker.js` R2 缓存&quot;, &quot;前端重试&quot;, &quot;`scripts/warm-share.py`&quot;]">⤴ 分享卡片</button></div>
+</article><article class="release">
   <div class="release-head"><span class="release-tag">重采</span><time class="release-date">2026-07-01</time></div>
   <p class="release-note">纯当日鲜闻:及时性 7.7 → 90.5</p>
   <ul class="release-body"><li class="rn-item"><strong>依据</strong>:站长指令「重采一份」——旧 7-01 期含 ~2–4 周前旧闻,及时性分仅 7.7。用新规则(实时源、只采当日/昨日、据实标 published)重采。</li><li class="rn-item"><strong>改了什么</strong>:</li><li class="rn-sub">1. <strong>整期重采</strong>:替换 7-01 语料为 <strong>15 条 6/29–6/30 鲜闻</strong>(仅推理并购 1 条 6/24),全部真实一手 URL。含美团 LongCat-2.0(1.6 万亿参数、国产芯片全程预训练)、GitHub Copilot 计量计费冲击、台湾突袭 Super Micro、GPT-5.6 政府门控、Anthropic 解禁 + Claude Science、最高法地理围栏案、Meta『戛纳』测试丑闻、AP 全球 AI 诈骗调查等。</li><li class="rn-sub">2. <strong>重出分析</strong>:4 条当日关联 + 2 条<strong>跨日期</strong>关联(接 6-30 的 Anthropic 蒸馏指控/高通收 Tenstorrent)+ 6 条分级结论;深度原声 Import AI 463(ARGUS 万卡框架)、GeopolitechS(LongCat 冲击出口管制);更新「美中 AI 角力」线索到芯片/训练层。</li><li class="rn-sub">3. <strong>源台账评选</strong>:新增 Bloomberg/VentureBeat 固化为 core,The Next Web/SiliconANGLE/GeopolitechS 入 trial。</li><li class="rn-sub">4. <strong>分数</strong>:及时 <strong>7.7→90.5</strong>、关联 <strong>66.7→100</strong>、综合 <strong>71.4→84.6</strong>;数量降到 71.9(守住『只上干净鲜闻、不注水』)。</li><li class="rn-item"><strong>为什么</strong>:验证新及时性强惩罚的正向面——按规则采,分数自然回正;且不牺牲真实性与一手溯源。</li><li class="rn-item"><strong>如何回滚</strong>:<code>git revert</code>;语料/分析/线索可分别回退。</li></ul>
@@ -874,14 +879,21 @@
     if(!SHARE_API){return;}
     var card=btn.closest(".card"),cs=card&&card.querySelector(".chart-svg"),chart="";
     if(cs){try{chart="data:image/svg+xml;base64,"+btoa(unescape(encodeURIComponent(cs.outerHTML)));}catch(_){}}
-    var pay={title:btn.dataset.title||"",summary:btn.dataset.summary||"",source:btn.dataset.source||"",date:btn.dataset.date||"",kind:btn.dataset.kind||"consensus",badge:btn.dataset.badge||"",quote:btn.dataset.quote||"",chart:chart};
+    var pay={id:btn.dataset.item||"",title:btn.dataset.title||"",summary:btn.dataset.summary||"",source:btn.dataset.source||"",date:btn.dataset.date||"",kind:btn.dataset.kind||"consensus",badge:btn.dataset.badge||"",quote:btn.dataset.quote||"",chart:chart};
     if(btn.dataset.items){try{pay.items=JSON.parse(btn.dataset.items);}catch(_){}}   // 自进化日志:发布要点
     _shareName=((btn.dataset.title||"loop-news").replace(/[\/\\:*?"<>|\s]/g,"").slice(0,36)||"loop-news");
     _shareBlob=null;shareMsg.textContent="";sharePreview.innerHTML='<span class="share-loading">生成中…</span>';shareModal.hidden=false;
-    fetch(SHARE_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(pay)})
-      .then(function(r){if(!r.ok)throw 0;return r.blob();})
-      .then(function(b){_shareBlob=b;sharePreview.innerHTML='<img alt="分享图" src="'+URL.createObjectURL(b)+'">';})
-      .catch(function(){sharePreview.innerHTML='<span class="share-loading">生成失败,关闭重试</span>';});
+    var tries=0;
+    (function attempt(){
+      tries++;
+      fetch(SHARE_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(pay)})
+        .then(function(r){if(!r.ok)throw 0;return r.blob();})
+        .then(function(b){_shareBlob=b;sharePreview.innerHTML='<img alt="分享图" src="'+URL.createObjectURL(b)+'">';})
+        .catch(function(){
+          if(tries<3){sharePreview.innerHTML='<span class="share-loading">生成中…(重试 '+tries+')</span>';setTimeout(attempt,600*tries);}
+          else{sharePreview.innerHTML='<span class="share-loading">生成失败,关闭重试</span>';}
+        });
+    })();
   }
   function closeShare(){shareModal.hidden=true;}
   function shareDownloadFn(){

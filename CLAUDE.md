@@ -12,7 +12,7 @@
 ## 每日循环
 > **一键编排:`/ln-daily am`(早班全链路)、`/ln-daily pm`(晚班)。** 下面是它内部的权威步骤。
 > 定时调度**未 arm**(用户选择手动跑);将来无人值守时 `ln-daily mode=autonomous` = 免确认自动发布。
-- **早班 07:00**:`ln-collect`(batch=am) → `ln-synthesize`(汇总**昨天**) → `python3 web/compile.py` → `bash scripts/deploy-cloudflare.sh`(部署 Cloudflare) → `ln-evolve`
+- **早班 07:00**:`ln-collect`(batch=am) → `ln-synthesize`(汇总**昨天**) → `python3 web/compile.py` → `bash scripts/deploy-cloudflare.sh`(部署 Cloudflare) → `python3 scripts/warm-share.py`(预热当天分享图进 R2 缓存) → `ln-evolve`
 - **晚班 19:00**:仅 `ln-collect`(batch=pm)
 
 ## 关键纪律(所有 LLM 步骤通用)

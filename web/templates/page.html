@@ -239,14 +239,21 @@
     if(!SHARE_API){return;}
     var card=btn.closest(".card"),cs=card&&card.querySelector(".chart-svg"),chart="";
     if(cs){try{chart="data:image/svg+xml;base64,"+btoa(unescape(encodeURIComponent(cs.outerHTML)));}catch(_){}}
-    var pay={title:btn.dataset.title||"",summary:btn.dataset.summary||"",source:btn.dataset.source||"",date:btn.dataset.date||"",kind:btn.dataset.kind||"consensus",badge:btn.dataset.badge||"",quote:btn.dataset.quote||"",chart:chart};
+    var pay={id:btn.dataset.item||"",title:btn.dataset.title||"",summary:btn.dataset.summary||"",source:btn.dataset.source||"",date:btn.dataset.date||"",kind:btn.dataset.kind||"consensus",badge:btn.dataset.badge||"",quote:btn.dataset.quote||"",chart:chart};
     if(btn.dataset.items){try{pay.items=JSON.parse(btn.dataset.items);}catch(_){}}   // 自进化日志:发布要点
     _shareName=((btn.dataset.title||"loop-news").replace(/[\/\\:*?"<>|\s]/g,"").slice(0,36)||"loop-news");
     _shareBlob=null;shareMsg.textContent="";sharePreview.innerHTML='<span class="share-loading">生成中…</span>';shareModal.hidden=false;
-    fetch(SHARE_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(pay)})
-      .then(function(r){if(!r.ok)throw 0;return r.blob();})
-      .then(function(b){_shareBlob=b;sharePreview.innerHTML='<img alt="分享图" src="'+URL.createObjectURL(b)+'">';})
-      .catch(function(){sharePreview.innerHTML='<span class="share-loading">生成失败,关闭重试</span>';});
+    var tries=0;
+    (function attempt(){
+      tries++;
+      fetch(SHARE_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(pay)})
+        .then(function(r){if(!r.ok)throw 0;return r.blob();})
+        .then(function(b){_shareBlob=b;sharePreview.innerHTML='<img alt="分享图" src="'+URL.createObjectURL(b)+'">';})
+        .catch(function(){
+          if(tries<3){sharePreview.innerHTML='<span class="share-loading">生成中…(重试 '+tries+')</span>';setTimeout(attempt,600*tries);}
+          else{sharePreview.innerHTML='<span class="share-loading">生成失败,关闭重试</span>';}
+        });
+    })();
   }
   function closeShare(){shareModal.hidden=true;}
   function shareDownloadFn(){

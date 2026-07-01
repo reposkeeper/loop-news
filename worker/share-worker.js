@@ -112,13 +112,42 @@ function releaseHtml(d) {
 
 // 老版 Safari UA → Google Fonts 对子集请求返回 TTF(satori 不吃 woff2)
 const UA = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; de-at) AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1";
+// 带重试的 fetch —— 字体抓取是渲染最脆的一环(Google Fonts 偶发慢/限流),重试 3 次即可消除大半失败
+async function rfetch(url, opts, tries = 3) {
+  let last;
+  for (let i = 0; i < tries; i++) {
+    try {
+      const r = await fetch(url, opts);
+      if (r.ok) return r;
+      last = new Error("HTTP " + r.status);
+    } catch (e) { last = e; }
+  }
+  throw last || new Error("fetch failed: " + url);
+}
 async function loadFont(family, weight, text) {
   // 关键:text 必须 encodeURIComponent(含 CJK 与空格),否则 Google 退回拉丁子集 → 中文豆腐块
   const url = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(family)}:wght@${weight}&text=${encodeURIComponent(text)}`;
-  const css = await fetch(url, { headers: { "User-Agent": UA } }).then((r) => r.text());
+  const css = await rfetch(url, { headers: { "User-Agent": UA } }).then((r) => r.text());
   const m = css.match(/src:\s*url\((.+?)\)\s*format\('(?:opentype|truetype)'\)/);
   if (!m) throw new Error("font css parse failed: " + css.slice(0, 120));
-  return await fetch(m[1]).then((r) => r.arrayBuffer());
+  return await rfetch(m[1], {}).then((r) => r.arrayBuffer());
+}
+
+// 缓存键:优先用卡片 id(稳定、唯一);无 id(如自进化日志卡)则按内容哈希
+async function cacheKey(d) {
+  if (d.id) return "share/" + String(d.id).replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 40) + ".png";
+  const s = [d.kind, d.title, d.summary, d.source, d.date, d.badge, d.quote, (d.items || []).join("|")].join("");
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
+  const hex = [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  return "share/h/" + hex.slice(0, 24) + ".png";
+}
+function pngResp(body, cacheState) {
+  const h = new Headers(CORS);
+  h.set("Content-Type", "image/png");
+  h.set("Content-Disposition", 'attachment; filename="loop-news.png"');
+  h.set("Cache-Control", "public, max-age=86400");
+  h.set("X-Cache", cacheState);
+  return new Response(body, { status: 200, headers: h });
 }
 async function fontsFor(d) {
   const punct = " ·…—《》「」『』、,。:;!?()%0123456789";
@@ -139,7 +168,7 @@ async function fontsFor(d) {
 }
 
 export default {
-  async fetch(req) {
+  async fetch(req, env, ctx) {
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
     const url = new URL(req.url);
     if (url.pathname === "/health") return new Response(JSON.stringify({ ok: true }), { headers: { ...CORS, "Content-Type": "application/json" } });
@@ -150,21 +179,36 @@ export default {
       try { d = await req.json(); } catch (_) { return new Response("bad json", { status: 400, headers: CORS }); }
     } else {
       const p = url.searchParams;
-      d = { title: p.get("title"), summary: p.get("summary"), source: p.get("source"), date: p.get("date"), kind: p.get("kind"), badge: p.get("badge"), quote: p.get("quote") };
+      d = { title: p.get("title"), summary: p.get("summary"), source: p.get("source"), date: p.get("date"), kind: p.get("kind"), badge: p.get("badge"), quote: p.get("quote"), id: p.get("id") };
     }
     if (!d.title && !d.quote) return new Response("nothing to render", { status: 400, headers: CORS });
 
+    const bucket = env && env.BUCKET;
+    const force = !!(d.force || url.searchParams.get("force"));
+    let key = null;
+    try { key = await cacheKey(d); } catch (_) {}
+    // 命中缓存 → 秒发(预热后,用户点分享几乎都是 HIT,不再吃 CPU、不再受字体抖动影响)
+    if (bucket && key && !force) {
+      try {
+        const obj = await bucket.get(key);
+        if (obj) return pngResp(obj.body, "HIT");
+      } catch (_) {}
+    }
     try {
       let html = d.kind === "release" ? releaseHtml(d) : cardHtml(d);
       html = scalePx(html);
       if (d.chart) html = html.replace("__CHART_URI__", d.chart);
       const fonts = await fontsFor(d);
       const img = new ImageResponse(html, { width: OUT_W, fonts });
-      const h = new Headers(img.headers);
-      for (const [k, v] of Object.entries(CORS)) h.set(k, v);
-      h.set("Content-Disposition", 'attachment; filename="loop-news.png"');
-      h.set("Cache-Control", "public, max-age=86400");
-      return new Response(img.body, { status: img.status, headers: h });
+      const buf = await img.arrayBuffer();
+      // 写回 R2(用 waitUntil 不阻塞响应);下次同一张卡直接命中
+      if (bucket && key) {
+        try {
+          const put = bucket.put(key, buf, { httpMetadata: { contentType: "image/png", cacheControl: "public, max-age=86400" } });
+          ctx && ctx.waitUntil ? ctx.waitUntil(put) : await put;
+        } catch (_) {}
+      }
+      return pngResp(buf, force ? "WARM" : "MISS");
     } catch (e) {
       return new Response("render error: " + (e && e.message ? e.message : String(e)), { status: 500, headers: CORS });
     }

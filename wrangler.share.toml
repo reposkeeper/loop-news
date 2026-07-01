@@ -8,3 +8,8 @@ compatibility_date = "2026-06-01"
 routes = [
   { pattern = "share.xdzq.org", custom_domain = true }
 ]
+
+# 渲染缓存:同一张卡按 id 缓存 PNG(命中秒发,预热后用户点分享几乎不触发渲染)。复用反馈同桶。
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "loop-news"

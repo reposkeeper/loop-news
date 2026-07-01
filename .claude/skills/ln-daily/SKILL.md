@@ -20,6 +20,7 @@ description: Loop News 每日循环编排。一条命令按权威顺序跑完整
 4. **`ln-compile`** —— `python3 web/compile.py` 重建单页 `docs/index.html`。
 5. **发布门**:`interactive` 本地预览 + 人工确认 / `autonomous` 直接(已由调度授权)。
 6. **`ln-publish`** —— `bash scripts/deploy-cloudflare.sh` 部署 Cloudflare(Pages 站点 + Worker 反馈 API)。
+7. **预热分享图** —— `python3 scripts/warm-share.py <当天>`:把当天所有卡片(共识/深度/播客)按 id 预渲染进 R2 缓存,之后用户点「分享」几乎都是缓存命中(秒发、不吃 Worker CPU、不受字体抖动影响)。脚本幂等自收敛(偶发 503 自动重试补齐);仍有零星失败可稍后再跑一次。**非阻塞**:预热失败不影响已发布的站点。
 
 ## 晚班(pm)—— 仅采集
 1. **`ln-collect`(batch=pm)** —— 采集今天晚班,入语料库供次日早班汇总。
