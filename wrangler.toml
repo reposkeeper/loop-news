@@ -19,12 +19,12 @@ bucket_name = "loop-news"
 # id / database_id 为占位符,provision 时替换为真实值(见下方 TODO)。
 [[kv_namespaces]]
 binding = "SESSIONS"
-id = "PLACEHOLDER_KV_ID"  # TODO: 填真实 id(provision 时 npx wrangler kv namespace create SESSIONS 返回)
+id = "77f13a6905314196900d9ad384eda824"  # TODO: 填真实 id(provision 时 npx wrangler kv namespace create SESSIONS 返回)
 
 [[d1_databases]]
 binding = "DB"
 database_name = "loop-news-db"
-database_id = "PLACEHOLDER_D1_ID"  # TODO: 填真实 id(provision 时 npx wrangler d1 create loop-news-db 返回)
+database_id = "003d8b10-f1ee-42b8-acdf-294e08a8b94c"  # TODO: 填真实 id(provision 时 npx wrangler d1 create loop-news-db 返回)
 
 [vars]
 SITE_ORIGIN = "https://news.xdzq.org"
@@ -47,12 +47,12 @@ bucket_name = "loop-news"
 
 [[env.gray.kv_namespaces]]
 binding = "SESSIONS"
-id = "PLACEHOLDER_KV_ID"  # 与顶层【相同】真实 id(共享生产会话)
+id = "77f13a6905314196900d9ad384eda824"  # 与顶层【相同】真实 id(共享生产会话)
 
 [[env.gray.d1_databases]]
 binding = "DB"
 database_name = "loop-news-db"
-database_id = "PLACEHOLDER_D1_ID"  # 与顶层【相同】真实 id(共享生产数据)
+database_id = "003d8b10-f1ee-42b8-acdf-294e08a8b94c"  # 与顶层【相同】真实 id(共享生产数据)
 
 [env.gray.vars]
 SITE_ORIGIN = "https://gray-news.xdzq.org"

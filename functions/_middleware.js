@@ -35,7 +35,9 @@ export async function onRequest(context) {
     if (raw) { try { sess = JSON.parse(raw); } catch {} }
   }
   if (!sess) {
-    const api = JSON.stringify(env.SITE_API || "https://feedback.xdzq.org");
+    // 登录页的 API 基址:优先 env.SITE_API;否则按域名自动推导(gray-* → 灰度 API,否则生产)。
+    const host = new URL(request.url).hostname;
+    const api = JSON.stringify(env.SITE_API || (host.includes("gray") ? "https://gray-feedback.xdzq.org" : "https://feedback.xdzq.org"));
     return new Response(LOGIN_HTML.replace("%API%", api), {
       status: 401, headers: { "Content-Type": "text/html; charset=utf-8" },
     });
