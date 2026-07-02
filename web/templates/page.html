@@ -42,6 +42,7 @@
         <a class="nav-link" data-target="view-feedback" href="#feedback">📋 反馈台账</a>
         <a class="nav-link nav-owner" data-target="view-dashboard" href="#dashboard">📊 自进化仪表盘</a>
         {{SYS_OWNER_NAV}}
+        <button class="nav-link nav-evo" id="myEvoBtn">✨ 我的进化</button>
         <button class="nav-link" id="logoutBtn">退出</button>
       </div>
     </nav>
@@ -105,6 +106,26 @@
   </div>
 </div>
 
+<!-- 我的进化(翻译版):只显示不透明的等级/进度/叙事/里程碑,绝无真实维度名/分数/公式 -->
+<div class="fb-modal" id="evoModal" hidden>
+  <div class="fb-card evo-box" role="dialog" aria-modal="true" aria-label="我的进化">
+    <div class="fb-head"><span class="fb-act">✨ 我的进化</span><button class="fb-x" id="evoClose" aria-label="关闭">✕</button></div>
+    <div id="evoBody"><p class="empty">加载中…</p></div>
+  </div>
+</div>
+
+<!-- 屏蔽 / 订阅(条目菜单):点来源/话题 chip 即时生效,无需整页刷新 -->
+<div class="fb-modal" id="muteModal" hidden>
+  <div class="fb-card" role="dialog" aria-modal="true" aria-label="屏蔽/订阅">
+    <div class="fb-head"><span class="fb-act">⊘ 屏蔽 / 订阅</span><button class="fb-x" id="muteClose" aria-label="关闭">✕</button></div>
+    <p class="fb-item">不想再看某个来源或话题?点一下就屏蔽;也可以订阅感兴趣的话题,以后优先给你找。</p>
+    <div class="mute-group"><span class="mute-label">屏蔽来源</span><div class="fb-chips" id="muteSourceChips"></div></div>
+    <div class="mute-group"><span class="mute-label">屏蔽话题</span><div class="fb-chips" id="muteTopicChips"></div></div>
+    <div class="mute-group"><span class="mute-label">订阅话题(可选)</span><div class="fb-chips" id="subTopicChips"></div></div>
+    <div class="fb-foot"><span class="fb-msg" id="muteMsg"></span></div>
+  </div>
+</div>
+
 <script>window.__FB={enabled:{{FEEDBACK_ENABLED}},api:"{{FEEDBACK_API}}",share:"{{SHARE_API}}",tags:{{FEEDBACK_TAGS}}};window.__LEDGER={{LEDGER_JSON}};</script>
 <script>
 (function(){
@@ -138,6 +159,7 @@
     if(targetId==="view-favorites") loadFavorites();
     if(targetId==="view-feedback") loadFeedbackLedger();
     if(targetId.indexOf("dossier-")===0) markRead(targetId);
+    if(targetId.indexOf("day-")===0){var _dayEl=document.getElementById(targetId);if(_dayEl)personalizeDay(_dayEl);}
     document.getElementById("sidebar").classList.remove("open");
   }
   window.addEventListener("hashchange",showTarget);
@@ -161,6 +183,7 @@
   if(ck("lnrole")==="owner") document.body.classList.add("is-owner");
   if(API){fetch(API+"/me",{credentials:"include"}).then(function(r){return r.ok?r.json():null;}).then(function(u){
     if(!u)return;
+    document.body.classList.add("is-authed");
     if(u.role==="owner") document.body.classList.add("is-owner");
     var el=document.getElementById("greeting");
     if(el&&u.name){el.textContent="你好，"+u.name;el.style.display="";}
@@ -258,6 +281,151 @@
     fetch(API+"/read",{method:"POST",headers:{"Content-Type":"application/json"},credentials:"include",body:JSON.stringify({id:id,ts:up})}).catch(function(){});
   }
 
+  /* ---- 个人重排(登录后按 /me/feed 重排当天条目;端点不存在/未登录/网络错 → 静默保持原样,不报错不闪烁)----
+     契约:条目公开元数据 {id,topics,entities,source,kind}(不含权重);/me/feed 只回 order/hidden/tags。 */
+  function collectDayItems(dayEl){
+    var out=[];
+    dayEl.querySelectorAll("[data-item-id]").forEach(function(el){
+      var id=el.getAttribute("data-item-id"); if(!id)return;
+      var topics=[],ents=[];
+      try{topics=JSON.parse(el.getAttribute("data-topics")||"[]");}catch(_){}
+      try{ents=JSON.parse(el.getAttribute("data-entities")||"[]");}catch(_){}
+      out.push({id:id,topics:topics,entities:ents,source:el.getAttribute("data-source")||"",kind:el.getAttribute("data-kind")||""});
+    });
+    return out;
+  }
+  function applyPersonalFeed(dayEl,data){
+    if(!data||typeof data!=="object")return;
+    var order=data.order||[], hidden={}, tags=data.tags||{};
+    (data.hidden||[]).forEach(function(id){hidden[id]=true;});
+    var pos={}; order.forEach(function(id,i){pos[id]=i;});
+    var parents=[];
+    dayEl.querySelectorAll("[data-item-id]").forEach(function(el){
+      if(parents.indexOf(el.parentNode)===-1) parents.push(el.parentNode);
+    });
+    parents.forEach(function(parent){
+      var kids=Array.prototype.filter.call(parent.children,function(c){return c.hasAttribute("data-item-id");});
+      var known=kids.some(function(k){return pos.hasOwnProperty(k.getAttribute("data-item-id"));});
+      if(!known)return;   // 该容器里没有一个 id 在 order 里(异常返回)→ 不改动此容器顺序
+      kids.sort(function(a,b){
+        var ia=pos.hasOwnProperty(a.getAttribute("data-item-id"))?pos[a.getAttribute("data-item-id")]:9999;
+        var ib=pos.hasOwnProperty(b.getAttribute("data-item-id"))?pos[b.getAttribute("data-item-id")]:9999;
+        return ia-ib;
+      });
+      kids.forEach(function(k){parent.appendChild(k);});
+    });
+    dayEl.querySelectorAll("[data-item-id]").forEach(function(el){
+      var id=el.getAttribute("data-item-id");
+      el.classList.toggle("ln-hidden",!!hidden[id]);
+      var old=el.querySelector(".for-you-tag"); if(old)old.remove();
+      var tag=tags[id];
+      if(tag){
+        var h=el.querySelector("h3")||el;
+        var b=document.createElement("span"); b.className="for-you-tag"; b.textContent=tag;
+        h.parentNode.insertBefore(b,h);
+      }
+    });
+  }
+  function personalizeDay(dayEl,force){
+    if(!dayEl||!FB.enabled||!API)return;                       // 未配置反馈服务/关闭 → 保持原样
+    if(!force&&dayEl.getAttribute("data-ln-ranked")==="1")return;
+    var date=(dayEl.id||"").replace(/^day-/,"");
+    var items=collectDayItems(dayEl);
+    if(!items.length)return;
+    dayEl.setAttribute("data-ln-ranked","1");
+    fetch(API+"/me/feed",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({date:date,items:items})})
+      .then(function(r){return r.ok?r.json():null;})
+      .then(function(d){if(d)applyPersonalFeed(dayEl,d);})      // 无返回(404/未登录/空)→ 什么也不做,页面≡现状
+      .catch(function(){/* 网络错/端点不存在:静默降级,不报错不闪烁 */});
+  }
+
+  /* ---- 我的进化(翻译版):等级 + 进度条 + 会变叙事 +(可选)里程碑;绝不取/展示真实分数或维度名 ---- */
+  function loadEvolution(){
+    var box=document.getElementById("evoBody"); if(!box)return;
+    if(!FB.enabled||!API){box.innerHTML='<p class="empty">需要登录才能看到你的进化。</p>';return;}
+    box.innerHTML='<p class="empty">加载中…</p>';
+    fetch(API+"/me/evolution",{credentials:"include"}).then(function(r){return r.ok?r.json():null;}).then(function(d){
+      if(!d||d.error){box.innerHTML='<p class="empty">暂时还没有你的进化记录,多留下些反馈就会开始生长。</p>';return;}
+      var lvl=esc(d.level_name||(d.level!=null?("Lv. "+d.level):"新手"));
+      var pct=Math.max(0,Math.min(100,Number(d.progress)||0));
+      var narrative=esc(d.narrative||"");
+      var miles=(d.milestones||[]).map(function(m){
+        var lab=typeof m==="string"?m:(m&&(m.label||m.name))||"";
+        return lab?'<span class="evo-badge">'+esc(lab)+'</span>':"";
+      }).join("");
+      box.innerHTML='<div class="evo-level">'+lvl+'</div>'
+        +'<div class="evo-bar"><span style="width:'+pct+'%"></span></div>'
+        +(narrative?'<p class="evo-narrative">'+narrative+'</p>':"")
+        +(miles?'<div class="evo-miles">'+miles+'</div>':"");
+    }).catch(function(){box.innerHTML='<p class="empty">加载失败,晚点再看看。</p>';});
+  }
+  function openEvo(){var m=document.getElementById("evoModal");if(!m)return;m.hidden=false;loadEvolution();}
+  function closeEvo(){var m=document.getElementById("evoModal");if(m)m.hidden=true;}
+  document.getElementById("myEvoBtn")&&document.getElementById("myEvoBtn").addEventListener("click",openEvo);
+  document.getElementById("evoClose")&&document.getElementById("evoClose").addEventListener("click",closeEvo);
+
+  /* ---- 屏蔽 / 订阅:条目菜单弹出 chips,点击即时生效(POST /me/mute · /me/topics),无需整页刷新 ---- */
+  function chipEl(label,onClick){
+    var c=document.createElement("button");c.type="button";c.className="fb-chip";c.textContent=label;c.addEventListener("click",onClick);return c;
+  }
+  function openMute(btn){
+    var modal=document.getElementById("muteModal"); if(!modal)return;
+    var source=btn.getAttribute("data-source")||"", topics=[];
+    try{topics=JSON.parse(btn.getAttribute("data-topics")||"[]");}catch(_){}
+    var srcBox=document.getElementById("muteSourceChips"),topicBox=document.getElementById("muteTopicChips"),
+        subBox=document.getElementById("subTopicChips"),msg=document.getElementById("muteMsg");
+    srcBox.innerHTML="";topicBox.innerHTML="";subBox.innerHTML="";msg.textContent="";
+    if(source){
+      srcBox.appendChild(chipEl("⊘ "+source,function(){
+        var c=this,on=!c.classList.contains("on");
+        c.classList.toggle("on",on);c.textContent=(on?"已屏蔽 ":"⊘ ")+source;
+        postMute("source",source,on,msg,c,!on);
+      }));
+    }else{
+      srcBox.innerHTML='<span class="empty">无来源信息</span>';
+    }
+    if(topics.length){
+      topics.forEach(function(t){
+        topicBox.appendChild(chipEl("⊘ "+t,function(){
+          var c=this,on=!c.classList.contains("on");
+          c.classList.toggle("on",on);c.textContent=(on?"已屏蔽 ":"⊘ ")+t;
+          postMute("topic",t,on,msg,c,!on);
+        }));
+        subBox.appendChild(chipEl("+ "+t,function(){
+          var c=this,on=!c.classList.contains("on");
+          c.classList.toggle("on",on);c.textContent=(on?"已订阅 ":"+ ")+t;
+          postTopic(t,on,msg,c,!on);
+        }));
+      });
+    }else{
+      topicBox.innerHTML='<span class="empty">无话题信息</span>';subBox.innerHTML='<span class="empty">无话题信息</span>';
+    }
+    modal.hidden=false;
+  }
+  function closeMute(){var m=document.getElementById("muteModal");if(m)m.hidden=true;}
+  function postMute(kind,value,on,msg,chip,revertOn){
+    if(!FB.enabled||!API){msg.textContent="未配置反馈服务器";if(chip)chip.classList.toggle("on",revertOn);return;}
+    msg.textContent="更新中…";
+    fetch(API+"/me/mute",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({kind:kind,value:value,on:on})})
+      .then(function(r){return r.ok?r.json():null;})
+      .then(function(d){
+        if(d&&!d.error){msg.textContent="已更新";}
+        else{msg.textContent="暂时没生效(功能筹备中)";if(chip)chip.classList.toggle("on",revertOn);}
+      })
+      .catch(function(){msg.textContent="暂时没生效(离线?)";if(chip)chip.classList.toggle("on",revertOn);});
+  }
+  function postTopic(topic,on,msg,chip,revertOn){
+    if(!FB.enabled||!API){msg.textContent="未配置反馈服务器";if(chip)chip.classList.toggle("on",revertOn);return;}
+    msg.textContent="更新中…";
+    fetch(API+"/me/topics",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({topic:topic,on:on})})
+      .then(function(r){return r.ok?r.json():null;})
+      .then(function(d){
+        if(d&&!d.error){msg.textContent="已更新";}
+        else{msg.textContent="暂时没生效(功能筹备中)";if(chip)chip.classList.toggle("on",revertOn);}
+      })
+      .catch(function(){msg.textContent="暂时没生效(离线?)";if(chip)chip.classList.toggle("on",revertOn);});
+  }
+
   /* ---- owner 用户管理面板(表 + 邀请 + 启禁 + 活动抽屉,仅 owner 可见)---- */
   var API_ADMIN = API; // 复用 API base
   function openAdmin(){var m=document.getElementById("adminModal");if(!m)return;m.hidden=false;loadUsers();}
@@ -325,12 +493,19 @@
   }
   document.getElementById("logoutBtn")&&document.getElementById("logoutBtn").addEventListener("click",function(){fetch(API+"/auth/logout",{method:"POST",credentials:"include"}).then(function(){location.reload();});});
   document.addEventListener("click",function(e){
+    var lh=e.target.closest(".card.ln-hidden:not(.ln-expanded)");        // 折叠卡片:点击展开(不拦截链接/按钮)
+    if(lh&&!e.target.closest("a,button")){lh.classList.add("ln-expanded");return;}
     if(e.target.closest("#reqBtn")){openRequest();return;}
     var sh=e.target.closest(".act.share");if(sh){shareCard(sh);return;}
     if(e.target.closest("#shareClose")){closeShare();return;}
     if(e.target.closest("#shareDownload")){shareDownloadFn();return;}
     if(e.target.closest("#shareCopy")){shareCopyFn();return;}
     if(e.target===shareModal){closeShare();return;}
+    var mo=e.target.closest(".act.mute-open");if(mo){openMute(mo);return;}
+    if(e.target.closest("#muteClose")){closeMute();return;}
+    if(e.target===document.getElementById("muteModal")){closeMute();return;}
+    if(e.target.closest("#evoClose")){closeEvo();return;}
+    if(e.target===document.getElementById("evoModal")){closeEvo();return;}
     var act=e.target.closest(".act");if(act){toggleAct(act);return;}
     var rm=e.target.closest(".fav-remove");if(rm){removeFav(rm.dataset.item);return;}
     var fb=e.target.closest(".fb");if(fb){openModal(fb);return;}
@@ -341,7 +516,11 @@
     var sb=document.getElementById("sidebar");                       // 点抽屉外 → 关闭(移动端)
     if(sb&&sb.classList.contains("open")&&!e.target.closest("#sidebar")&&!e.target.closest(".menu-toggle")){sb.classList.remove("open");}
   });
-  document.addEventListener("keydown",function(e){if(e.key==="Escape"){if(!modal.hidden)closeModal();if(!shareModal.hidden)closeShare();}});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"){
+    if(!modal.hidden)closeModal();if(!shareModal.hidden)closeShare();
+    var em=document.getElementById("evoModal");if(em&&!em.hidden)closeEvo();
+    var mm=document.getElementById("muteModal");if(mm&&!mm.hidden)closeMute();
+  }});
 })();
 </script>
 </body>

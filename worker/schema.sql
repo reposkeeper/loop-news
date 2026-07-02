@@ -36,3 +36,7 @@ CREATE TABLE IF NOT EXISTS requests (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL, ts TEXT, text TEXT, tags TEXT, status TEXT DEFAULT 'new'
 );
+-- SP2 相位 2a:每用户个人画像(编译后的权重;热路径唯一消费物)。增量、对共享生产 D1 安全。
+CREATE TABLE IF NOT EXISTS user_profile (
+  user_id INTEGER PRIMARY KEY, profile TEXT NOT NULL, version INTEGER DEFAULT 1, updated_at TEXT
+);

@@ -22,6 +22,8 @@ import { handleRequestCode, handleVerify, handleLogout, handleMe, handleSetTheme
 import { logActivity } from "./lib/activity.js";
 import { nowISO } from "./lib/store.js";
 import { handleAdmin } from "./lib/admin.js";
+import { handleMeFeed, handleMeMute, handleMeTopics, handleMeEvolution } from "./lib/me.js";
+import { updateProfileFromSignal } from "./lib/profile.js";
 
 const DEFAULT_TAGS = {
   up: ["有洞察", "信息密度高", "正是我想看的", "角度新颖", "证据扎实"],
@@ -57,6 +59,10 @@ export default {
     if (p === "/auth/logout" && req.method === "POST") return handleLogout(req, env);
     if (p === "/me" && req.method === "GET") return handleMe(req, env);
     if (p === "/me/theme" && req.method === "POST") return handleSetTheme(req, env);
+    if (p === "/me/feed" && req.method === "POST") return handleMeFeed(req, env, json);
+    if (p === "/me/mute" && req.method === "POST") return handleMeMute(req, env, json);
+    if (p === "/me/topics" && req.method === "POST") return handleMeTopics(req, env, json);
+    if (p === "/me/evolution" && req.method === "GET") return handleMeEvolution(req, env, json);
     if (p.startsWith("/admin/")) return handleAdmin(req, env, url, json);
 
     if (p === "/activity" && req.method === "POST") {
@@ -92,6 +98,11 @@ export default {
              JSON.stringify((Array.isArray(d.tags) ? d.tags : []).slice(0, 8).map((t) => String(t).slice(0, 40))),
              String(d.text || "").trim().slice(0, 2000)).run();
       await logActivity(env, who.user_id, "feedback", d.item_id, d.action);
+      // 通道A(附加、确定性):反馈即时微调本人画像。失败绝不阻断核心写入。
+      try {
+        await updateProfileFromSignal(env, who.user_id,
+          { action: d.action, topics: d.topics, entities: d.entities, source: d.source, kind: d.kind });
+      } catch (e) { console.warn("channelA/feedback", e && e.message); }
       return json({ ok: true });
     }
 
@@ -126,6 +137,11 @@ export default {
         "INSERT OR REPLACE INTO favorites (user_id,item_id,date,title,ts) VALUES (?,?,?,?,?)"
       ).bind(who.user_id, item_id, String(d.date || "").slice(0, 20), String(d.title || "").slice(0, 300), nowISO()).run();
       await logActivity(env, who.user_id, "favorite", item_id);
+      // 通道A:收藏=正信号(+1)。老客户端不带维度则内部跳过,不报错。
+      try {
+        await updateProfileFromSignal(env, who.user_id,
+          { action: "favorite", topics: d.topics, entities: d.entities, source: d.source, kind: d.kind });
+      } catch (e) { console.warn("channelA/favorite", e && e.message); }
       return json({ ok: true, on: true });
     }
     if (p === "/favorites" && req.method === "GET") {
@@ -152,6 +168,11 @@ export default {
         "INSERT OR REPLACE INTO follows (user_id,item_id,title,topics,entities,ts) VALUES (?,?,?,?,?,?)"
       ).bind(who.user_id, item_id, String(d.title || "").slice(0, 300), JSON.stringify(topics), JSON.stringify(entities), nowISO()).run();
       await logActivity(env, who.user_id, "follow", item_id);
+      // 通道A:关注=正信号(+1),用已带的 topics/entities(+ 可选 source/kind)。
+      try {
+        await updateProfileFromSignal(env, who.user_id,
+          { action: "follow", topics, entities, source: d.source, kind: d.kind });
+      } catch (e) { console.warn("channelA/follow", e && e.message); }
       return json({ ok: true, on: true });
     }
     if (p === "/follows" && req.method === "GET") {

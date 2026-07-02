@@ -76,6 +76,8 @@ button.nav-link:hover{color:var(--accent);}
 .nav-sys .nav-section{margin-top:0;}
 .nav-owner{display:none;}                          /* 生成分享链接:仅 owner 可见 */
 body.is-owner .nav-owner{display:block;}
+.nav-evo{display:none;}                            /* 「我的进化」:仅登录用户可见,未登录=现状不变 */
+body.is-authed .nav-evo{display:block;}
 /* 分享图预览弹窗 */
 .share-modal-card{max-width:460px;}
 .share-preview{display:flex;align-items:center;justify-content:center;min-height:160px;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:8px 0 14px;}
@@ -105,6 +107,20 @@ body.is-owner .nav-owner{display:block;}
 .act-drawer .a-ts{color:var(--muted);margin-right:6px;}
 .act-drawer .a-act{font-weight:600;color:var(--ink);margin-right:6px;}
 .act-drawer .a-t{color:var(--ink-soft);}
+/* 「我的进化」翻译版面板——只显示不透明等级/进度/叙事/里程碑,绝无真实维度名/分数/公式 */
+.evo-box{max-width:420px;}
+.evo-level{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--ink);margin:6px 0 14px;}
+.evo-bar{height:8px;background:var(--line-soft);border-radius:5px;overflow:hidden;margin-bottom:16px;}
+.evo-bar span{display:block;height:100%;background:var(--accent);border-radius:5px;transition:width .5s ease;}
+.evo-narrative{font-family:var(--serif);font-size:15px;font-style:italic;line-height:1.65;color:var(--ink-soft);margin:0 0 14px;}
+.evo-miles{display:flex;flex-wrap:wrap;gap:8px;}
+.evo-badge{font-size:11.5px;font-weight:600;color:#fff;background:var(--infer);border-radius:6px;padding:3px 10px;}
+/* 屏蔽 / 订阅面板(条目菜单弹出) */
+.mute-group{margin-bottom:14px;}
+.mute-group:last-child{margin-bottom:0;}
+.mute-label{display:block;font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px;}
+#muteSourceChips .fb-chip.on,#muteTopicChips .fb-chip.on{background:var(--danger);border-color:var(--danger);}
+#subTopicChips .fb-chip.on{background:var(--accent);border-color:var(--accent);}
 /* 反馈台账 */
 .ledger-cycle{padding:14px 0;border-bottom:1px solid var(--line-soft);}
 .ledger-cycle:last-child{border-bottom:none;}
@@ -244,7 +260,20 @@ mark.hl{background:linear-gradient(transparent 56%, rgba(232,198,110,.6) 56%);co
 .act.fav.on{border-color:var(--infer);color:#fff;background:var(--infer);}
 .act.follow.on{border-color:var(--accent);color:#fff;background:var(--accent);}
 .act.share:hover{border-color:var(--ink);color:var(--ink);}
+.act.mute-open:hover{border-color:var(--danger);color:var(--danger);}
 .act:disabled{opacity:.6;cursor:default;}
+
+/* ── 个人重排:「为你」不透明小标签 + 隐藏态折叠(深浅色下都要正常)── */
+.for-you-tag{display:inline-block;font-family:var(--sans);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);
+  border-radius:999px;padding:2px 9px;margin:0 0 8px;}
+.card.ln-hidden{position:relative;max-height:56px;overflow:hidden;opacity:.55;cursor:pointer;
+  transition:max-height .22s ease,opacity .18s ease;}
+.card.ln-hidden::after{content:"已按你的偏好折叠 · 点击展开";position:absolute;inset:0;
+  display:flex;align-items:flex-end;padding-bottom:6px;font-size:12px;color:var(--faint);
+  background:linear-gradient(180deg,transparent,var(--paper) 72%);}
+.card.ln-hidden.ln-expanded{max-height:none;opacity:1;cursor:auto;}
+.card.ln-hidden.ln-expanded::after{content:none;}
 
 /* 我的收藏列表 */
 .fav-list{margin-top:6px;}

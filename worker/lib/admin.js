@@ -2,9 +2,15 @@ import { identify } from "./auth.js";
 import { revokeAllForUser } from "./session.js";
 import { logActivity } from "./activity.js";
 import { nowISO } from "./store.js";
+import { readProfile, feedbackCount, ownerEvolution } from "./profile.js";
 
 export function parseUserId(path) {
   const m = path.match(/^\/admin\/users\/(\d+)$/);
+  return m ? parseInt(m[1], 10) : null;
+}
+// /admin/users/:id/evolution —— owner 看某用户真实个人进化。
+export function parseUserEvolution(path) {
+  const m = path.match(/^\/admin\/users\/(\d+)\/evolution$/);
   return m ? parseInt(m[1], 10) : null;
 }
 const ROLES = new Set(["owner", "viewer"]);
@@ -55,6 +61,13 @@ export async function handleAdmin(req, env, url, json) {
     } catch (e) {
       return json({ error: "该邮箱已存在" }, 409);
     }
+  }
+
+  const evoUid = parseUserEvolution(p);
+  if (evoUid !== null && req.method === "GET") {
+    const profile = await readProfile(env, evoUid);
+    const fc = await feedbackCount(env, evoUid);
+    return json(ownerEvolution(profile, fc));   // owner 侧真实分(§8.5 例外)
   }
 
   const uid = parseUserId(p);

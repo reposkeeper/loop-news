@@ -281,6 +281,17 @@ def fb_row(cfg, date, item_id, title):
             f'{btn("adopt", "✓ 采用")}</div>')
 
 
+def item_pub_meta(it, kind):
+    """条目**公开**元数据(id/topics/entities/source/kind),给前端个人重排收集用。
+    只含内容维度,绝不含任何权重/分数/排序公式——那些永远留在服务端。"""
+    iid = e(it.get("id", ""))
+    topics = e(json.dumps(it.get("topics", []) or [], ensure_ascii=False))
+    ents = e(json.dumps(it.get("entities", []) or [], ensure_ascii=False))
+    src = it.get("source") or " · ".join(it.get("sources", []) or [])
+    return (f'data-item-id="{iid}" data-topics="{topics}" data-entities="{ents}" '
+            f'data-source="{e(src)}" data-kind="{e(kind)}"')
+
+
 def act_row(cfg, date, it):
     """新闻条目的 收藏 / 关注(per-user,凭 token;关注驱动后续采集)。"""
     if not cfg_get(cfg, "feedback.enabled", True):
@@ -297,9 +308,13 @@ def act_row(cfg, date, it):
     share = (f'<button class="act share" data-item="{iid}" data-date="{d}" data-title="{t}" '
              f'data-summary="{e(it.get("summary_zh",""))}" data-source="{e(src)}" data-kind="{kind}" '
              f'data-badge="{e(badge)}" data-quote="{e(it.get("original_quote",""))}">⤴ 分享</button>')
+    # 屏蔽/订阅入口:弹出条目菜单(chips),选来源/话题即时 POST /me/mute 或 /me/topics
+    mute = (f'<button class="act mute-open" data-item="{iid}" data-source="{e(src)}" '
+            f'data-topics="{topics}">⊘ 屏蔽/订阅</button>')
     return (f'<span class="act-row">'
             f'<button class="act fav" data-item="{iid}" data-date="{d}" data-title="{t}">★ 收藏</button>'
             f'<button class="act follow" data-item="{iid}" data-date="{d}" data-title="{t}" data-topics="{topics}" data-entities="{ents}">+ 关注</button>'
+            f'{mute}'
             f'{share}'
             f'</span>')
 
@@ -333,7 +348,7 @@ def render_consensus(items, cfg, date):
             url = it.get("url", "")
             one = f' <a class="src-link" href="{e(url)}" target="_blank" rel="noopener">原文 ↗</a>' if url else ""
             src_html = f'<span class="badge badge-src">{src_list}</span>{one}'
-        out.append(f"""<article class="card" id="item-{e(it.get('id'))}">
+        out.append(f"""<article class="card" id="item-{e(it.get('id'))}" {item_pub_meta(it, 'consensus')}>
   <h3>{e(it.get('title_zh'))}</h3>
   <p>{hl(it.get('summary_zh'))}</p>
   {render_charts(it.get('charts'))}
@@ -355,7 +370,7 @@ def render_deep(items, cfg, date):
         ihtml = f'<p class="insight">{e(insight)}</p>' if insight else ""
         url = it.get("url", "")
         link = f'<a class="src-link" href="{e(url)}" target="_blank" rel="noopener">来源 ↗</a>' if url else ""
-        out.append(f"""<article class="card deep" id="item-{e(it.get('id'))}">
+        out.append(f"""<article class="card deep" id="item-{e(it.get('id'))}" {item_pub_meta(it, 'deep')}>
   <div class="byline"><span class="byline-src">{e(it.get('source'))}</span>{link}</div>
   {pq}
   <h3 class="deep-title">{e(it.get('title_zh'))}</h3>
@@ -415,7 +430,7 @@ def render_podcasts(items, cfg, date):
         pq = f'<blockquote class="pq" lang="{e(it.get("lang","en"))}">{e(it.get("quote"))}</blockquote>' if it.get("quote") else ""
         pts = "".join(f"<li>{hl(p)}</li>" for p in it.get("key_points_zh", []))
         pts_html = f'<ul class="pod-points">{pts}</ul>' if pts else ""
-        out.append(f"""<article class="card podcast" id="item-{e(it.get('id',''))}">
+        out.append(f"""<article class="card podcast" id="item-{e(it.get('id',''))}" {item_pub_meta(it, 'podcast')}>
   <div class="pod-head"><span class="pod-show">🎙 {show}</span><span class="pod-meta">{host} × {guest_line}</span><span class="pod-date">{e(it.get('date',''))}</span>{link}</div>
   <h3>{e(it.get('title_zh'))}</h3>
   {pq}

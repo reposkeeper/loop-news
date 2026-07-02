@@ -5,6 +5,17 @@
 
 ---
 
+## 2026-07-02 · SP2-2a(千人千面 MVP:个人画像 + 服务端重排 + 进化面 + Agent 环境骨架)
+- **改了什么**:
+  1. **个人画像 + 通道A(确定性)**:D1 增量表 `user_profile`(`worker/schema.sql`);`worker/lib/profile.js` 纯函数 `rank()`(全 0 画像→保持原序,新用户≡base)+ EWMA 更新规则;`worker/feedback-worker.js` 在 /feedback、/favorite、/follow handler 里**增量**挂通道A(全程 try/catch,失败绝不阻断核心写入)。
+  2. **服务端重排 + /me/* 端点**:`worker/lib/me.js` 的 `POST /me/feed`(客户端传当天条目公开元数据 → 服务端用私有画像回传 `order/hidden/tags`,**权重/公式绝不下发**)、`POST /me/mute`、`POST /me/topics`、`GET /me/evolution`(**翻译版**:不透明 level/进度/叙事,§8.5 硬约束);`worker/lib/admin.js` 加 owner-only `GET /admin/users/:id/evolution`(owner 侧看真实)。
+  3. **前端**:`web/compile.py` 给每条新闻输出 `data-item-id/topics/entities/source/kind`;`web/templates/page.html` 个人重排(降级安全:端点缺失/未登录→页面原样)、✨我的进化面、⊘屏蔽/订阅;`web/assets/style.css` 配套样式。
+  4. **③ Agent 自进化环境骨架**:`users/_base/`(agent/spec/rubric/goals/loop 五文件=fork 源)+ `scripts/env-sync.sh`(pull/push/diff/reset,base⊕稀疏overlay)+ skill `ln-evolve-lite`(通道B:per-user 进化,规则为主,只消化本人反馈,绝不改全局/他人)。
+- **为什么**:SP2 三层(代码/数据/Agent 环境)落地"千人千面"——每人一份可进化的环境文件夹(差异是数据不是代码);热路径确定性无 LLM,LLM 只在后台 evolve-lite。新用户默认≡owner base,反馈后分叉。隔离不变量:谁的反馈都不改他人视图/全局 base。
+- **如何回滚**:`git revert` 对应提交;`user_profile` 表与 /me/* 端点均为增量(`CREATE TABLE IF NOT EXISTS`、精确路由匹配),回滚不影响既有数据与端点。**部署前需对共享 D1 应用一次新 schema。**
+
+---
+
 ## 2026-07-02 · SP2-2c(系统分 6→8:克制/创新)
 - **改了什么**:
   1. **新增两个系统分**:`scripts/score.py` 在原 6 分外确定性计算 **7·克制 restraint**(`0.40·证据充分 + 0.20·分级纪律 + 0.20·证据深度 + 0.20·信噪比`)与 **8·创新 innovation**(`0.25·前沿新产 + 0.20·脱离 core + 0.20·透镜多样 + 0.20·跨域新配对 + 0.15·学习速度`);`composite` 改为 8 者均值。新增 `scripts/test_score.py` 单测(反作弊:堆非显然结论→克制↓;只吃 core/重复昨天→创新↓)。

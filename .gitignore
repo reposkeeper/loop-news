@@ -26,3 +26,6 @@ node_modules/
 
 # 灰度构建产物(deploy-gray.sh 输出到这里,不入库)
 build/
+
+# ③ Agent 环境物化工作目录(env-sync.sh pull 输出;一次性可重建,不入库)
+runtime/
