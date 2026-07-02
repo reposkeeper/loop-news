@@ -5,6 +5,17 @@
 
 ---
 
+## 2026-07-02 · SP2-2c(系统分 6→8:克制/创新)
+- **改了什么**:
+  1. **新增两个系统分**:`scripts/score.py` 在原 6 分外确定性计算 **7·克制 restraint**(`0.40·证据充分 + 0.20·分级纪律 + 0.20·证据深度 + 0.20·信噪比`)与 **8·创新 innovation**(`0.25·前沿新产 + 0.20·脱离 core + 0.20·透镜多样 + 0.20·跨域新配对 + 0.15·学习速度`);`composite` 改为 8 者均值。新增 `scripts/test_score.py` 单测(反作弊:堆非显然结论→克制↓;只吃 core/重复昨天→创新↓)。
+  2. **张力矩阵**:`prompts/scoring.md`「六个→八个分数」+ 张力矩阵(抄近路某分涨→另一分跌、净不赚),`GOALS.md` 把「克制/创新」立为北极星的运行化护栏(over-reach 有分惩罚、防高分停滞)。
+  3. **owner 仪表盘 8 维**:`web/compile.py`/`web/assets/style.css` 的「📊 自进化仪表盘」显示 8 张卡,历史旧数据(仅 6 分)缺失维显示「—」不误判 0。
+  4. 设计:`specs/2026-07-01-personalization-evolution-design.md` v2 三层重构(代码/数据/Agent 自进化环境),本轮为其相位 2c。
+- **为什么**:原 6 分几乎全奖励「更多/更高」,与 GOALS「over-reach 是最大风险」相悖、且奖励吃 core 导致高分停滞。补两个正交盲区,用分数间张力(composite=8均值 + 每轮提最低分)逼系统「既克制又创新」。
+- **如何回滚**:`git revert` 对应提交;`state/scores.json` 加两字段向后兼容(旧 entry 缺则视 None)。
+
+---
+
 ## 2026-07-01 · SP1-UI(owner 面板 + 夜间模式)
 - **改了什么**:
   1. **夜间模式**:`POST /me/theme` 把主题偏好持久化到 `users.theme`(跟随账号跨设备);`web/assets/style.css` 新增 `[data-theme="dark"]` 暗色板 + `@media (prefers-color-scheme:dark)` 处理 `auto` 档,分级色相(事实/推断/预测)不变、明度压暗;页头三档切换(自动/浅/深),内联脚本在渲染前读 `localStorage` 应用主题,无闪屏。

@@ -140,6 +140,8 @@ body.is-owner .nav-owner{display:block;}
 .sc-up{color:var(--accent);}.sc-down{color:var(--danger);}
 .dash-bar{height:5px;background:var(--line-soft);border-radius:3px;margin-top:10px;overflow:hidden;}
 .dash-bar span{display:block;height:100%;background:var(--accent);border-radius:3px;}
+.dash-card.dash-na{border-style:dashed;opacity:.6;}
+.dash-num-na{color:var(--faint);}
 .dash-detail{font-size:13px;line-height:1.85;color:var(--muted);}
 .dash-detail b{color:var(--ink);font-weight:600;}
 .tier-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}

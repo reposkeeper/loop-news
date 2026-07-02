@@ -15,12 +15,16 @@
     "angles": 8,
     "core_sources": 12,
     "fresh_days": 4,
-    "stale_decay": 0.78
+    "stale_decay": 0.78,
+    "novelty_window": 7,
+    "novel_target": 6,
+    "lens_target": 5,
+    "cross_domain_target": 2
   },
   "history": [
     {
       "date": "2026-06-30",
-      "computed_at": "2026-07-01T13:09:39+08:00",
+      "computed_at": "2026-07-02T12:40:17+08:00",
       "scores": {
         "correlation": 76.7,
         "volume": 88.8,
@@ -28,7 +32,9 @@
         "breadth": 78.7,
         "source_quality": 76.6,
         "timeliness": 100.0,
-        "composite": 85.7
+        "restraint": 94.4,
+        "innovation": 100.0,
+        "composite": 88.6
       },
       "components": {
         "collected": 18,
@@ -45,28 +51,40 @@
         "domains": 1,
         "feedback_recent": 3,
         "angles": 14,
-        "core_sources": 14,
+        "core_sources": 16,
         "core_quality": 0.84,
         "from_core_share": 0.22,
         "curation_freshness": 1.0,
         "fresh_le2d": 18,
         "stale_gt4d": 0,
         "avg_lateness_d": 1.0,
-        "recency_coverage": 1.0
+        "recency_coverage": 1.0,
+        "overreach_rate": 0.0,
+        "grounded": 1.0,
+        "grade_discipline": 1.0,
+        "evidence_depth": 1.0,
+        "snr": 0.72,
+        "new_productive": 1.0,
+        "exploration": 1.0,
+        "lens_diversity": 1.0,
+        "cross_domain_novel": 1.0,
+        "learning_velocity": 1.0
       },
       "delta_vs_prev": {
-        "correlation": -11.6,
-        "volume": -11.2,
-        "analysis": 9.8,
+        "correlation": -23.3,
+        "volume": 16.9,
+        "analysis": 12.9,
         "breadth": 0.0,
-        "source_quality": -11.9,
-        "timeliness": 100.0,
-        "composite": -2.1
+        "source_quality": -9.4,
+        "timeliness": 9.5,
+        "restraint": null,
+        "innovation": null,
+        "composite": 4.0
       }
     },
     {
       "date": "2026-07-01",
-      "computed_at": "2026-07-01T14:15:57+08:00",
+      "computed_at": "2026-07-02T12:40:17+08:00",
       "scores": {
         "correlation": 100.0,
         "volume": 71.9,
@@ -74,7 +92,9 @@
         "breadth": 78.7,
         "source_quality": 86.0,
         "timeliness": 90.5,
-        "composite": 84.6
+        "restraint": 97.3,
+        "innovation": 96.0,
+        "composite": 87.6
       },
       "components": {
         "collected": 15,
@@ -98,7 +118,17 @@
         "fresh_le2d": 14,
         "stale_gt4d": 1,
         "avg_lateness_d": 1.9,
-        "recency_coverage": 1.0
+        "recency_coverage": 1.0,
+        "overreach_rate": 0.0,
+        "grounded": 1.0,
+        "grade_discipline": 1.0,
+        "evidence_depth": 1.0,
+        "snr": 0.87,
+        "new_productive": 1.0,
+        "exploration": 0.8,
+        "lens_diversity": 1.0,
+        "cross_domain_novel": 1.0,
+        "learning_velocity": 1.0
       },
       "delta_vs_prev": {
         "correlation": 23.3,
@@ -107,7 +137,9 @@
         "breadth": 0.0,
         "source_quality": 9.4,
         "timeliness": -9.5,
-        "composite": -1.1
+        "restraint": 2.9,
+        "innovation": -4.0,
+        "composite": -1.0
       }
     }
   ]

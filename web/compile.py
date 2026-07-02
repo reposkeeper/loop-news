@@ -593,11 +593,14 @@ def render_feedback(ledger):
 
 
 DASH_LABELS = [("correlation", "关联度"), ("volume", "数量"), ("analysis", "分析整合"),
-               ("breadth", "自进化广度"), ("source_quality", "信息源固化"), ("timeliness", "及时性")]
+               ("breadth", "自进化广度"), ("source_quality", "信息源固化"), ("timeliness", "及时性"),
+               ("restraint", "克制"), ("innovation", "创新")]
 
 
 def render_dashboard(scores, srcq):
-    """📊 自进化仪表盘(owner 专属):5 个系统分数 + 趋势 + 成分 + 来源分档。"""
+    """📊 自进化仪表盘(owner 专属):8 个系统分数 + 趋势 + 成分 + 来源分档。
+    向后兼容:旧数据(scores.json 尚未含 restraint/innovation)时,该维度卡片显示占位「—」,
+    不当作 0 分参与显示或告警判断。"""
     hist = (scores or {}).get("history", [])
     if not hist:
         return ('<section class="view" id="view-dashboard"><h1 class="day-date">📊 自进化仪表盘</h1>'
@@ -614,11 +617,19 @@ def render_dashboard(scores, srcq):
         arr = "▲" if dv > 0 else "▼" if dv < 0 else "·"
         return f'<span class="dash-d {cls}">{arr} {"+" if dv >= 0 else ""}{dv}</span>'
 
-    cards = "".join(
-        f'<div class="dash-card"><div class="dash-lab">{lab}</div>'
-        f'<div class="dash-numrow"><span class="dash-num">{s.get(k, 0)}</span>{dtxt(k)}</div>'
-        f'<div class="dash-bar"><span style="width:{min(100, s.get(k, 0))}%"></span></div></div>'
-        for k, lab in DASH_LABELS)
+    def card(k, lab):
+        v = s.get(k)
+        if v is None:
+            # 该维度在当前 entry 缺失(旧数据,score.py 尚未产出该分数):占位「—」,
+            # 不参与最低分高亮/告警判断,不当 0 分处理。
+            return (f'<div class="dash-card dash-na"><div class="dash-lab">{lab}</div>'
+                     '<div class="dash-numrow"><span class="dash-num dash-num-na">—</span></div>'
+                     '<div class="dash-bar"><span style="width:0%"></span></div></div>')
+        return (f'<div class="dash-card"><div class="dash-lab">{lab}</div>'
+                f'<div class="dash-numrow"><span class="dash-num">{v}</span>{dtxt(k)}</div>'
+                f'<div class="dash-bar"><span style="width:{min(100, v)}%"></span></div></div>')
+
+    cards = "".join(card(k, lab) for k, lab in DASH_LABELS)
     comp = s.get("composite", 0)
     cd = d.get("composite")
     comp_d = "" if cd is None else f' <span class="{"sc-up" if cd >= 0 else "sc-down"}">{"+" if cd >= 0 else ""}{cd}</span>'
