@@ -1,0 +1,29 @@
+name: CI
+
+# 质量门:PR 与主要分支 push 时跑 —— vitest 单测 + 变更落地自检(check.sh:编译自洽/JSON/引用/进化留痕)。
+on:
+  pull_request:
+  push:
+    branches: [gray, release, main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: npm install
+      - name: Unit tests (vitest)
+        run: npx vitest run
+      - name: Landing self-check (check.sh)
+        run: bash scripts/check.sh

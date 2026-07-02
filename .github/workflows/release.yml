@@ -1,0 +1,32 @@
+name: Deploy Release (Production)
+
+# 生产环境(news.xdzq.org):push 到 release 分支即部署。
+# 环境 release 建议加"required reviewers"审批 —— 生产上线需人工确认(见仓库 Settings → Environments → release)。
+on:
+  push:
+    branches: [release]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-release
+  cancel-in-progress: false      # 生产部署不打断,排队执行
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: release         # ← 关联 GitHub Environment: release(带生产审批 + 其 secret)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: npm install
+      - name: Deploy production (D1 schema + Pages + Workers + R2)
+        run: bash scripts/deploy-cloudflare.sh
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
